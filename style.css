@@ -139,10 +139,10 @@ img {
 }
 
 .nav__link {
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.02em;
-  color: var(--gray-300);
+  color: var(--gray-200);
   transition: color 0.3s;
   position: relative;
 }
@@ -243,7 +243,7 @@ img {
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 600;
-  color: var(--gray-300);
+  color: var(--gray-200);
   transition: color 0.3s;
 }
 
@@ -281,11 +281,11 @@ img {
 .hero__badge {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--gray-400);
+  color: var(--gray-300);
   border: 1px solid var(--gray-700);
   padding: 0.4rem 1rem;
   border-radius: 100px;
@@ -312,8 +312,8 @@ img {
 }
 
 .hero__tagline {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: var(--gray-300);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: var(--gray-200);
   max-width: 560px;
   line-height: 1.7;
   margin-bottom: 2.5rem;
@@ -328,8 +328,8 @@ img {
 }
 
 .hero__meta-item {
-  font-size: 0.9rem;
-  color: var(--gray-300);
+  font-size: 1.05rem;
+  color: var(--gray-200);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -337,10 +337,10 @@ img {
 
 .hero__meta-label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--gray-500);
+  color: var(--gray-400);
 }
 
 .hero__meta-divider {
@@ -362,7 +362,7 @@ img {
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   padding: 0.85rem 2rem;
   border-radius: 100px;
@@ -402,8 +402,8 @@ img {
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  color: var(--gray-500);
-  font-size: 0.7rem;
+  color: var(--gray-400);
+  font-size: 0.8rem;
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -443,10 +443,10 @@ img {
 
 .marquee__inner span {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--gray-400);
+  color: var(--gray-300);
   flex-shrink: 0;
 }
 
@@ -476,8 +476,8 @@ img {
 .section__number {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--gray-500);
+  font-size: 0.9rem;
+  color: var(--gray-400);
   letter-spacing: 0.15em;
   margin-bottom: 1rem;
 }
@@ -491,8 +491,8 @@ img {
 }
 
 .section__subtitle {
-  font-size: 1.1rem;
-  color: var(--gray-400);
+  font-size: 1.2rem;
+  color: var(--gray-300);
   max-width: 500px;
 }
 
@@ -543,8 +543,8 @@ img {
 
 .timeline__date {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--gray-500);
+  font-size: 0.85rem;
+  color: var(--gray-400);
   letter-spacing: 0.1em;
   margin-bottom: 0.75rem;
 }
@@ -572,26 +572,26 @@ img {
 
 .timeline__role {
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
 .timeline__company {
-  font-size: 1rem;
-  color: var(--gray-300);
+  font-size: 1.1rem;
+  color: var(--gray-200);
   font-weight: 500;
 }
 
 .timeline__location {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--gray-500);
+  font-size: 0.85rem;
+  color: var(--gray-400);
   letter-spacing: 0.08em;
 }
 
 .timeline__desc {
-  font-size: 0.95rem;
-  color: var(--gray-400);
+  font-size: 1.05rem;
+  color: var(--gray-300);
   margin-bottom: 1.5rem;
   line-height: 1.6;
 }
@@ -613,15 +613,15 @@ img {
 
 .timeline__highlight-metric {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
   line-height: 1;
 }
 
 .timeline__highlight-label {
-  font-size: 0.75rem;
-  color: var(--gray-500);
-  max-width: 160px;
+  font-size: 0.85rem;
+  color: var(--gray-400);
+  max-width: 180px;
 }
 
 .timeline__details {
@@ -631,8 +631,8 @@ img {
 }
 
 .timeline__details li {
-  font-size: 0.875rem;
-  color: var(--gray-400);
+  font-size: 1rem;
+  color: var(--gray-300);
   padding-left: 1rem;
   position: relative;
 }
@@ -674,30 +674,30 @@ img {
 
 .edu-card__logo {
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
-  color: var(--gray-300);
+  color: var(--gray-200);
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
 }
 
 .edu-card__school {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .edu-card__degree {
-  font-size: 0.9rem;
-  color: var(--gray-400);
+  font-size: 1rem;
+  color: var(--gray-300);
   margin-bottom: 0.25rem;
 }
 
 .edu-card__year {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--gray-500);
+  font-size: 0.85rem;
+  color: var(--gray-400);
   letter-spacing: 0.1em;
   margin-bottom: 1.25rem;
 }
@@ -709,8 +709,8 @@ img {
 }
 
 .edu-card__highlights li {
-  font-size: 0.85rem;
-  color: var(--gray-400);
+  font-size: 0.95rem;
+  color: var(--gray-300);
   padding-left: 1rem;
   position: relative;
 }
@@ -774,21 +774,21 @@ img {
   font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 800;
-  color: var(--gray-500);
+  color: var(--gray-400);
   line-height: 1;
   margin-bottom: 1.5rem;
 }
 
 .project-card__title {
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
 }
 
 .project-card__desc {
-  font-size: 0.9rem;
-  color: var(--gray-400);
+  font-size: 1rem;
+  color: var(--gray-300);
   line-height: 1.6;
   margin-bottom: 1.5rem;
   flex-grow: 1;
@@ -803,13 +803,13 @@ img {
 
 .tag {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 0.3rem 0.75rem;
   border: 1px solid var(--gray-700);
   border-radius: 100px;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 .project-card__links {
@@ -819,14 +819,14 @@ img {
 }
 
 .project-card__link {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--white);
   transition: opacity 0.3s;
 }
 
 .project-card__link--secondary {
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 .project-card__link:hover {
@@ -869,23 +869,23 @@ img {
 
 .writing-card__type {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--gray-500);
+  color: var(--gray-400);
   margin-bottom: 1rem;
 }
 
 .writing-card__title {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
 }
 
 .writing-card__excerpt {
-  font-size: 0.9rem;
-  color: var(--gray-400);
+  font-size: 1rem;
+  color: var(--gray-300);
   line-height: 1.6;
   flex-grow: 1;
   margin-bottom: 1.5rem;
@@ -899,14 +899,14 @@ img {
 
 .writing-card__platform {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--gray-500);
+  color: var(--gray-400);
 }
 
 .writing-card__read {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--white);
   transition: opacity 0.3s;
@@ -952,14 +952,14 @@ img {
 
 .extra-card__title {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
 }
 
 .extra-card__desc {
-  font-size: 0.85rem;
-  color: var(--gray-400);
+  font-size: 0.95rem;
+  color: var(--gray-300);
   line-height: 1.6;
 }
 
@@ -984,8 +984,8 @@ img {
 }
 
 .contact__desc {
-  font-size: 1.05rem;
-  color: var(--gray-400);
+  font-size: 1.15rem;
+  color: var(--gray-300);
   margin-bottom: 3rem;
   line-height: 1.6;
 }
@@ -1014,14 +1014,14 @@ img {
 
 .contact__link-label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--gray-500);
+  color: var(--gray-400);
 }
 
 .contact__link-value {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 500;
 }
 
@@ -1034,10 +1034,10 @@ img {
 
 .contact__lang-label {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--gray-500);
+  color: var(--gray-400);
   margin-right: 0.25rem;
 }
 
@@ -1057,14 +1057,14 @@ img {
 
 .footer__logo {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 700;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 .footer__copy {
-  font-size: 0.8rem;
-  color: var(--gray-400);
+  font-size: 0.9rem;
+  color: var(--gray-300);
 }
 
 /* --- Selection --- */
