@@ -253,9 +253,6 @@ img {
 
 /* --- Hero --- */
 .hero {
-  min-height: auto;
-  display: flex;
-  align-items: center;
   position: relative;
   overflow: hidden;
   padding: 7rem 0 3rem;
@@ -272,10 +269,26 @@ img {
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 70%);
 }
 
-.hero__content {
+.hero__top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
   position: relative;
   z-index: 1;
-  max-width: 800px;
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .hero__top {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+}
+
+.hero__intro {
+  position: relative;
+  z-index: 1;
 }
 
 .hero__badge {
@@ -1092,21 +1105,16 @@ img {
 }
 
 /* --- About Section --- */
-.about {
-  padding: 3rem 0;
-}
-
-.about__stats {
+/* --- Hero Stats (right column) --- */
+.hero__stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  margin-bottom: 2.5rem;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid var(--gray-800);
-}
-
-@media (min-width: 768px) {
-  .about__stats { grid-template-columns: repeat(4, 1fr); }
+  gap: 1.5rem;
+  padding: 2rem;
+  border: 1px solid var(--gray-800);
+  border-radius: 16px;
+  background: var(--gray-900);
+  align-self: center;
 }
 
 .stat {
@@ -1116,7 +1124,7 @@ img {
 .stat__number {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -1124,51 +1132,47 @@ img {
 
 .stat__label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: var(--gray-400);
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
   font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   line-height: 1.4;
 }
 
-.about__body {
-  max-width: 720px;
-  margin-bottom: 2.5rem;
-  padding-left: 2rem;
+/* --- Hero Summary --- */
+.hero__summary {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin-bottom: 2rem;
+  padding-left: 1.5rem;
   border-left: 2px solid var(--gray-600);
 }
 
-.about__summary {
-  font-size: clamp(1.1rem, 2vw, 1.25rem);
-  color: var(--gray-200);
-  line-height: 1.8;
-  margin-bottom: 1rem;
-}
-
-.about__summary:last-child {
-  margin-bottom: 0;
-}
-
-.about__summary--secondary {
+.hero__summary p {
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
   color: var(--gray-300);
-  font-style: italic;
+  line-height: 1.8;
 }
 
-.about__pillars {
+/* --- Hero Pillars --- */
+.hero__pillars {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 @media (min-width: 768px) {
-  .about__pillars { grid-template-columns: repeat(3, 1fr); }
+  .hero__pillars { grid-template-columns: repeat(3, 1fr); }
 }
 
 .pillar {
-  padding: 2rem;
+  padding: 1.5rem;
   border: 1px solid var(--gray-800);
   border-radius: 12px;
   transition: border-color 0.3s, transform 0.3s;
@@ -1181,10 +1185,10 @@ img {
 
 .pillar__title {
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.6rem;
   position: relative;
 }
 
@@ -1193,22 +1197,24 @@ img {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 40px;
+  width: 32px;
   height: 2px;
   background: var(--white);
 }
 
 .pillar__desc {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--gray-300);
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
-.about__cta {
-  margin-top: 1rem;
+/* --- Hero CTA --- */
+.hero__cta {
+  position: relative;
+  z-index: 1;
 }
 
-.about__cta .btn {
+.hero__cta .btn {
   gap: 0.75rem;
 }
 
@@ -1296,18 +1302,13 @@ img {
     padding: 3.5rem 0;
   }
 
-  .about {
-    padding: 2.5rem 0 2rem;
+  .hero__stats {
+    padding: 1.5rem;
+    gap: 1rem;
   }
 
-  .about__body {
-    padding-left: 1.5rem;
-  }
-
-  .about__stats {
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
+  .hero__summary {
+    padding-left: 1rem;
   }
 
   .footer__inner {
