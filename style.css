@@ -391,18 +391,18 @@ img {
   color: var(--gray-100);
 }
 
-/* --- Action Row --- */
-.hero__action-row {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
 .hero__actions {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Hero Bottom (summary + social on the right) --- */
+.hero__bottom {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.5rem;
 }
 
 /* --- Buttons --- */
@@ -440,6 +440,11 @@ img {
 .btn--ghost:hover {
   border-color: var(--white);
   transform: translateY(-2px);
+}
+
+.btn--sm {
+  font-size: 0.85rem;
+  padding: 0.55rem 1.25rem;
 }
 
 /* --- Scroll Indicator --- */
@@ -1253,20 +1258,8 @@ img {
 /* --- Hero Social --- */
 .hero__social {
   display: flex;
-  gap: 1.25rem;
-  margin-top: 1.5rem;
-}
-
-.hero__social-link {
-  color: var(--gray-400);
-  transition: color 0.3s, transform 0.3s;
-  display: flex;
-  align-items: center;
-}
-
-.hero__social-link:hover {
-  color: var(--white);
-  transform: translateY(-2px);
+  gap: 0.75rem;
+  margin-top: 1.25rem;
 }
 
 /* --- Contact Actions --- */
@@ -1360,11 +1353,6 @@ img {
   .hero__stats {
     flex-wrap: wrap;
     gap: 1.5rem;
-  }
-
-  .hero__action-row {
-    flex-direction: column;
-    align-items: flex-start;
   }
 
   .hero__summary {
