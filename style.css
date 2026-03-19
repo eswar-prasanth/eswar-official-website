@@ -320,7 +320,7 @@ img {
 .hero__credentials {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.25rem;
+  gap: 1.5rem;
   align-items: center;
   margin-bottom: 1.75rem;
   padding: 1.25rem 0;
@@ -331,24 +331,29 @@ img {
 .credential {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .credential__logo {
-  height: 24px;
+  height: 28px;
   width: auto;
   object-fit: contain;
-  filter: grayscale(100%) brightness(0.2);
-  opacity: 0.8;
-  transition: opacity 0.3s, filter 0.3s;
+  opacity: 0.75;
+  transition: opacity 0.3s;
 }
 
-.credential__logo--round {
+.credential__logo--wide {
+  height: 22px;
+}
+
+.credential__logo--square {
+  height: 32px;
+  width: 32px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .credential:hover .credential__logo {
-  filter: none;
   opacity: 1;
 }
 
@@ -390,9 +395,8 @@ img {
 .hero__action-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 1.5rem;
   flex-wrap: wrap;
-  gap: 1rem;
 }
 
 .hero__actions {
@@ -1334,8 +1338,13 @@ img {
     gap: 1rem;
   }
 
-  .credential__logo {
-    height: 20px;
+  .credential__logo--wide {
+    height: 18px;
+  }
+
+  .credential__logo--square {
+    height: 26px;
+    width: 26px;
   }
 
   .credential__name {

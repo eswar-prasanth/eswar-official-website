@@ -133,12 +133,16 @@
 
   // --- CountUp animation for hero stats ---
   const statNumbers = document.querySelectorAll('.stat__number[data-target]');
+  const countedSet = new Set();
 
   function animateCount(el) {
+    if (countedSet.has(el)) return;
+    countedSet.add(el);
+
     const target = parseInt(el.dataset.target, 10);
     const prefix = el.dataset.prefix || '';
     const suffix = el.dataset.suffix || '';
-    const duration = 1600;
+    const duration = 1800;
     const startTime = performance.now();
 
     function easeOutExpo(t) {
@@ -170,9 +174,18 @@
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.1 }
     );
     statNumbers.forEach(el => statObserver.observe(el));
+
+    setTimeout(() => {
+      statNumbers.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          animateCount(el);
+        }
+      });
+    }, 300);
   }
 
   // --- Parallax on hero grid ---
