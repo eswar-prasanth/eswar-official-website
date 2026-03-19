@@ -269,26 +269,10 @@ img {
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 70%);
 }
 
-.hero__top {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
+.hero__content {
   position: relative;
   z-index: 1;
   margin-bottom: 2.5rem;
-}
-
-@media (min-width: 768px) {
-  .hero__top {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: start;
-  }
-}
-
-.hero__intro {
-  position: relative;
-  z-index: 1;
 }
 
 .hero__badge {
@@ -332,40 +316,88 @@ img {
   margin-bottom: 1.5rem;
 }
 
-.hero__meta {
+/* --- Credential Strip --- */
+.hero__credentials {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  align-items: flex-start;
-  margin-bottom: 2rem;
+  gap: 1.25rem;
+  align-items: center;
+  margin-bottom: 1.75rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--gray-800);
+  border-bottom: 1px solid var(--gray-800);
 }
 
-.hero__meta-item {
-  font-size: 1.05rem;
-  color: var(--gray-200);
+.credential {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 0.6rem;
 }
 
-.hero__meta-label {
+.credential__logo {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(100%) brightness(0.2);
+  opacity: 0.8;
+  transition: opacity 0.3s, filter 0.3s;
+}
+
+.credential__logo--round {
+  border-radius: 50%;
+}
+
+.credential:hover .credential__logo {
+  filter: none;
+  opacity: 1;
+}
+
+.credential__name {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-200);
+  letter-spacing: -0.01em;
+}
+
+/* --- Current Role --- */
+.hero__role {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.hero__role-label {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   color: var(--gray-400);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--gray-700);
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
-.hero__meta-divider {
-  width: 1px;
-  height: 40px;
-  background: var(--gray-700);
-  align-self: stretch;
+.hero__role-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--gray-100);
+}
+
+/* --- Action Row --- */
+.hero__action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .hero__actions {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
@@ -1105,26 +1137,21 @@ img {
 }
 
 /* --- About Section --- */
-/* --- Hero Stats (right column) --- */
+/* --- Hero Stats --- */
 .hero__stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  padding: 2rem;
-  border: 1px solid var(--gray-800);
-  border-radius: 16px;
-  background: var(--gray-900);
-  align-self: center;
+  display: flex;
+  gap: 2.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .stat {
-  text-align: center;
+  text-align: left;
 }
 
 .stat__number {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -1134,7 +1161,7 @@ img {
   display: block;
   font-size: 0.7rem;
   color: var(--gray-400);
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1208,14 +1235,15 @@ img {
   line-height: 1.65;
 }
 
-/* --- Hero CTA --- */
-.hero__cta {
-  position: relative;
-  z-index: 1;
+/* --- Stat countUp animation --- */
+@keyframes statPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
-.hero__cta .btn {
-  gap: 0.75rem;
+.stat__number.counted {
+  animation: statPulse 0.4s ease-out;
 }
 
 /* --- Hero Social --- */
@@ -1302,9 +1330,32 @@ img {
     padding: 3.5rem 0;
   }
 
-  .hero__stats {
-    padding: 1.5rem;
+  .hero__credentials {
     gap: 1rem;
+  }
+
+  .credential__logo {
+    height: 20px;
+  }
+
+  .credential__name {
+    font-size: 0.8rem;
+  }
+
+  .hero__role {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .hero__stats {
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .hero__action-row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .hero__summary {

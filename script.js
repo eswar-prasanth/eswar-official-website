@@ -131,6 +131,50 @@
     });
   });
 
+  // --- CountUp animation for hero stats ---
+  const statNumbers = document.querySelectorAll('.stat__number[data-target]');
+
+  function animateCount(el) {
+    const target = parseInt(el.dataset.target, 10);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const duration = 1600;
+    const startTime = performance.now();
+
+    function easeOutExpo(t) {
+      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+    }
+
+    function tick(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const value = Math.round(easeOutExpo(progress) * target);
+      el.textContent = prefix + value.toLocaleString() + suffix;
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.classList.add('counted');
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  if (statNumbers.length) {
+    const statObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target);
+            statObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    statNumbers.forEach(el => statObserver.observe(el));
+  }
+
   // --- Parallax on hero grid ---
   const heroGrid = document.querySelector('.hero__grid-bg');
   if (heroGrid) {
