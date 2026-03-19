@@ -164,37 +164,11 @@
   }
 
   function initCountUp() {
-    const statNumbers = document.querySelectorAll('.stat__number[data-target]');
-    if (!statNumbers.length) return;
-
-    statNumbers.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        animateCount(el);
-      }
-    });
-
-    const statObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            animateCount(entry.target);
-            statObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    statNumbers.forEach(el => {
-      if (!countedSet.has(el)) statObserver.observe(el);
-    });
+    document.querySelectorAll('.stat__number[data-target]').forEach(el => animateCount(el));
   }
 
-  if (document.readyState === 'complete') {
-    initCountUp();
-  } else {
-    window.addEventListener('load', initCountUp);
-  }
+  window.addEventListener('load', initCountUp);
+  setTimeout(initCountUp, 500);
 
   // --- Parallax on hero grid ---
   const heroGrid = document.querySelector('.hero__grid-bg');
