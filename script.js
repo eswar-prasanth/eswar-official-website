@@ -20,7 +20,6 @@
 
   // --- Nav scroll behavior ---
   const nav = document.getElementById('nav');
-  let lastScroll = 0;
 
   function handleNavScroll() {
     const scrollY = window.scrollY;
@@ -29,7 +28,6 @@
     } else {
       nav.classList.remove('scrolled');
     }
-    lastScroll = scrollY;
   }
 
   window.addEventListener('scroll', handleNavScroll, { passive: true });
@@ -77,6 +75,32 @@
 
   revealElements.forEach(el => revealObserver.observe(el));
 
+  // --- Tab switching ---
+  const tabBtns = document.querySelectorAll('.tabs__btn');
+  const tabPanels = document.querySelectorAll('.tabs__panel');
+
+  function switchTab(tabId) {
+    tabBtns.forEach(btn => {
+      const isActive = btn.dataset.tab === tabId;
+      btn.classList.toggle('tabs__btn--active', isActive);
+      btn.setAttribute('aria-selected', isActive);
+    });
+    tabPanels.forEach(panel => {
+      panel.classList.toggle('tabs__panel--active', panel.id === `tab-${tabId}`);
+    });
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  // --- Nav/mobile links that target a specific tab ---
+  document.querySelectorAll('[data-tab-target]').forEach(link => {
+    link.addEventListener('click', () => {
+      switchTab(link.dataset.tabTarget);
+    });
+  });
+
   // --- Smooth scroll for anchor links ---
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -112,6 +136,36 @@
   }
 
   window.addEventListener('scroll', highlightNav, { passive: true });
+
+  // --- Experience accordion ---
+  const timelineItems = document.querySelectorAll('.timeline__item[data-expandable]');
+
+  timelineItems.forEach(item => {
+    const header = item.querySelector('.timeline__card-header');
+    if (!header) return;
+
+    header.addEventListener('click', () => {
+      const isExpanded = item.classList.contains('timeline__item--expanded');
+
+      timelineItems.forEach(other => {
+        other.classList.remove('timeline__item--expanded');
+        const h = other.querySelector('.timeline__card-header');
+        if (h) h.setAttribute('aria-expanded', 'false');
+      });
+
+      if (!isExpanded) {
+        item.classList.add('timeline__item--expanded');
+        header.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
 
   // --- Stagger animation on timeline highlights ---
   const timelineCards = document.querySelectorAll('.timeline__card');
@@ -181,7 +235,7 @@
 
   // --- Console Easter egg ---
   console.log(
-    '%cHey there! 👋',
+    '%cHey there! \uD83D\uDC4B',
     'font-size: 16px; font-weight: bold; color: #fafafa; background: #0a0a0a; padding: 8px 16px; border-radius: 4px;'
   );
   console.log(

@@ -521,6 +521,148 @@ img {
   100% { transform: translateX(-50%); }
 }
 
+/* --- Tabs --- */
+.tabs__bar {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--gray-800);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.tabs__bar::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs__btn {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-400);
+  background: none;
+  border: none;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  transition: color 0.3s;
+  flex-shrink: 0;
+}
+
+.tabs__btn:hover {
+  color: var(--gray-200);
+}
+
+.tabs__btn--active {
+  color: var(--white);
+}
+
+.tabs__btn--active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--white);
+  animation: tabIndicatorIn 0.3s var(--transition);
+}
+
+@keyframes tabIndicatorIn {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.tabs__panel {
+  display: none;
+  animation: tabFadeIn 0.35s var(--transition);
+}
+
+.tabs__panel--active {
+  display: block;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tabs__panel-header {
+  margin-bottom: 1.5rem;
+}
+
+.tabs__panel-header .section__title {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  margin-bottom: 0.5rem;
+}
+
+.tabs__panel-header .section__subtitle {
+  font-size: 1.05rem;
+  max-width: none;
+  white-space: nowrap;
+}
+
+/* --- Accordion Timeline --- */
+.timeline__card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.timeline__card-header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline__chevron {
+  flex-shrink: 0;
+  margin-top: 0.35rem;
+  color: var(--gray-400);
+  transition: transform 0.35s var(--transition), color 0.3s;
+}
+
+.timeline__item--expanded .timeline__chevron {
+  transform: rotate(180deg);
+  color: var(--white);
+}
+
+.timeline__card-header:hover .timeline__chevron {
+  color: var(--gray-200);
+}
+
+.timeline__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s var(--transition);
+}
+
+.timeline__item--expanded .timeline__body {
+  grid-template-rows: 1fr;
+}
+
+.timeline__body-inner {
+  overflow: hidden;
+}
+
+.timeline__body-inner .timeline__desc {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gray-800);
+  margin-top: 1.25rem;
+}
+
 /* --- Sections --- */
 .section {
   padding: 6rem 0;
@@ -572,7 +714,7 @@ img {
 
 .timeline__item {
   position: relative;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .timeline__item:last-child {
@@ -582,7 +724,7 @@ img {
 .timeline__marker {
   position: absolute;
   left: -2rem;
-  top: 0.35rem;
+  top: 1.75rem;
   width: 9px;
   height: 9px;
   border-radius: 50%;
@@ -601,23 +743,22 @@ img {
 
 .timeline__date {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--gray-400);
   letter-spacing: 0.1em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .timeline__card {
   background: var(--gray-900);
   border: 1px solid var(--gray-800);
   border-radius: 12px;
-  padding: 2rem;
-  transition: border-color 0.3s, transform 0.3s;
+  padding: 1.5rem 2rem;
+  transition: border-color 0.3s;
 }
 
 .timeline__card:hover {
   border-color: var(--gray-600);
-  transform: translateX(4px);
 }
 
 .timeline__header {
@@ -658,9 +799,7 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--gray-800);
+  margin-top: 0.75rem;
 }
 
 .timeline__highlight {
@@ -671,7 +810,7 @@ img {
 
 .timeline__highlight-metric {
   font-family: var(--font-display);
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
 }
@@ -1404,5 +1543,22 @@ img {
     flex-direction: column;
     gap: 1.5rem;
     text-align: center;
+  }
+
+  .tabs__btn {
+    font-size: 0.85rem;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .timeline__card {
+    padding: 1.25rem;
+  }
+
+  .timeline__highlights {
+    gap: 1rem;
+  }
+
+  .timeline__highlight-metric {
+    font-size: 1.25rem;
   }
 }
