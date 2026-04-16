@@ -42,6 +42,7 @@ body {
   color: var(--white);
   line-height: 1.6;
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 a {
@@ -609,7 +610,6 @@ img {
 .tabs__panel-header .section__subtitle {
   font-size: 1.05rem;
   max-width: none;
-  white-space: nowrap;
 }
 
 /* --- Accordion Timeline --- */
@@ -1463,6 +1463,10 @@ img {
 
 /* --- Responsive fine-tuning --- */
 @media (max-width: 767px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+
   .hero {
     padding: 5.5rem 0 2.5rem;
   }
@@ -1482,11 +1486,23 @@ img {
   }
 
   .timeline {
-    padding-left: 1.5rem;
+    padding-left: 1.25rem;
   }
 
   .timeline__card {
-    padding: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  .timeline__role {
+    font-size: 1.2rem;
+  }
+
+  .timeline__company {
+    font-size: 1rem;
+  }
+
+  .timeline__desc {
+    font-size: 1rem;
   }
 
   .timeline__highlights {
@@ -1494,16 +1510,33 @@ img {
     gap: 1rem;
   }
 
-  .section {
-    padding: 4rem 0;
+  .timeline__highlight-metric {
+    font-size: 1.25rem;
   }
 
   .contact {
-    padding: 4rem 0;
+    padding: 3.5rem 0;
+  }
+
+  .contact__desc {
+    font-size: 1.05rem;
+  }
+
+  .contact__link {
+    padding: 1rem 1.25rem;
+  }
+
+  .contact__link-value {
+    font-size: 1rem;
+    word-break: break-all;
   }
 
   .hero__credentials {
-    gap: 1rem;
+    gap: 0.75rem 1rem;
+  }
+
+  .credential__logo {
+    height: 24px;
   }
 
   .credential__logo--wide {
@@ -1525,9 +1558,13 @@ img {
     gap: 0.4rem;
   }
 
+  .hero__role-title {
+    font-size: 0.95rem;
+  }
+
   .hero__stats {
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
   .hero__top {
@@ -1536,7 +1573,43 @@ img {
   }
 
   .hero__summary {
-    padding: 1rem 0 1rem 1.5rem;
+    padding: 1rem 0 1rem 1.25rem;
+  }
+
+  .hero__summary p {
+    font-size: 0.95rem;
+  }
+
+  .hero__actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .hero__social {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .btn--sm {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .pillar {
+    padding: 1.5rem;
+  }
+
+  .pillar__title {
+    font-size: 1.15rem;
+  }
+
+  .pillar__desc {
+    font-size: 0.95rem;
   }
 
   .footer__inner {
@@ -1550,15 +1623,113 @@ img {
     padding: 0.75rem 0.85rem;
   }
 
-  .timeline__card {
-    padding: 1.25rem;
+  .tabs__panel-header .section__subtitle {
+    font-size: 0.95rem;
   }
 
-  .timeline__highlights {
+  .edu-card {
+    padding: 1.5rem;
+  }
+
+  .edu-card__logo {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .edu-card__school {
+    font-size: 1.1rem;
+  }
+
+  .project-card {
+    padding: 1.5rem;
+  }
+
+  .project-card__number {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .project-card__title {
+    font-size: 1.3rem;
+  }
+
+  .project-card__desc {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .writing-card {
+    padding: 1.5rem;
+  }
+
+  .writing-card__title {
+    font-size: 1.2rem;
+  }
+
+  .writing-card__excerpt {
+    font-size: 0.95rem;
+  }
+
+  .extra-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .extra-card__title {
+    font-size: 1.1rem;
+  }
+
+  .extra-card__desc {
+    font-size: 0.9rem;
+  }
+
+  .nav {
+    padding: 1.25rem 1.25rem;
+  }
+
+  .nav.scrolled {
+    padding: 0.85rem 1.25rem;
+  }
+}
+
+@media (max-width: 374px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .hero__badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.65rem;
+  }
+
+  .hero__stats {
     gap: 1rem;
   }
 
-  .timeline__highlight-metric {
-    font-size: 1.25rem;
+  .stat__label {
+    font-size: 0.7rem;
+  }
+
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.65rem 1.25rem;
+  }
+
+  .tabs__btn {
+    font-size: 0.78rem;
+    padding: 0.65rem 0.65rem;
+  }
+
+  .timeline__card {
+    padding: 1rem;
+  }
+
+  .timeline__role {
+    font-size: 1.1rem;
+  }
+
+  .edu-card,
+  .project-card,
+  .writing-card {
+    padding: 1.25rem;
   }
 }
