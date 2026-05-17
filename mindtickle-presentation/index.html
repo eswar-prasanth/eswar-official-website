@@ -11,6 +11,52 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fff; -webkit-font-smoothing: antialiased; }
     #root { min-height: 100vh; }
+    .pres-root { font-family: 'IBM Plex Sans', sans-serif; width: 100%; margin: 0 auto; background: #fff; padding: 0 48px 32px; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 10px; border-bottom: 1px solid #eee; margin-bottom: 18px; gap: 8px; }
+    .nav-slides { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; }
+    .flex-row { display: flex; gap: 20px; align-items: flex-start; }
+    .flex-col-stack { display: flex; flex-direction: column; gap: 20px; }
+    .chart-col { flex: 1 1 55%; min-width: 0; }
+    .sidebar-col { flex: 1 1 40%; min-width: 0; }
+    .orbit-col { flex: 1 1 50%; min-width: 0; }
+    .metrics-col { flex: 0 0 280px; }
+    .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+    .grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .grid-4col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+    .stats-bar { display: flex; border-top: 2px solid #111; border-bottom: 1px solid #eee; margin-bottom: 16px; }
+    .phase-tabs { display: flex; gap: 0; margin-bottom: 16px; border-top: 2px solid #111; }
+    .phase-content { display: flex; gap: 20px; margin-bottom: 16px; }
+    .intervention-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+
+    @media (max-width: 768px) {
+      .pres-root { padding: 0 16px 20px; }
+      .nav-bar { flex-wrap: wrap; justify-content: center; gap: 6px; }
+      .nav-slides { gap: 2px; }
+      .nav-slides button { font-size: 7px !important; padding: 4px 6px !important; }
+      .nav-bar > button { font-size: 9px !important; padding: 4px 10px !important; }
+      .flex-row { flex-direction: column; gap: 16px; }
+      .chart-col, .sidebar-col, .orbit-col { flex: 1 1 100%; }
+      .metrics-col { flex: 1 1 100%; }
+      .phase-content { flex-direction: column; gap: 16px; }
+      .grid-2col { grid-template-columns: 1fr; }
+      .grid-3col { grid-template-columns: 1fr; }
+      .grid-4col { grid-template-columns: 1fr 1fr; }
+      .stats-bar { flex-wrap: wrap; }
+      .stats-bar > div { flex: 1 1 50% !important; min-width: 0; }
+      .phase-tabs > div { padding: 8px 6px !important; }
+      .intervention-btns { gap: 3px; }
+      .intervention-btns button { font-size: 7px !important; padding: 3px 6px !important; }
+      h1 { font-size: 17px !important; }
+    }
+
+    @media (max-width: 480px) {
+      .pres-root { padding: 0 12px 16px; }
+      .grid-4col { grid-template-columns: 1fr; }
+      .stats-bar > div { flex: 1 1 50% !important; }
+      .phase-tabs { flex-wrap: wrap; }
+      .phase-tabs > div { flex: 1 1 45% !important; }
+      h1 { font-size: 15px !important; }
+    }
   </style>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -346,7 +392,7 @@
         React.createElement("h1", {style:{fontSize:20,fontWeight:700,color:"#111",margin:"0 0 2px",letterSpacing:"-0.02em"}}, data.title),
         React.createElement("p", {style:{fontSize:11,color:"#999",margin:"0 0 4px"}}, data.subtitle+" \u2014 "+data.tagline),
         React.createElement("p", {style:{fontSize:10,color:"#aaa",margin:"0 0 14px"}}, "Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.currentARR)+" \u2192 "+fmt(c.potentialARR)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
-        React.createElement("div", {style:{display:"flex",gap:0,marginBottom:16,borderTop:"2px solid #111"}},
+        React.createElement("div", {className:"phase-tabs"},
           data.phases.map((p,i)=>React.createElement("div", {key:i, onClick:()=>setActivePhase(i), style:{
             flex:1,padding:"10px 12px",cursor:"pointer",borderBottom:activePhase===i?"3px solid #111":"3px solid transparent",
             borderRight:i<3?"1px solid #eee":"none",background:activePhase===i?"#f7f7f7":"#fff",transition:"all 0.15s"
@@ -356,8 +402,8 @@
             React.createElement("div", {style:{fontSize:9,color:"#bbb"}}, p.weeks)
           ))
         ),
-        React.createElement("div", {style:{display:"flex",gap:20,marginBottom:16}},
-          React.createElement("div", {style:{flex:1}},
+        React.createElement("div", {className:"phase-content"},
+          React.createElement("div", {style:{flex:1,minWidth:0}},
             React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}}, "Objective"),
             React.createElement("div", {style:{fontSize:12,color:"#333",lineHeight:1.6,marginBottom:14}}, phase.objective),
             React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}}, "Key Asks from Customer"),
@@ -371,7 +417,7 @@
               React.createElement("div", {style:{fontSize:10,color:"#666",lineHeight:1.5}}, r)
             ))
           ),
-          React.createElement("div", {style:{flex:"0 0 240px"}},
+          React.createElement("div", {className:"metrics-col"},
             React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:8}}, "Target Metrics"),
             phase.metrics.map((m,i)=>React.createElement("div", {key:i, style:{padding:"8px 10px",background:i%2===0?"#f9f9f9":"#fff",borderBottom:"1px solid #f0f0f0"}},
               React.createElement("div", {style:{fontSize:10,fontWeight:600,color:"#333",marginBottom:4}}, m.label),
@@ -385,7 +431,7 @@
         ),
         React.createElement("div", {style:{borderTop:"2px solid #111",paddingTop:12}},
           React.createElement("div", {style:{fontSize:12,fontWeight:700,color:"#111",marginBottom:10}}, "Execution Tasks \u2014 "+phase.name+" ("+phase.weeks+")"),
-          React.createElement("div", {style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 20px"}},
+          React.createElement("div", {className:"grid-2col"},
             phase.tasks.map((t,i)=>React.createElement("div", {key:i, style:{display:"flex",gap:8,alignItems:"flex-start"}},
               React.createElement("div", {style:{flex:"0 0 18px",height:18,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:1}}, i+1),
               React.createElement("div", {style:{fontSize:10,color:"#444",lineHeight:1.5}}, t)
@@ -404,33 +450,33 @@
       const aP=ap?CRO_P.find(p=>p.id===ap):null;
       const slideNames=["Portfolio","CRO Priorities","Q3: Stabilise","Q2: Workshop","Q4: Relationship","Q1: Expand"];
 
-      return React.createElement("div", {style:{fontFamily:"'IBM Plex Sans',sans-serif",maxWidth:1000,margin:"0 auto",background:"#fff",padding:"0 32px 24px"}},
-        React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 0 10px",borderBottom:"1px solid #eee",marginBottom:18}},
-          React.createElement("button", {onClick:()=>setSlide(Math.max(1,slide-1)), disabled:slide===1, style:{padding:"5px 14px",fontSize:10,fontWeight:600,borderRadius:3,cursor:slide===1?"default":"pointer",border:"1px solid #ddd",background:slide===1?"#f5f5f5":"#fff",color:slide===1?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif"}}, "\u2190 Prev"),
-          React.createElement("div", {style:{display:"flex",gap:3}},
-            slideNames.map((n,i)=>React.createElement("button", {key:i, onClick:()=>setSlide(i+1), style:{padding:"4px 8px",borderRadius:2,fontSize:8,fontWeight:600,cursor:"pointer",border:slide===i+1?"1.5px solid #111":"1px solid #ddd",background:slide===i+1?"#111":"#fff",color:slide===i+1?"#fff":"#aaa",fontFamily:"'IBM Plex Sans',sans-serif"}}, n))
+      return React.createElement("div", {className:"pres-root"},
+        React.createElement("div", {className:"nav-bar"},
+          React.createElement("button", {onClick:()=>setSlide(Math.max(1,slide-1)), disabled:slide===1, style:{padding:"5px 14px",fontSize:10,fontWeight:600,borderRadius:3,cursor:slide===1?"default":"pointer",border:"1px solid #ddd",background:slide===1?"#f5f5f5":"#fff",color:slide===1?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}}, "\u2190 Prev"),
+          React.createElement("div", {className:"nav-slides"},
+            slideNames.map((n,i)=>React.createElement("button", {key:i, onClick:()=>setSlide(i+1), style:{padding:"4px 8px",borderRadius:2,fontSize:8,fontWeight:600,cursor:"pointer",border:slide===i+1?"1.5px solid #111":"1px solid #ddd",background:slide===i+1?"#111":"#fff",color:slide===i+1?"#fff":"#aaa",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}}, n))
           ),
-          React.createElement("button", {onClick:()=>setSlide(Math.min(6,slide+1)), disabled:slide===6, style:{padding:"5px 14px",fontSize:10,fontWeight:600,borderRadius:3,cursor:slide===6?"default":"pointer",border:"1px solid #ddd",background:slide===6?"#f5f5f5":"#fff",color:slide===6?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif"}}, "Next \u2192")
+          React.createElement("button", {onClick:()=>setSlide(Math.min(6,slide+1)), disabled:slide===6, style:{padding:"5px 14px",fontSize:10,fontWeight:600,borderRadius:3,cursor:slide===6?"default":"pointer",border:"1px solid #ddd",background:slide===6?"#f5f5f5":"#fff",color:slide===6?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}}, "Next \u2192")
         ),
 
         slide===1 && React.createElement("div", null,
           React.createElement("h1", {style:{fontSize:20,fontWeight:700,color:"#111",margin:"0 0 2px"}}, "Achieving Full Revenue Potential from Existing Accounts"),
           React.createElement("p", {style:{fontSize:11,color:"#999",margin:"0 0 14px"}}, "Top 10 accounts \u2014 "+fmt(tC)+" of "+fmt(tP)+" addressable \u00b7 "+Math.round((tC/tP)*100)+"% captured \u00b7 "+fmt(tP-tC)+" gap"),
-          React.createElement("div", {style:{display:"flex",borderTop:"2px solid #111",borderBottom:"1px solid #eee",marginBottom:16}},
+          React.createElement("div", {className:"stats-bar"},
             [{l:"Current ARR",v:fmt(tC)},{l:"Addressable",v:fmt(tP)},{l:"Captured",v:Math.round((tC/tP)*100)+"%"},{l:"Gap",v:fmt(tP-tC)}].map(({l,v},i)=>React.createElement("div", {key:l, style:{flex:1,padding:"10px 0",textAlign:"center",borderRight:i<3?"1px solid #eee":"none"}},
               React.createElement("div", {style:{fontSize:8,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.1em",fontWeight:600}}, l),
               React.createElement("div", {style:{fontSize:18,fontWeight:700,color:"#111",marginTop:2}}, v)
             ))
           ),
-          React.createElement("div", {style:{display:"flex",gap:20,alignItems:"flex-start",marginBottom:20}},
-            React.createElement("div", {style:{flex:"0 0 520px"}},
+          React.createElement("div", {className:"flex-row", style:{marginBottom:20}},
+            React.createElement("div", {className:"chart-col"},
               React.createElement(S1Chart, {clients:CLIENTS, hov:s1H, setHov:setS1H, sel:s1S, setSel:setS1S, aq:s1Q, setAq:setS1Q}),
-              React.createElement("div", {style:{display:"flex",gap:16,justifyContent:"center",marginTop:4}},
+              React.createElement("div", {style:{display:"flex",gap:16,justifyContent:"center",marginTop:4,flexWrap:"wrap"}},
                 [{bg:"#ddd",t:"Light = Low capture"},{bg:"#444",t:"Dark = High capture"}].map(({bg,t})=>React.createElement("div", {key:t, style:{display:"flex",alignItems:"center",gap:5,fontSize:9,color:"#aaa"}}, React.createElement("div", {style:{width:12,height:12,borderRadius:"50%",background:bg}}), t)),
                 React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, "Size = Potential ARR")
               )
             ),
-            React.createElement("div", {style:{flex:1}},
+            React.createElement("div", {className:"sidebar-col"},
               s1Sel ? React.createElement("div", null,
                 React.createElement("div", {style:{fontSize:14,fontWeight:700,color:"#111"}}, s1Sel.name),
                 React.createElement("div", {style:{fontSize:9,color:"#aaa",marginBottom:12}}, s1Sel.industry),
@@ -456,16 +502,16 @@
           ),
           React.createElement("div", {style:{borderTop:"2px solid #111",paddingTop:16}},
             s1I ? React.createElement("div", null,
-              React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}},
+              React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12,flexWrap:"wrap",gap:8}},
                 React.createElement("div", null,
                   React.createElement("div", {style:{fontSize:14,fontWeight:700,color:"#111"}}, s1I.title),
                   React.createElement("div", {style:{fontSize:10,color:"#999"}}, s1I.subtitle)
                 ),
-                React.createElement("div", {style:{display:"flex",gap:4}},
+                React.createElement("div", {className:"intervention-btns"},
                   QO.map(q=>React.createElement("button", {key:q, onClick:()=>{setS1Q(q);setS1S(null)}, style:{padding:"3px 10px",borderRadius:2,fontSize:8,fontWeight:600,border:"1px solid "+(s1EQ===q?"#111":"#ddd"),background:s1EQ===q?"#111":"#fff",color:s1EQ===q?"#fff":"#999",cursor:"pointer",fontFamily:"'IBM Plex Sans',sans-serif"}}, S1_INT[q].title.split("&")[0].trim()))
                 )
               ),
-              React.createElement("div", {style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px 24px"}},
+              React.createElement("div", {className:"grid-2col"},
                 s1I.items.map((it,i)=>React.createElement("div", {key:i, style:{display:"flex",gap:8,alignItems:"flex-start"}},
                   React.createElement("div", {style:{flex:"0 0 16px",height:16,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:2}}, i+1),
                   React.createElement("div", {style:{fontSize:11,color:"#444",lineHeight:1.5}}, it)
@@ -474,7 +520,7 @@
               React.createElement("div", {style:{marginTop:12,padding:"8px 12px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:11,color:"#555",fontWeight:500}}, s1I.focus)
             ) : React.createElement("div", null,
               React.createElement("div", {style:{fontSize:13,fontWeight:700,color:"#111",marginBottom:12}}, "Intervention Playbook by Quadrant"),
-              React.createElement("div", {style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:12}},
+              React.createElement("div", {className:"grid-4col"},
                 QO.map(q=>{const inv=S1_INT[q],qc=CLIENTS.filter(c=>c.q===q);
                 return React.createElement("div", {key:q, onClick:()=>setS1Q(q), style:{padding:"12px 14px",background:"#f9f9f9",borderRadius:4,cursor:"pointer",border:"1px solid #eee"}},
                   React.createElement("div", {style:{fontSize:11,fontWeight:700,color:"#333",marginBottom:4}}, inv.title),
@@ -490,8 +536,8 @@
         slide===2 && React.createElement("div", null,
           React.createElement("h1", {style:{fontSize:20,fontWeight:700,color:"#111",margin:"0 0 2px"}}, "The CRO\u2019s World \u2014 What Keeps Them Up at Night"),
           React.createElement("p", {style:{fontSize:11,color:"#999",margin:"0 0 16px"}}, "Mapping CRO priorities to Mindtickle capabilities \u2014 current offering vs expectation gap"),
-          React.createElement("div", {style:{display:"flex",gap:20,alignItems:"flex-start",marginBottom:20}},
-            React.createElement("div", {style:{flex:"0 0 440px"}},
+          React.createElement("div", {className:"flex-row", style:{marginBottom:20}},
+            React.createElement("div", {className:"orbit-col"},
               React.createElement(OrbitDiag, {ps:CRO_P, ap:ap, setAp:setAp}),
               React.createElement("div", {style:{display:"flex",gap:12,justifyContent:"center",marginTop:4}},
                 React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, "Inner = Core"),
@@ -499,7 +545,7 @@
                 React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, "Click to explore")
               )
             ),
-            React.createElement("div", {style:{flex:1}},
+            React.createElement("div", {className:"sidebar-col"},
               aP ? React.createElement("div", null,
                 React.createElement("div", {style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:12}}, aP.label.replace("\n"," ")),
                 React.createElement("div", {style:{marginBottom:14}},
@@ -527,19 +573,19 @@
           ),
           React.createElement("div", {style:{borderTop:"2px solid #111",paddingTop:16}},
             aP ? React.createElement("div", null,
-              React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}},
+              React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,flexWrap:"wrap",gap:8}},
                 React.createElement("div", null,
                   React.createElement("div", {style:{fontSize:13,fontWeight:700,color:"#111"}}, "Recommended Intervention"),
                   React.createElement("div", {style:{fontSize:10,color:"#999"}}, aP.label.replace("\n"," "))
                 ),
-                React.createElement("div", {style:{display:"flex",gap:4}},
+                React.createElement("div", {className:"intervention-btns"},
                   CRO_P.map(p=>React.createElement("button", {key:p.id, onClick:()=>setAp(p.id), style:{padding:"3px 8px",borderRadius:2,fontSize:7.5,fontWeight:600,border:"1px solid "+(ap===p.id?"#111":"#ddd"),background:ap===p.id?"#111":"#fff",color:ap===p.id?"#fff":"#aaa",cursor:"pointer",fontFamily:"'IBM Plex Sans',sans-serif"}}, p.label.split("\n")[0]))
                 )
               ),
               React.createElement("div", {style:{padding:"12px 16px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:12,color:"#333",lineHeight:1.6}}, aP.int)
             ) : React.createElement("div", null,
               React.createElement("div", {style:{fontSize:13,fontWeight:700,color:"#111",marginBottom:12}}, "CRO Priority \u2192 Mindtickle Capability Map"),
-              React.createElement("div", {style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}},
+              React.createElement("div", {className:"grid-3col"},
                 CRO_P.map(p=>React.createElement("div", {key:p.id, onClick:()=>setAp(p.id), style:{padding:"12px 14px",background:"#f9f9f9",borderRadius:4,cursor:"pointer",border:"1px solid #eee"}},
                   React.createElement("div", {style:{fontSize:11,fontWeight:700,color:"#333",marginBottom:4}}, p.label.replace("\n"," ")),
                   React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, p.orbit===1?"Core":"Enabling"),
