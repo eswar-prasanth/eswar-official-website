@@ -11,22 +11,22 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fff; -webkit-font-smoothing: antialiased; }
     #root { min-height: 100vh; }
-    .pres-root { font-family: 'IBM Plex Sans', sans-serif; width: 100%; margin: 0 auto; background: #fff; padding: 0 48px 32px; }
-    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 8px; border-bottom: 1px solid #eee; margin-bottom: 16px; gap: 8px; }
+    .pres-root { font-family: 'IBM Plex Sans', sans-serif; width: 100%; margin: 0 auto; background: #fff; padding: 0 32px 12px; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 0 6px; border-bottom: 1px solid #eee; margin-bottom: 8px; gap: 8px; }
     .nav-slides { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
-    .flex-row { display: flex; gap: 16px; align-items: flex-start; }
+    .flex-row { display: flex; gap: 12px; align-items: flex-start; }
     .chart-col { flex: 1 1 55%; min-width: 0; }
     .sidebar-col { flex: 1 1 40%; min-width: 0; }
-    .orbit-col { flex: 1 1 50%; min-width: 0; }
+    .orbit-col { flex: 0 0 38%; min-width: 0; }
     .metrics-col { flex: 0 0 300px; }
     .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
     .grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .grid-4col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
-    .stats-bar { display: flex; border-top: 2px solid #111; border-bottom: 1px solid #eee; margin-bottom: 14px; }
-    .phase-tabs { display: flex; gap: 0; margin-bottom: 14px; border-top: 2px solid #111; }
-    .phase-content { display: flex; gap: 16px; margin-bottom: 14px; }
+    .stats-bar { display: flex; border-top: 2px solid #111; border-bottom: 1px solid #eee; margin-bottom: 8px; }
+    .phase-tabs { display: flex; gap: 0; margin-bottom: 8px; border-top: 2px solid #111; }
+    .phase-content { display: flex; gap: 12px; margin-bottom: 8px; }
     .intervention-btns { display: flex; gap: 3px; flex-wrap: wrap; }
-    .metrics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .metrics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
     .s2-bottom-row { display: flex; gap: 16px; }
 
     @media (max-width: 768px) {
@@ -241,7 +241,7 @@
 
     // ===== COMPONENTS =====
     function S1Chart({clients,hov,setHov,sel,setSel,aq,setAq}) {
-      const W=520,H=400,pad={top:10,right:16,bottom:44,left:50},cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
+      const W=520,H=340,pad={top:10,right:16,bottom:40,left:50},cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
       const xP=v=>pad.left+(v/100)*cW,yP=v=>pad.top+cH-(v/100)*cH;
       const qF={q2:"#f5f5f5",q1:"#fafafa",q3:"#ededed",q4:"#f5f5f5"};
       const qB=[{k:"q2",x:pad.left,y:pad.top},{k:"q1",x:pad.left+cW/2,y:pad.top},{k:"q3",x:pad.left,y:pad.top+cH/2},{k:"q4",x:pad.left+cW/2,y:pad.top+cH/2}];
@@ -265,14 +265,14 @@
     }
 
     function OrbitDiag({ps,ap,setAp}) {
-      const W=480,H=430,cx=W/2,cy=H/2,r1=120,r2=180;
+      const W=400,H=360,cx=W/2,cy=H/2,r1=100,r2=155;
       return h("svg",{viewBox:`0 0 ${W} ${H}`,style:{width:"100%",display:"block"}},
         h("circle",{cx,cy,r:r1,fill:"none",stroke:"#ddd",strokeWidth:"0.75",strokeDasharray:"4,3"}),
         h("circle",{cx,cy,r:r2,fill:"none",stroke:"#eee",strokeWidth:"0.75",strokeDasharray:"4,3"}),
-        h("circle",{cx,cy,r:40,fill:"#222"}),
+        h("circle",{cx,cy,r:34,fill:"#222"}),
         h("text",{x:cx,y:cy-4,textAnchor:"middle",fontSize:"13",fontWeight:"700",fill:"#fff",fontFamily:"'IBM Plex Sans',sans-serif"},"CRO"),
         h("text",{x:cx,y:cy+9,textAnchor:"middle",fontSize:"10",fill:"#aaa",fontFamily:"'IBM Plex Sans',sans-serif"},"Revenue Officer"),
-        ps.map(p=>{const r=p.orbit===1?r1:r2,rad=(p.angle*Math.PI)/180,px=cx+r*Math.cos(rad),py=cy+r*Math.sin(rad),isA=ap===p.id,nR=38,ls=p.label.split("\n");
+        ps.map(p=>{const r=p.orbit===1?r1:r2,rad=(p.angle*Math.PI)/180,px=cx+r*Math.cos(rad),py=cy+r*Math.sin(rad),isA=ap===p.id,nR=33,ls=p.label.split("\n");
         return h("g",{key:p.id,onClick:()=>setAp(isA?null:p.id),style:{cursor:"pointer"}},
           h("line",{x1:cx,y1:cy,x2:px,y2:py,stroke:"#ddd",strokeWidth:"0.5",style:{pointerEvents:"none"}}),
           h("circle",{cx:px,cy:py,r:nR,fill:isA?"#333":"#f5f5f5",stroke:isA?"#000":"#bbb",strokeWidth:isA?2:0.75,style:{transition:"all 0.15s"}}),
@@ -286,48 +286,48 @@
       const p = data.phases[ap];
       const gap = data.accounts.reduce((s,c)=>s+(c.pot-c.cur),0);
       return h("div",null,
-        h("h1",{style:{fontSize:26,fontWeight:700,color:"#111",margin:"0 0 2px"}},data.title),
-        h("p",{style:{fontSize:15,color:"#999",margin:"0 0 3px"}},data.sub+" \u2014 "+data.tag),
-        h("p",{style:{fontSize:14,color:"#aaa",margin:"0 0 12px"}},"Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.cur)+"\u2192"+fmt(c.pot)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
+        h("h1",{style:{fontSize:22,fontWeight:700,color:"#111",margin:"0 0 1px"}},data.title),
+        h("p",{style:{fontSize:13,color:"#999",margin:"0 0 1px"}},data.sub+" \u2014 "+data.tag),
+        h("p",{style:{fontSize:12,color:"#aaa",margin:"0 0 6px"}},"Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.cur)+"\u2192"+fmt(c.pot)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
         h("div",{className:"phase-tabs"},
-          data.phases.map((ph,i)=>h("div",{key:i,onClick:()=>setAp(i),style:{flex:1,padding:"8px 10px",cursor:"pointer",borderBottom:ap===i?"3px solid #111":"3px solid transparent",borderRight:i<3?"1px solid #eee":"none",background:ap===i?"#f7f7f7":"#fff",transition:"all 0.15s"}},
-            h("div",{style:{fontSize:18,marginBottom:1}},ph.icon),
-            h("div",{style:{fontSize:15,fontWeight:700,color:ap===i?"#111":"#888"}},ph.name),
-            h("div",{style:{fontSize:13,color:"#bbb"}},ph.weeks)
+          data.phases.map((ph,i)=>h("div",{key:i,onClick:()=>setAp(i),style:{flex:1,padding:"6px 8px",cursor:"pointer",borderBottom:ap===i?"3px solid #111":"3px solid transparent",borderRight:i<3?"1px solid #eee":"none",background:ap===i?"#f7f7f7":"#fff",transition:"all 0.15s"}},
+            h("div",{style:{fontSize:16,marginBottom:0}},ph.icon),
+            h("div",{style:{fontSize:14,fontWeight:700,color:ap===i?"#111":"#888"}},ph.name),
+            h("div",{style:{fontSize:12,color:"#bbb"}},ph.weeks)
           ))
         ),
         h("div",{className:"phase-content"},
           h("div",{style:{flex:1,minWidth:0}},
-            h("div",{style:{fontSize:14,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}},p.left.title),
-            p.left.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#888",marginTop:7}}),
-              h("div",{style:{fontSize:14,color:"#444",lineHeight:1.5}},it)
+            h("div",{style:{fontSize:13,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},p.left.title),
+            p.left.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start"}},
+              h("div",{style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#888",marginTop:7}}),
+              h("div",{style:{fontSize:13,color:"#444",lineHeight:1.4}},it)
             ))
           ),
           h("div",{style:{flex:1,minWidth:0}},
-            h("div",{style:{fontSize:14,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}},p.right.title),
-            p.right.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#ccc",marginTop:7}}),
-              h("div",{style:{fontSize:14,color:"#555",lineHeight:1.5}},it)
+            h("div",{style:{fontSize:13,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},p.right.title),
+            p.right.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start"}},
+              h("div",{style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#ccc",marginTop:7}}),
+              h("div",{style:{fontSize:13,color:"#555",lineHeight:1.4}},it)
             ))
           )
         ),
         p.metrics && h("div",{className:"metrics-grid"},
-          p.metrics.map((m,i)=>h("div",{key:i,style:{padding:"8px 10px",background:"#f9f9f9",borderRadius:3}},
-            h("div",{style:{fontSize:13,fontWeight:600,color:"#666",marginBottom:4}},m.l),
+          p.metrics.map((m,i)=>h("div",{key:i,style:{padding:"5px 8px",background:"#f9f9f9",borderRadius:3}},
+            h("div",{style:{fontSize:12,fontWeight:600,color:"#666",marginBottom:2}},m.l),
             h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
-              h("span",{style:{fontSize:13,color:"#aaa"}},m.c),
-              h("span",{style:{fontSize:11,color:"#ccc"}},"\u2192"),
-              h("span",{style:{fontSize:13,fontWeight:600,color:"#111"}},m.t)
+              h("span",{style:{fontSize:12,color:"#aaa"}},m.c),
+              h("span",{style:{fontSize:10,color:"#ccc"}},"\u2192"),
+              h("span",{style:{fontSize:12,fontWeight:600,color:"#111"}},m.t)
             )
           ))
         ),
-        h("div",{style:{borderTop:"2px solid #111",paddingTop:10}},
-          h("div",{style:{fontSize:15,fontWeight:700,color:"#111",marginBottom:8}},"Execution Tasks \u2014 "+p.name+" ("+p.weeks+")"),
+        h("div",{style:{borderTop:"2px solid #111",paddingTop:6}},
+          h("div",{style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:5}},"Execution Tasks \u2014 "+p.name+" ("+p.weeks+")"),
           h("div",{className:"grid-2col"},
-            p.tasks.map((t,i)=>h("div",{key:i,style:{display:"flex",gap:6,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 20px",height:20,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#888",marginTop:2}},i+1),
-              h("div",{style:{fontSize:14,color:"#444",lineHeight:1.4}},t)
+            p.tasks.map((t,i)=>h("div",{key:i,style:{display:"flex",gap:5,alignItems:"flex-start"}},
+              h("div",{style:{flex:"0 0 18px",height:18,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:"#888",marginTop:1}},i+1),
+              h("div",{style:{fontSize:13,color:"#444",lineHeight:1.35}},t)
             ))
           )
         )
@@ -357,15 +357,15 @@
 
         // SLIDE 1
         sl===1 && h("div",null,
-          h("h1",{style:{fontSize:26,fontWeight:700,color:"#111",margin:"0 0 2px"}},"Achieving Full Revenue Potential from Existing Accounts"),
-          h("p",{style:{fontSize:15,color:"#999",margin:"0 0 12px"}},"Top 10 \u2014 "+fmt(tC)+" of "+fmt(tP)+" addressable \u00b7 "+Math.round((tC/tP)*100)+"% captured \u00b7 "+fmt(tP-tC)+" gap"),
+          h("h1",{style:{fontSize:22,fontWeight:700,color:"#111",margin:"0 0 1px"}},"Achieving Full Revenue Potential from Existing Accounts"),
+          h("p",{style:{fontSize:13,color:"#999",margin:"0 0 6px"}},"Top 10 \u2014 "+fmt(tC)+" of "+fmt(tP)+" addressable \u00b7 "+Math.round((tC/tP)*100)+"% captured \u00b7 "+fmt(tP-tC)+" gap"),
           h("div",{className:"stats-bar"},
-            [{l:"Current",v:fmt(tC)},{l:"Addressable",v:fmt(tP)},{l:"Captured",v:Math.round((tC/tP)*100)+"%"},{l:"Gap",v:fmt(tP-tC)}].map(({l,v},i)=>h("div",{key:l,style:{flex:1,padding:"8px 0",textAlign:"center",borderRight:i<3?"1px solid #eee":"none"}},
-              h("div",{style:{fontSize:11,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.1em",fontWeight:600}},l),
-              h("div",{style:{fontSize:24,fontWeight:700,color:"#111",marginTop:2}},v)
+            [{l:"Current",v:fmt(tC)},{l:"Addressable",v:fmt(tP)},{l:"Captured",v:Math.round((tC/tP)*100)+"%"},{l:"Gap",v:fmt(tP-tC)}].map(({l,v},i)=>h("div",{key:l,style:{flex:1,padding:"5px 0",textAlign:"center",borderRight:i<3?"1px solid #eee":"none"}},
+              h("div",{style:{fontSize:10,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.1em",fontWeight:600}},l),
+              h("div",{style:{fontSize:20,fontWeight:700,color:"#111",marginTop:1}},v)
             ))
           ),
-          h("div",{className:"flex-row",style:{marginBottom:16}},
+          h("div",{className:"flex-row",style:{marginBottom:8}},
             h("div",{className:"chart-col"},
               h(S1Chart,{clients:CL,hov:s1H,setHov:setS1H,sel:s1S,setSel:setS1S,aq:s1Q,setAq:setS1Q}),
               h("div",{style:{display:"flex",gap:12,justifyContent:"center",marginTop:4,flexWrap:"wrap"}},
@@ -394,33 +394,33 @@
               )
             )
           ),
-          h("div",{style:{borderTop:"2px solid #111",paddingTop:12}},
+          h("div",{style:{borderTop:"2px solid #111",paddingTop:6}},
             s1Int ? h("div",null,
-              h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,flexWrap:"wrap",gap:8}},
+              h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,flexWrap:"wrap",gap:6}},
                 h("div",null,
-                  h("div",{style:{fontSize:17,fontWeight:700,color:"#111"}},QN[s1EQ]),
-                  h("div",{style:{fontSize:14,color:"#999"}},QS[s1EQ])
+                  h("div",{style:{fontSize:15,fontWeight:700,color:"#111"}},QN[s1EQ]),
+                  h("div",{style:{fontSize:12,color:"#999"}},QS[s1EQ])
                 ),
                 h("div",{className:"intervention-btns"},
                   QO.map(q=>h("button",{key:q,onClick:()=>{setS1Q(q);setS1S(null)},style:{padding:"5px 10px",borderRadius:3,fontSize:11,fontWeight:600,border:"1px solid "+(s1EQ===q?"#111":"#ddd"),background:s1EQ===q?"#111":"#fff",color:s1EQ===q?"#fff":"#999",cursor:"pointer",fontFamily:"'IBM Plex Sans',sans-serif"}},QN[q].split("&")[0].split("(")[0].trim()))
                 )
               ),
               h("div",{className:"grid-2col"},
-                s1Int.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,alignItems:"flex-start"}},
-                  h("div",{style:{flex:"0 0 20px",height:20,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#888",marginTop:2}},i+1),
-                  h("div",{style:{fontSize:14,color:"#444",lineHeight:1.5}},it)
+                s1Int.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,alignItems:"flex-start"}},
+                  h("div",{style:{flex:"0 0 18px",height:18,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:"#888",marginTop:1}},i+1),
+                  h("div",{style:{fontSize:13,color:"#444",lineHeight:1.4}},it)
                 ))
               ),
-              h("div",{style:{marginTop:10,padding:"8px 12px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:14,color:"#555",fontWeight:500}},s1Int.focus)
+              h("div",{style:{marginTop:6,padding:"6px 10px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:13,color:"#555",fontWeight:500}},s1Int.focus)
             ) : h("div",null,
-              h("div",{style:{fontSize:16,fontWeight:700,color:"#111",marginBottom:10}},"Intervention Playbook by Quadrant"),
+              h("div",{style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:6}},"Intervention Playbook by Quadrant"),
               h("div",{className:"grid-4col"},
                 QO.map(q=>{const qc=CL.filter(c=>c.q===q);
-                return h("div",{key:q,onClick:()=>{setS1Q(q);setS1S(null)},style:{padding:"10px 12px",background:"#f9f9f9",borderRadius:3,cursor:"pointer",border:"1px solid #eee"}},
-                  h("div",{style:{fontSize:14,fontWeight:700,color:"#333",marginBottom:3}},QN[q]),
-                  h("div",{style:{fontSize:11,color:"#aaa",marginBottom:6}},QS[q]),
-                  h("div",{style:{fontSize:11,color:"#888"}},qc.map(c=>c.name).join(", ")),
-                  h("div",{style:{marginTop:6,fontSize:13,fontWeight:600,color:"#555"}},fmt(qc.reduce((s,c)=>s+(c.pot-c.cur),0))+" gap \u2192")
+                return h("div",{key:q,onClick:()=>{setS1Q(q);setS1S(null)},style:{padding:"8px 10px",background:"#f9f9f9",borderRadius:3,cursor:"pointer",border:"1px solid #eee"}},
+                  h("div",{style:{fontSize:13,fontWeight:700,color:"#333",marginBottom:2}},QN[q]),
+                  h("div",{style:{fontSize:10,color:"#aaa",marginBottom:4}},QS[q]),
+                  h("div",{style:{fontSize:10,color:"#888"}},qc.map(c=>c.name).join(", ")),
+                  h("div",{style:{marginTop:4,fontSize:12,fontWeight:600,color:"#555"}},fmt(qc.reduce((s,c)=>s+(c.pot-c.cur),0))+" gap \u2192")
                 )})
               )
             )
@@ -429,23 +429,23 @@
 
         // SLIDE 2
         sl===2 && h("div",null,
-          h("h1",{style:{fontSize:26,fontWeight:700,color:"#111",margin:"0 0 2px"}},"CRO Priorities \u2014 What Mindtickle Enables vs The Art of the Possible"),
-          h("p",{style:{fontSize:15,color:"#999",margin:"0 0 14px"}},"Honest assessment: where we deliver today, what competition does, and what\u2019s possible with ElevateOS"),
-          h("div",{className:"flex-row",style:{marginBottom:16}},
+          h("h1",{style:{fontSize:22,fontWeight:700,color:"#111",margin:"0 0 1px"}},"CRO Priorities \u2014 What Mindtickle Enables vs The Art of the Possible"),
+          h("p",{style:{fontSize:13,color:"#999",margin:"0 0 8px"}},"Honest assessment: where we deliver today, what competition does, and what\u2019s possible with ElevateOS"),
+          h("div",{className:"flex-row",style:{marginBottom:8}},
             h("div",{className:"orbit-col"},h(OrbitDiag,{ps:PRIO,ap,setAp})),
             h("div",{className:"sidebar-col"},
               aP ? h("div",null,
                 h("div",{style:{fontSize:18,fontWeight:700,color:"#111",marginBottom:4}},aP.label.replace("\n"," ")),
-                h("div",{style:{fontSize:13,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"What Mindtickle Does Today"),
-                h("div",{style:{fontSize:14,color:aP.todayItems.length===0?"#999":"#444",marginBottom:aP.todayItems.length>0?2:6,fontStyle:aP.todayItems.length===0?"italic":"normal"}},aP.today),
-                aP.todayItems.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start",paddingLeft:4}},
-                  h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#888",marginTop:7}}),
-                  h("div",{style:{fontSize:13,color:"#444",lineHeight:1.4}},it)
+                h("div",{style:{fontSize:15,color:"#555",textTransform:"uppercase",letterSpacing:"0.06em",fontWeight:700,marginBottom:6}},"What Mindtickle Does Today"),
+                h("div",{style:{fontSize:15,color:aP.todayItems.length===0?"#999":"#444",marginBottom:aP.todayItems.length>0?4:8,fontStyle:aP.todayItems.length===0?"italic":"normal",lineHeight:1.5}},aP.today),
+                aP.todayItems.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:3,alignItems:"flex-start",paddingLeft:4}},
+                  h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#888",marginTop:8}}),
+                  h("div",{style:{fontSize:14,color:"#444",lineHeight:1.45}},it)
                 )),
-                h("div",{style:{fontSize:13,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginTop:8,marginBottom:4}},"What Competition Does"),
-                aP.competition.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start",paddingLeft:4}},
-                  h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#ccc",marginTop:7}}),
-                  h("div",{style:{fontSize:13,color:"#666",lineHeight:1.4}},it)
+                h("div",{style:{fontSize:15,color:"#555",textTransform:"uppercase",letterSpacing:"0.06em",fontWeight:700,marginTop:10,marginBottom:6}},"What Competition Does"),
+                aP.competition.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:3,alignItems:"flex-start",paddingLeft:4}},
+                  h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#ccc",marginTop:8}}),
+                  h("div",{style:{fontSize:14,color:"#555",lineHeight:1.45}},it)
                 ))
               ) : h("div",{style:{color:"#bbb",fontSize:15,lineHeight:1.6}},
                 h("div",{style:{fontWeight:600,color:"#777",fontSize:17,marginBottom:8}},"Click a priority node"),
@@ -456,29 +456,29 @@
               )
             )
           ),
-          h("div",{style:{borderTop:"2px solid #111",paddingTop:12}},
+          h("div",{style:{borderTop:"2px solid #111",paddingTop:8}},
             aP ? h("div",null,
               h("div",{className:"s2-bottom-row"},
                 h("div",{style:{flex:1,minWidth:0}},
-                  h("div",{style:{fontSize:15,fontWeight:700,color:"#111",marginBottom:6}},"Art of the Possible"),
-                  aP.artOfPossible.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-                    h("div",{style:{flex:"0 0 20px",height:20,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#888",marginTop:2}},i+1),
-                    h("div",{style:{fontSize:14,color:"#444",lineHeight:1.4}},it)
+                  h("div",{style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:4}},"Art of the Possible"),
+                  aP.artOfPossible.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:3,alignItems:"flex-start"}},
+                    h("div",{style:{flex:"0 0 18px",height:18,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:"#888",marginTop:1}},i+1),
+                    h("div",{style:{fontSize:13,color:"#444",lineHeight:1.35}},it)
                   ))
                 ),
                 h("div",{className:"metrics-col"},
-                  h("div",{style:{fontSize:15,fontWeight:700,color:"#111",marginBottom:6}},"Key CRO Metrics"),
-                  aP.metrics.map((m,i)=>h("div",{key:i,style:{padding:"5px 8px",background:i%2===0?"#f9f9f9":"#fff",borderBottom:"1px solid #f0f0f0",fontSize:14,color:"#444"}},m)),
-                  h("div",{style:{marginTop:10,padding:"8px 10px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:14,color:"#555",lineHeight:1.5}},aP.int)
+                  h("div",{style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:4}},"Key CRO Metrics"),
+                  aP.metrics.map((m,i)=>h("div",{key:i,style:{padding:"4px 8px",background:i%2===0?"#f9f9f9":"#fff",borderBottom:"1px solid #f0f0f0",fontSize:13,color:"#444"}},m)),
+                  h("div",{style:{marginTop:6,padding:"6px 10px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:13,color:"#555",lineHeight:1.4}},aP.int)
                 )
               )
             ) : h("div",null,
-              h("div",{style:{fontSize:16,fontWeight:700,color:"#111",marginBottom:10}},"CRO Priority \u2192 Capability Map"),
+              h("div",{style:{fontSize:15,fontWeight:700,color:"#111",marginBottom:6}},"CRO Priority \u2192 Capability Map"),
               h("div",{className:"grid-3col"},
-                PRIO.map(p=>h("div",{key:p.id,onClick:()=>setAp(p.id),style:{padding:"10px 12px",background:"#f9f9f9",borderRadius:3,cursor:"pointer",border:"1px solid #eee"}},
-                  h("div",{style:{fontSize:14,fontWeight:700,color:"#333",marginBottom:3}},p.label.replace("\n"," ")),
-                  h("div",{style:{fontSize:13,color:"#aaa",marginBottom:4}},p.orbit===1?"Core":"Enabling"),
-                  h("div",{style:{fontSize:13,color:"#666",lineHeight:1.3}},p.today.substring(0,80)+"...")
+                PRIO.map(p=>h("div",{key:p.id,onClick:()=>setAp(p.id),style:{padding:"8px 10px",background:"#f9f9f9",borderRadius:3,cursor:"pointer",border:"1px solid #eee"}},
+                  h("div",{style:{fontSize:13,fontWeight:700,color:"#333",marginBottom:2}},p.label.replace("\n"," ")),
+                  h("div",{style:{fontSize:12,color:"#aaa",marginBottom:3}},p.orbit===1?"Core":"Enabling"),
+                  h("div",{style:{fontSize:12,color:"#666",lineHeight:1.3}},p.today.substring(0,80)+"...")
                 ))
               )
             )
