@@ -18,7 +18,7 @@
     .chart-col { flex: 1 1 55%; min-width: 0; }
     .sidebar-col { flex: 1 1 40%; min-width: 0; }
     .orbit-col { flex: 1 1 50%; min-width: 0; }
-    .metrics-col { flex: 0 0 220px; }
+    .metrics-col { flex: 0 0 300px; }
     .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
     .grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .grid-4col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
@@ -33,8 +33,8 @@
       .pres-root { padding: 0 16px 20px; }
       .nav-bar { flex-wrap: wrap; justify-content: center; gap: 6px; }
       .nav-slides { gap: 2px; }
-      .nav-slides button { font-size: 7px !important; padding: 3px 5px !important; }
-      .nav-bar > button { font-size: 9px !important; padding: 4px 10px !important; }
+      .nav-slides button { font-size: 10px !important; padding: 3px 5px !important; }
+      .nav-bar > button { font-size: 12px !important; padding: 4px 10px !important; }
       .flex-row { flex-direction: column; gap: 16px; }
       .chart-col, .sidebar-col, .orbit-col { flex: 1 1 100%; }
       .metrics-col { flex: 1 1 100%; }
@@ -46,10 +46,10 @@
       .stats-bar > div { flex: 1 1 50% !important; min-width: 0; }
       .phase-tabs > div { padding: 8px 6px !important; }
       .intervention-btns { gap: 3px; }
-      .intervention-btns button { font-size: 7px !important; padding: 3px 5px !important; }
+      .intervention-btns button { font-size: 10px !important; padding: 3px 5px !important; }
       .metrics-grid { grid-template-columns: 1fr 1fr; }
       .s2-bottom-row { flex-direction: column; }
-      h1 { font-size: 16px !important; }
+      h1 { font-size: 22px !important; }
     }
 
     @media (max-width: 480px) {
@@ -59,7 +59,7 @@
       .stats-bar > div { flex: 1 1 50% !important; }
       .phase-tabs { flex-wrap: wrap; }
       .phase-tabs > div { flex: 1 1 45% !important; }
-      h1 { font-size: 14px !important; }
+      h1 { font-size: 18px !important; }
     }
   </style>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -286,48 +286,48 @@
       const p = data.phases[ap];
       const gap = data.accounts.reduce((s,c)=>s+(c.pot-c.cur),0);
       return h("div",null,
-        h("h1",{style:{fontSize:18,fontWeight:700,color:"#111",margin:"0 0 2px"}},data.title),
-        h("p",{style:{fontSize:11,color:"#999",margin:"0 0 3px"}},data.sub+" \u2014 "+data.tag),
-        h("p",{style:{fontSize:10,color:"#aaa",margin:"0 0 12px"}},"Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.cur)+"\u2192"+fmt(c.pot)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
+        h("h1",{style:{fontSize:26,fontWeight:700,color:"#111",margin:"0 0 2px"}},data.title),
+        h("p",{style:{fontSize:15,color:"#999",margin:"0 0 3px"}},data.sub+" \u2014 "+data.tag),
+        h("p",{style:{fontSize:14,color:"#aaa",margin:"0 0 12px"}},"Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.cur)+"\u2192"+fmt(c.pot)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
         h("div",{className:"phase-tabs"},
           data.phases.map((ph,i)=>h("div",{key:i,onClick:()=>setAp(i),style:{flex:1,padding:"8px 10px",cursor:"pointer",borderBottom:ap===i?"3px solid #111":"3px solid transparent",borderRight:i<3?"1px solid #eee":"none",background:ap===i?"#f7f7f7":"#fff",transition:"all 0.15s"}},
-            h("div",{style:{fontSize:14,marginBottom:1}},ph.icon),
-            h("div",{style:{fontSize:11,fontWeight:700,color:ap===i?"#111":"#888"}},ph.name),
-            h("div",{style:{fontSize:9,color:"#bbb"}},ph.weeks)
+            h("div",{style:{fontSize:18,marginBottom:1}},ph.icon),
+            h("div",{style:{fontSize:15,fontWeight:700,color:ap===i?"#111":"#888"}},ph.name),
+            h("div",{style:{fontSize:13,color:"#bbb"}},ph.weeks)
           ))
         ),
         h("div",{className:"phase-content"},
           h("div",{style:{flex:1,minWidth:0}},
-            h("div",{style:{fontSize:10,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}},p.left.title),
+            h("div",{style:{fontSize:14,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}},p.left.title),
             p.left.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#888",marginTop:6}}),
-              h("div",{style:{fontSize:10,color:"#444",lineHeight:1.5}},it)
+              h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#888",marginTop:7}}),
+              h("div",{style:{fontSize:14,color:"#444",lineHeight:1.5}},it)
             ))
           ),
           h("div",{style:{flex:1,minWidth:0}},
-            h("div",{style:{fontSize:10,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}},p.right.title),
+            h("div",{style:{fontSize:14,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}},p.right.title),
             p.right.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#ccc",marginTop:6}}),
-              h("div",{style:{fontSize:10,color:"#555",lineHeight:1.5}},it)
+              h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#ccc",marginTop:7}}),
+              h("div",{style:{fontSize:14,color:"#555",lineHeight:1.5}},it)
             ))
           )
         ),
         p.metrics && h("div",{className:"metrics-grid"},
           p.metrics.map((m,i)=>h("div",{key:i,style:{padding:"8px 10px",background:"#f9f9f9",borderRadius:3}},
-            h("div",{style:{fontSize:9,fontWeight:600,color:"#666",marginBottom:4}},m.l),
+            h("div",{style:{fontSize:13,fontWeight:600,color:"#666",marginBottom:4}},m.l),
             h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
-              h("span",{style:{fontSize:9,color:"#aaa"}},m.c),
-              h("span",{style:{fontSize:8,color:"#ccc"}},"\u2192"),
-              h("span",{style:{fontSize:9,fontWeight:600,color:"#111"}},m.t)
+              h("span",{style:{fontSize:13,color:"#aaa"}},m.c),
+              h("span",{style:{fontSize:11,color:"#ccc"}},"\u2192"),
+              h("span",{style:{fontSize:13,fontWeight:600,color:"#111"}},m.t)
             )
           ))
         ),
         h("div",{style:{borderTop:"2px solid #111",paddingTop:10}},
-          h("div",{style:{fontSize:11,fontWeight:700,color:"#111",marginBottom:8}},"Execution Tasks \u2014 "+p.name+" ("+p.weeks+")"),
+          h("div",{style:{fontSize:15,fontWeight:700,color:"#111",marginBottom:8}},"Execution Tasks \u2014 "+p.name+" ("+p.weeks+")"),
           h("div",{className:"grid-2col"},
             p.tasks.map((t,i)=>h("div",{key:i,style:{display:"flex",gap:6,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 16px",height:16,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:1}},i+1),
-              h("div",{style:{fontSize:10,color:"#444",lineHeight:1.4}},t)
+              h("div",{style:{flex:"0 0 20px",height:20,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#888",marginTop:2}},i+1),
+              h("div",{style:{fontSize:14,color:"#444",lineHeight:1.4}},t)
             ))
           )
         )
@@ -348,44 +348,44 @@
       return h("div",{className:"pres-root"},
         // Nav
         h("div",{className:"nav-bar"},
-          h("button",{onClick:()=>setSl(Math.max(1,sl-1)),disabled:sl===1,style:{padding:"4px 12px",fontSize:10,fontWeight:600,borderRadius:3,cursor:sl===1?"default":"pointer",border:"1px solid #ddd",background:sl===1?"#f5f5f5":"#fff",color:sl===1?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},"\u2190 Prev"),
+          h("button",{onClick:()=>setSl(Math.max(1,sl-1)),disabled:sl===1,style:{padding:"6px 16px",fontSize:13,fontWeight:600,borderRadius:3,cursor:sl===1?"default":"pointer",border:"1px solid #ddd",background:sl===1?"#f5f5f5":"#fff",color:sl===1?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},"\u2190 Prev"),
           h("div",{className:"nav-slides"},
-            sn.map((n,i)=>h("button",{key:i,onClick:()=>setSl(i+1),style:{padding:"3px 7px",borderRadius:2,fontSize:7.5,fontWeight:600,cursor:"pointer",border:sl===i+1?"1.5px solid #111":"1px solid #ddd",background:sl===i+1?"#111":"#fff",color:sl===i+1?"#fff":"#aaa",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},n))
+            sn.map((n,i)=>h("button",{key:i,onClick:()=>setSl(i+1),style:{padding:"5px 10px",borderRadius:3,fontSize:11,fontWeight:600,cursor:"pointer",border:sl===i+1?"1.5px solid #111":"1px solid #ddd",background:sl===i+1?"#111":"#fff",color:sl===i+1?"#fff":"#aaa",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},n))
           ),
-          h("button",{onClick:()=>setSl(Math.min(6,sl+1)),disabled:sl===6,style:{padding:"4px 12px",fontSize:10,fontWeight:600,borderRadius:3,cursor:sl===6?"default":"pointer",border:"1px solid #ddd",background:sl===6?"#f5f5f5":"#fff",color:sl===6?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},"Next \u2192")
+          h("button",{onClick:()=>setSl(Math.min(6,sl+1)),disabled:sl===6,style:{padding:"6px 16px",fontSize:13,fontWeight:600,borderRadius:3,cursor:sl===6?"default":"pointer",border:"1px solid #ddd",background:sl===6?"#f5f5f5":"#fff",color:sl===6?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},"Next \u2192")
         ),
 
         // SLIDE 1
         sl===1 && h("div",null,
-          h("h1",{style:{fontSize:18,fontWeight:700,color:"#111",margin:"0 0 2px"}},"Achieving Full Revenue Potential from Existing Accounts"),
-          h("p",{style:{fontSize:11,color:"#999",margin:"0 0 12px"}},"Top 10 \u2014 "+fmt(tC)+" of "+fmt(tP)+" addressable \u00b7 "+Math.round((tC/tP)*100)+"% captured \u00b7 "+fmt(tP-tC)+" gap"),
+          h("h1",{style:{fontSize:26,fontWeight:700,color:"#111",margin:"0 0 2px"}},"Achieving Full Revenue Potential from Existing Accounts"),
+          h("p",{style:{fontSize:15,color:"#999",margin:"0 0 12px"}},"Top 10 \u2014 "+fmt(tC)+" of "+fmt(tP)+" addressable \u00b7 "+Math.round((tC/tP)*100)+"% captured \u00b7 "+fmt(tP-tC)+" gap"),
           h("div",{className:"stats-bar"},
             [{l:"Current",v:fmt(tC)},{l:"Addressable",v:fmt(tP)},{l:"Captured",v:Math.round((tC/tP)*100)+"%"},{l:"Gap",v:fmt(tP-tC)}].map(({l,v},i)=>h("div",{key:l,style:{flex:1,padding:"8px 0",textAlign:"center",borderRight:i<3?"1px solid #eee":"none"}},
-              h("div",{style:{fontSize:8,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.1em",fontWeight:600}},l),
-              h("div",{style:{fontSize:16,fontWeight:700,color:"#111",marginTop:2}},v)
+              h("div",{style:{fontSize:11,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.1em",fontWeight:600}},l),
+              h("div",{style:{fontSize:24,fontWeight:700,color:"#111",marginTop:2}},v)
             ))
           ),
           h("div",{className:"flex-row",style:{marginBottom:16}},
             h("div",{className:"chart-col"},
               h(S1Chart,{clients:CL,hov:s1H,setHov:setS1H,sel:s1S,setSel:setS1S,aq:s1Q,setAq:setS1Q}),
               h("div",{style:{display:"flex",gap:12,justifyContent:"center",marginTop:4,flexWrap:"wrap"}},
-                [{bg:"#ddd",t:"Light = Low capture"},{bg:"#444",t:"Dark = High capture"}].map(({bg,t})=>h("div",{key:t,style:{display:"flex",alignItems:"center",gap:4,fontSize:9,color:"#aaa"}},h("div",{style:{width:10,height:10,borderRadius:"50%",background:bg}}),t)),
-                h("div",{style:{fontSize:9,color:"#aaa"}},"Size = Potential")
+                [{bg:"#ddd",t:"Light = Low capture"},{bg:"#444",t:"Dark = High capture"}].map(({bg,t})=>h("div",{key:t,style:{display:"flex",alignItems:"center",gap:4,fontSize:13,color:"#aaa"}},h("div",{style:{width:10,height:10,borderRadius:"50%",background:bg}}),t)),
+                h("div",{style:{fontSize:13,color:"#aaa"}},"Size = Potential")
               )
             ),
             h("div",{className:"sidebar-col"},
               s1Sel ? h("div",null,
-                h("div",{style:{fontSize:13,fontWeight:700,color:"#111"}},s1Sel.name),
-                h("div",{style:{fontSize:9,color:"#aaa",marginBottom:10}},s1Sel.ind),
+                h("div",{style:{fontSize:17,fontWeight:700,color:"#111"}},s1Sel.name),
+                h("div",{style:{fontSize:13,color:"#aaa",marginBottom:10}},s1Sel.ind),
                 [{l:"Addressable",v:fmt(s1Sel.pot)},{l:"Current",v:fmt(s1Sel.cur)},{l:"Captured",v:Math.round((s1Sel.cur/s1Sel.pot)*100)+"%"},{l:"Gap",v:fmt(s1Sel.pot-s1Sel.cur)},{l:"Deployment Health",v:s1Sel.dh+"/100"},{l:"Relationship",v:s1Sel.rs+"/100"}].map(({l,v})=>h("div",{key:l,style:{display:"flex",justifyContent:"space-between",padding:"4px 0",borderBottom:"1px solid #f0f0f0"}},
-                  h("span",{style:{fontSize:10,color:"#999"}},l),
-                  h("span",{style:{fontSize:10,fontWeight:600,color:"#111"}},v)
+                  h("span",{style:{fontSize:14,color:"#999"}},l),
+                  h("span",{style:{fontSize:14,fontWeight:600,color:"#111"}},v)
                 ))
               ) : h("div",null,
-                h("div",{style:{fontSize:11,fontWeight:600,color:"#777",marginBottom:8}},s1Q?"Accounts in quadrant":"Click a bubble or quadrant"),
+                h("div",{style:{fontSize:15,fontWeight:600,color:"#777",marginBottom:8}},s1Q?"Accounts in quadrant":"Click a bubble or quadrant"),
                 (s1Q?CL.filter(c=>c.q===s1Q):CL).map(c=>h("div",{key:c.name,onClick:()=>{setS1S(CL.indexOf(c));setS1Q(null)},style:{display:"flex",justifyContent:"space-between",padding:"4px 0",borderBottom:"1px solid #f3f3f3",cursor:"pointer"}},
-                  h("span",{style:{fontSize:10,fontWeight:600,color:"#333"}},c.name),
-                  h("div",{style:{fontSize:9}},
+                  h("span",{style:{fontSize:14,fontWeight:600,color:"#333"}},c.name),
+                  h("div",{style:{fontSize:13}},
                     h("span",{style:{color:"#999"}},fmt(c.cur)),
                     h("span",{style:{color:"#ccc",margin:"0 4px"}},"\u2192"),
                     h("span",{style:{fontWeight:600,color:"#666"}},fmt(c.pot))
@@ -398,29 +398,29 @@
             s1Int ? h("div",null,
               h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,flexWrap:"wrap",gap:8}},
                 h("div",null,
-                  h("div",{style:{fontSize:13,fontWeight:700,color:"#111"}},QN[s1EQ]),
-                  h("div",{style:{fontSize:10,color:"#999"}},QS[s1EQ])
+                  h("div",{style:{fontSize:17,fontWeight:700,color:"#111"}},QN[s1EQ]),
+                  h("div",{style:{fontSize:14,color:"#999"}},QS[s1EQ])
                 ),
                 h("div",{className:"intervention-btns"},
-                  QO.map(q=>h("button",{key:q,onClick:()=>{setS1Q(q);setS1S(null)},style:{padding:"3px 8px",borderRadius:2,fontSize:8,fontWeight:600,border:"1px solid "+(s1EQ===q?"#111":"#ddd"),background:s1EQ===q?"#111":"#fff",color:s1EQ===q?"#fff":"#999",cursor:"pointer",fontFamily:"'IBM Plex Sans',sans-serif"}},QN[q].split("&")[0].split("(")[0].trim()))
+                  QO.map(q=>h("button",{key:q,onClick:()=>{setS1Q(q);setS1S(null)},style:{padding:"5px 10px",borderRadius:3,fontSize:11,fontWeight:600,border:"1px solid "+(s1EQ===q?"#111":"#ddd"),background:s1EQ===q?"#111":"#fff",color:s1EQ===q?"#fff":"#999",cursor:"pointer",fontFamily:"'IBM Plex Sans',sans-serif"}},QN[q].split("&")[0].split("(")[0].trim()))
                 )
               ),
               h("div",{className:"grid-2col"},
                 s1Int.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,alignItems:"flex-start"}},
-                  h("div",{style:{flex:"0 0 16px",height:16,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:1}},i+1),
-                  h("div",{style:{fontSize:10,color:"#444",lineHeight:1.5}},it)
+                  h("div",{style:{flex:"0 0 20px",height:20,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#888",marginTop:2}},i+1),
+                  h("div",{style:{fontSize:14,color:"#444",lineHeight:1.5}},it)
                 ))
               ),
-              h("div",{style:{marginTop:10,padding:"8px 12px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:10,color:"#555",fontWeight:500}},s1Int.focus)
+              h("div",{style:{marginTop:10,padding:"8px 12px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:14,color:"#555",fontWeight:500}},s1Int.focus)
             ) : h("div",null,
-              h("div",{style:{fontSize:12,fontWeight:700,color:"#111",marginBottom:10}},"Intervention Playbook by Quadrant"),
+              h("div",{style:{fontSize:16,fontWeight:700,color:"#111",marginBottom:10}},"Intervention Playbook by Quadrant"),
               h("div",{className:"grid-4col"},
                 QO.map(q=>{const qc=CL.filter(c=>c.q===q);
                 return h("div",{key:q,onClick:()=>{setS1Q(q);setS1S(null)},style:{padding:"10px 12px",background:"#f9f9f9",borderRadius:3,cursor:"pointer",border:"1px solid #eee"}},
-                  h("div",{style:{fontSize:10,fontWeight:700,color:"#333",marginBottom:3}},QN[q]),
-                  h("div",{style:{fontSize:8,color:"#aaa",marginBottom:6}},QS[q]),
-                  h("div",{style:{fontSize:8,color:"#888"}},qc.map(c=>c.name).join(", ")),
-                  h("div",{style:{marginTop:6,fontSize:9,fontWeight:600,color:"#555"}},fmt(qc.reduce((s,c)=>s+(c.pot-c.cur),0))+" gap \u2192")
+                  h("div",{style:{fontSize:14,fontWeight:700,color:"#333",marginBottom:3}},QN[q]),
+                  h("div",{style:{fontSize:11,color:"#aaa",marginBottom:6}},QS[q]),
+                  h("div",{style:{fontSize:11,color:"#888"}},qc.map(c=>c.name).join(", ")),
+                  h("div",{style:{marginTop:6,fontSize:13,fontWeight:600,color:"#555"}},fmt(qc.reduce((s,c)=>s+(c.pot-c.cur),0))+" gap \u2192")
                 )})
               )
             )
@@ -429,29 +429,29 @@
 
         // SLIDE 2
         sl===2 && h("div",null,
-          h("h1",{style:{fontSize:18,fontWeight:700,color:"#111",margin:"0 0 2px"}},"CRO Priorities \u2014 What Mindtickle Enables vs The Art of the Possible"),
-          h("p",{style:{fontSize:11,color:"#999",margin:"0 0 14px"}},"Honest assessment: where we deliver today, what competition does, and what\u2019s possible with ElevateOS"),
+          h("h1",{style:{fontSize:26,fontWeight:700,color:"#111",margin:"0 0 2px"}},"CRO Priorities \u2014 What Mindtickle Enables vs The Art of the Possible"),
+          h("p",{style:{fontSize:15,color:"#999",margin:"0 0 14px"}},"Honest assessment: where we deliver today, what competition does, and what\u2019s possible with ElevateOS"),
           h("div",{className:"flex-row",style:{marginBottom:16}},
             h("div",{className:"orbit-col"},h(OrbitDiag,{ps:PRIO,ap,setAp})),
             h("div",{className:"sidebar-col"},
               aP ? h("div",null,
-                h("div",{style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:4}},aP.label.replace("\n"," ")),
-                h("div",{style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"What Mindtickle Does Today"),
-                h("div",{style:{fontSize:10,color:aP.todayItems.length===0?"#999":"#444",marginBottom:aP.todayItems.length>0?2:6,fontStyle:aP.todayItems.length===0?"italic":"normal"}},aP.today),
+                h("div",{style:{fontSize:18,fontWeight:700,color:"#111",marginBottom:4}},aP.label.replace("\n"," ")),
+                h("div",{style:{fontSize:13,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"What Mindtickle Does Today"),
+                h("div",{style:{fontSize:14,color:aP.todayItems.length===0?"#999":"#444",marginBottom:aP.todayItems.length>0?2:6,fontStyle:aP.todayItems.length===0?"italic":"normal"}},aP.today),
                 aP.todayItems.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start",paddingLeft:4}},
-                  h("div",{style:{flex:"0 0 3px",height:3,borderRadius:2,background:"#888",marginTop:5}}),
-                  h("div",{style:{fontSize:9,color:"#444",lineHeight:1.4}},it)
+                  h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#888",marginTop:7}}),
+                  h("div",{style:{fontSize:13,color:"#444",lineHeight:1.4}},it)
                 )),
-                h("div",{style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginTop:8,marginBottom:4}},"What Competition Does"),
+                h("div",{style:{fontSize:13,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginTop:8,marginBottom:4}},"What Competition Does"),
                 aP.competition.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start",paddingLeft:4}},
-                  h("div",{style:{flex:"0 0 3px",height:3,borderRadius:2,background:"#ccc",marginTop:5}}),
-                  h("div",{style:{fontSize:9,color:"#666",lineHeight:1.4}},it)
+                  h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#ccc",marginTop:7}}),
+                  h("div",{style:{fontSize:13,color:"#666",lineHeight:1.4}},it)
                 ))
-              ) : h("div",{style:{color:"#bbb",fontSize:11,lineHeight:1.6}},
-                h("div",{style:{fontWeight:600,color:"#777",fontSize:13,marginBottom:8}},"Click a priority node"),
+              ) : h("div",{style:{color:"#bbb",fontSize:15,lineHeight:1.6}},
+                h("div",{style:{fontWeight:600,color:"#777",fontSize:17,marginBottom:8}},"Click a priority node"),
                 PRIO.map(p=>h("div",{key:p.id,onClick:()=>setAp(p.id),style:{padding:"4px 0",borderBottom:"1px solid #f3f3f3",cursor:"pointer"}},
-                  h("span",{style:{fontSize:10,fontWeight:600,color:"#333"}},p.label.replace("\n"," ")),
-                  h("span",{style:{fontSize:9,color:"#bbb",marginLeft:6}},p.orbit===1?"Core":"Enabling")
+                  h("span",{style:{fontSize:14,fontWeight:600,color:"#333"}},p.label.replace("\n"," ")),
+                  h("span",{style:{fontSize:13,color:"#bbb",marginLeft:6}},p.orbit===1?"Core":"Enabling")
                 ))
               )
             )
@@ -460,25 +460,25 @@
             aP ? h("div",null,
               h("div",{className:"s2-bottom-row"},
                 h("div",{style:{flex:1,minWidth:0}},
-                  h("div",{style:{fontSize:11,fontWeight:700,color:"#111",marginBottom:6}},"Art of the Possible"),
+                  h("div",{style:{fontSize:15,fontWeight:700,color:"#111",marginBottom:6}},"Art of the Possible"),
                   aP.artOfPossible.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-                    h("div",{style:{flex:"0 0 16px",height:16,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:1}},i+1),
-                    h("div",{style:{fontSize:10,color:"#444",lineHeight:1.4}},it)
+                    h("div",{style:{flex:"0 0 20px",height:20,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#888",marginTop:2}},i+1),
+                    h("div",{style:{fontSize:14,color:"#444",lineHeight:1.4}},it)
                   ))
                 ),
                 h("div",{className:"metrics-col"},
-                  h("div",{style:{fontSize:11,fontWeight:700,color:"#111",marginBottom:6}},"Key CRO Metrics"),
-                  aP.metrics.map((m,i)=>h("div",{key:i,style:{padding:"5px 8px",background:i%2===0?"#f9f9f9":"#fff",borderBottom:"1px solid #f0f0f0",fontSize:10,color:"#444"}},m)),
-                  h("div",{style:{marginTop:10,padding:"8px 10px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:10,color:"#555",lineHeight:1.5}},aP.int)
+                  h("div",{style:{fontSize:15,fontWeight:700,color:"#111",marginBottom:6}},"Key CRO Metrics"),
+                  aP.metrics.map((m,i)=>h("div",{key:i,style:{padding:"5px 8px",background:i%2===0?"#f9f9f9":"#fff",borderBottom:"1px solid #f0f0f0",fontSize:14,color:"#444"}},m)),
+                  h("div",{style:{marginTop:10,padding:"8px 10px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:14,color:"#555",lineHeight:1.5}},aP.int)
                 )
               )
             ) : h("div",null,
-              h("div",{style:{fontSize:12,fontWeight:700,color:"#111",marginBottom:10}},"CRO Priority \u2192 Capability Map"),
+              h("div",{style:{fontSize:16,fontWeight:700,color:"#111",marginBottom:10}},"CRO Priority \u2192 Capability Map"),
               h("div",{className:"grid-3col"},
                 PRIO.map(p=>h("div",{key:p.id,onClick:()=>setAp(p.id),style:{padding:"10px 12px",background:"#f9f9f9",borderRadius:3,cursor:"pointer",border:"1px solid #eee"}},
-                  h("div",{style:{fontSize:10,fontWeight:700,color:"#333",marginBottom:3}},p.label.replace("\n"," ")),
-                  h("div",{style:{fontSize:9,color:"#aaa",marginBottom:4}},p.orbit===1?"Core":"Enabling"),
-                  h("div",{style:{fontSize:9,color:"#666",lineHeight:1.3}},p.today.substring(0,80)+"...")
+                  h("div",{style:{fontSize:14,fontWeight:700,color:"#333",marginBottom:3}},p.label.replace("\n"," ")),
+                  h("div",{style:{fontSize:13,color:"#aaa",marginBottom:4}},p.orbit===1?"Core":"Enabling"),
+                  h("div",{style:{fontSize:13,color:"#666",lineHeight:1.3}},p.today.substring(0,80)+"...")
                 ))
               )
             )
