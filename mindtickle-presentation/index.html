@@ -12,27 +12,28 @@
     body { background: #fff; -webkit-font-smoothing: antialiased; }
     #root { min-height: 100vh; }
     .pres-root { font-family: 'IBM Plex Sans', sans-serif; width: 100%; margin: 0 auto; background: #fff; padding: 0 48px 32px; }
-    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 10px; border-bottom: 1px solid #eee; margin-bottom: 18px; gap: 8px; }
-    .nav-slides { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; }
-    .flex-row { display: flex; gap: 20px; align-items: flex-start; }
-    .flex-col-stack { display: flex; flex-direction: column; gap: 20px; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 8px; border-bottom: 1px solid #eee; margin-bottom: 16px; gap: 8px; }
+    .nav-slides { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
+    .flex-row { display: flex; gap: 16px; align-items: flex-start; }
     .chart-col { flex: 1 1 55%; min-width: 0; }
     .sidebar-col { flex: 1 1 40%; min-width: 0; }
     .orbit-col { flex: 1 1 50%; min-width: 0; }
-    .metrics-col { flex: 0 0 280px; }
-    .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
-    .grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-    .grid-4col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
-    .stats-bar { display: flex; border-top: 2px solid #111; border-bottom: 1px solid #eee; margin-bottom: 16px; }
-    .phase-tabs { display: flex; gap: 0; margin-bottom: 16px; border-top: 2px solid #111; }
-    .phase-content { display: flex; gap: 20px; margin-bottom: 16px; }
-    .intervention-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+    .metrics-col { flex: 0 0 220px; }
+    .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; }
+    .grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .grid-4col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+    .stats-bar { display: flex; border-top: 2px solid #111; border-bottom: 1px solid #eee; margin-bottom: 14px; }
+    .phase-tabs { display: flex; gap: 0; margin-bottom: 14px; border-top: 2px solid #111; }
+    .phase-content { display: flex; gap: 16px; margin-bottom: 14px; }
+    .intervention-btns { display: flex; gap: 3px; flex-wrap: wrap; }
+    .metrics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .s2-bottom-row { display: flex; gap: 16px; }
 
     @media (max-width: 768px) {
       .pres-root { padding: 0 16px 20px; }
       .nav-bar { flex-wrap: wrap; justify-content: center; gap: 6px; }
       .nav-slides { gap: 2px; }
-      .nav-slides button { font-size: 7px !important; padding: 4px 6px !important; }
+      .nav-slides button { font-size: 7px !important; padding: 3px 5px !important; }
       .nav-bar > button { font-size: 9px !important; padding: 4px 10px !important; }
       .flex-row { flex-direction: column; gap: 16px; }
       .chart-col, .sidebar-col, .orbit-col { flex: 1 1 100%; }
@@ -45,17 +46,20 @@
       .stats-bar > div { flex: 1 1 50% !important; min-width: 0; }
       .phase-tabs > div { padding: 8px 6px !important; }
       .intervention-btns { gap: 3px; }
-      .intervention-btns button { font-size: 7px !important; padding: 3px 6px !important; }
-      h1 { font-size: 17px !important; }
+      .intervention-btns button { font-size: 7px !important; padding: 3px 5px !important; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .s2-bottom-row { flex-direction: column; }
+      h1 { font-size: 16px !important; }
     }
 
     @media (max-width: 480px) {
       .pres-root { padding: 0 12px 16px; }
       .grid-4col { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: 1fr; }
       .stats-bar > div { flex: 1 1 50% !important; }
       .phase-tabs { flex-wrap: wrap; }
       .phase-tabs > div { flex: 1 1 45% !important; }
-      h1 { font-size: 15px !important; }
+      h1 { font-size: 14px !important; }
     }
   </style>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -66,545 +70,431 @@
   <div id="root"></div>
   <script type="text/babel">
     const { useState } = React;
+    const h = React.createElement;
+    const fmt = v => v >= 1000 ? `$${(v/1000).toFixed(1)}M` : `$${v}K`;
 
-    const fmt = (v) => v >= 1000 ? `$${(v / 1000).toFixed(1)}M` : `$${v}K`;
-
-    const CLIENTS = [
-      { name: "Ford", industry: "Automotive", potentialARR: 12000, currentARR: 3200, dh: 22, rs: 18, q: "q3" },
-      { name: "Wipro", industry: "IT Services", potentialARR: 8500, currentARR: 3600, dh: 30, rs: 35, q: "q3" },
-      { name: "Boston Scientific", industry: "Med Devices", potentialARR: 6000, currentARR: 400, dh: 28, rs: 78, q: "q2" },
-      { name: "J&J", industry: "Pharma", potentialARR: 14000, currentARR: 4800, dh: 38, rs: 65, q: "q2" },
-      { name: "Cisco", industry: "Enterprise Tech", potentialARR: 18000, currentARR: 8200, dh: 68, rs: 38, q: "q4" },
-      { name: "WWT", industry: "Enterprise Tech", potentialARR: 5500, currentARR: 2800, dh: 62, rs: 32, q: "q4" },
-      { name: "Splunk", industry: "Enterprise Tech", potentialARR: 7000, currentARR: 4200, dh: 72, rs: 82, q: "q1" },
-      { name: "Juniper Networks", industry: "Enterprise Tech", potentialARR: 5000, currentARR: 3400, dh: 78, rs: 72, q: "q1" },
-      { name: "Darktrace", industry: "Cybersecurity", potentialARR: 4500, currentARR: 2600, dh: 82, rs: 78, q: "q1" },
-      { name: "CentiMark", industry: "Construction", potentialARR: 2500, currentARR: 1800, dh: 88, rs: 88, q: "q1" },
+    const CL = [
+      {name:"Ford",ind:"Automotive",pot:12000,cur:3200,dh:22,rs:18,q:"q3"},
+      {name:"Wipro",ind:"IT Services",pot:8500,cur:3600,dh:30,rs:35,q:"q3"},
+      {name:"Boston Scientific",ind:"Med Devices",pot:6000,cur:400,dh:28,rs:78,q:"q2"},
+      {name:"J&J",ind:"Pharma",pot:14000,cur:4800,dh:38,rs:65,q:"q2"},
+      {name:"Cisco",ind:"Enterprise Tech",pot:18000,cur:8200,dh:68,rs:38,q:"q4"},
+      {name:"WWT",ind:"Enterprise Tech",pot:5500,cur:2800,dh:62,rs:32,q:"q4"},
+      {name:"Splunk",ind:"Enterprise Tech",pot:7000,cur:4200,dh:72,rs:82,q:"q1"},
+      {name:"Juniper Networks",ind:"Enterprise Tech",pot:5000,cur:3400,dh:78,rs:72,q:"q1"},
+      {name:"Darktrace",ind:"Cybersecurity",pot:4500,cur:2600,dh:82,rs:78,q:"q1"},
+      {name:"CentiMark",ind:"Construction",pot:2500,cur:1800,dh:88,rs:88,q:"q1"},
     ];
-
-    const S1_INT = {
-      q3: { title: "STABILISE & PROVE VALUE", subtitle: "Low DH \u00b7 Low RS", items: ["High-touch engagement \u2014 in-person meetings, steering committees with Mindtickle leadership","Rapid deployment audit \u2014 identify 2-3 quick wins to show immediate value","Value realisation sprint \u2014 industry-specific case studies and ROI benchmarks","Relationship rebuilding \u2014 executive dinners, conferences, advisory roundtables","Pricing lever (cautiously) \u2014 short-term discount tied to joint success plan","Assign dedicated \u2018restart\u2019 CSM \u2014 specialist in inherited deployments"], focus: "Prevent churn. Prove value fast. Rebuild trust." },
-      q2: { title: "WORKSHOP & ACTIVATE", subtitle: "Low DH \u00b7 High RS", items: ["Joint workshops \u2014 on-site discovery mapping sales process to platform","Organisational interventions \u2014 identify internal blockers","Pilot program \u2014 30-day sprint on highest-pain use case","Enablement-on-enablement \u2014 train their team to self-serve","Executive alignment \u2014 CRO sponsorship for platform relaunch","Co-create success metrics \u2014 3-4 KPIs for measurable progress"], focus: "The relationship is an asset \u2014 use it to drive adoption." },
-      q4: { title: "BUILD RELATIONSHIP", subtitle: "High DH \u00b7 Low RS", items: ["Relationship investment \u2014 seminars, executive dinners, thought leadership","QBR overhaul \u2014 business impact reviews correlating usage with outcomes","Executive sponsor program \u2014 pair C-suite with their leadership","Customer advisory board \u2014 insiders shaping the roadmap","Proactive value comms \u2014 monthly insights with benchmarks vs peers","Address unspoken friction \u2014 billing disputes, support gaps"], focus: "They\u2019re getting value but don\u2019t feel partnered." },
-      q1: { title: "EXPAND & CO-CREATE", subtitle: "High DH \u00b7 High RS", items: ["Design partners for AI \u2014 early adopters for ElevateOS","Multi-product expansion \u2014 Call AI, Digital Sales Rooms, Content Hub","Case study and advocacy \u2014 reference customer for their industry","Champion development \u2014 speaking opportunities, recognition","Enterprise licensing \u2014 platform-wide agreements","Co-innovation \u2014 joint white papers, webinars, co-presentations"], focus: "Maximise wallet share. Turn them into advocates." },
-    };
     const QO = ["q3","q2","q4","q1"];
+    const QN = {q3:"STABILISE & PROVE VALUE",q2:"ACTIVATE",q4:"BUILD RELATIONSHIP",q1:"CO-CREATE"};
+    const QS = {q3:"Low DH \u00b7 Low RS",q2:"Low DH \u00b7 High RS",q4:"High DH \u00b7 Low RS",q1:"High DH \u00b7 High RS"};
+    const S1I = {
+      q3:{items:["High-touch engagement \u2014 in-person meetings, steering committees with Mindtickle leadership","Rapid deployment audit \u2014 identify 2-3 quick wins to show immediate value","Value realisation sprint \u2014 industry-specific case studies and ROI benchmarks","Relationship rebuilding \u2014 executive dinners, conferences, advisory roundtables","Pricing lever (cautiously) \u2014 short-term discount tied to joint success plan","Assign dedicated \u2018restart\u2019 CSM \u2014 specialist in inherited deployments"],focus:"Prevent churn. Prove value fast. Rebuild trust."},
+      q2:{items:["Joint workshops \u2014 on-site discovery mapping sales process to platform","Organisational interventions \u2014 identify internal blockers (champion gap, manager buy-in)","Pilot program \u2014 30-day sprint on highest-pain use case with dedicated support","Enablement-on-enablement \u2014 train their team to self-serve and configure","Executive alignment \u2014 CRO sponsorship for platform relaunch","Co-create success metrics \u2014 3-4 KPIs for measurable progress"],focus:"The relationship is an asset \u2014 use it to drive adoption."},
+      q4:{items:["Relationship investment \u2014 seminars, executive dinners, thought leadership events","QBR overhaul \u2014 business impact reviews correlating usage with revenue outcomes","Executive sponsor program \u2014 pair Mindtickle C-suite with their leadership","Customer advisory board \u2014 insiders shaping the product roadmap","Proactive value comms \u2014 monthly insights with benchmarks vs peers","Address unspoken friction \u2014 billing disputes, support gaps, unmet expectations"],focus:"They\u2019re getting value but don\u2019t feel partnered. Close the gap."},
+      q1:{items:["Design partners for AI \u2014 early adopters for ElevateOS and next-gen features","Multi-product expansion \u2014 introduce Call AI, Digital Sales Rooms, Content Hub","Case study and advocacy \u2014 reference customer for their industry","Champion development \u2014 speaking opportunities, industry recognition","Enterprise licensing \u2014 platform-wide agreements increasing wallet share","Co-innovation \u2014 joint white papers, webinars, conference co-presentations"],focus:"Maximise wallet share. Turn them into advocates."},
+    };
 
-    const CRO_P = [
-      { id:"pipeline", label:"Pipeline\nGeneration", orbit:1, angle:-90,
-        mt:["AI Role-Play for onboarding and pitch practice","Content Hub with battle cards and case studies","Digital Sales Rooms for buyer engagement"],
-        exp:["Ramp time: 6-9 months avg \u2192 target 45 days","Higher meeting-to-opportunity conversion","Self-service content access"],
-        int:"Deploy \u201830-Day Ready\u2019 onboarding using AI Role-Play + curated content. Measure ramp reduction and pipeline from new hires." },
-      { id:"winrate", label:"Improve\nWin Rates", orbit:1, angle:-30,
-        mt:["Call AI for call scoring and coaching","Coaching module for manager-led deal reviews","Competitive battle cards and objection playbooks"],
-        exp:["Data-driven coaching replacing gut-feel reviews","Consistent messaging across all reps","Win rate improvement: +5-10 percentage points"],
-        int:"Activate Call AI on all calls. Weekly coaching on 3 lowest-scoring calls. Track win rate by cohort. Reference: Cisco saw 31% deal size increase." },
-      { id:"churn", label:"Prevent\nChurn", orbit:1, angle:30,
-        mt:["Readiness Index measuring team skill gaps","Certification programs for compliance","Health scoring through usage analytics"],
-        exp:["Early warning for at-risk reps before deals collapse","Compliance assurance for regulated industries","Quantifiable ROI proof for enablement investment"],
-        int:"Implement Readiness Index benchmarked against IRP. Correlate readiness scores with retention. Present in QBRs." },
-      { id:"expansion", label:"Expand\nRevenue", orbit:2, angle:-70,
-        mt:["Cross-sell/upsell playbooks in Content Hub","Customer-facing Digital Sales Rooms","Account-level readiness dashboards for CSMs"],
-        exp:["CS team with expansion plays, not just renewal scripts","Data on which accounts are upsell-ready","NRR improvement: 105% \u2192 115%+"],
-        int:"Build \u2018Expansion Readiness\u2019 scorecard. Train CS on upsell positioning via Role-Play. Track NRR by cohort." },
-      { id:"forecast", label:"Revenue\nPredictability", orbit:2, angle:-10,
-        mt:["Forecasting with AI-driven deal scoring","Pipeline analytics with stage conversion","Call AI signals (sentiment, risk flags)"],
-        exp:["Forecast accuracy within 5%, not 20% swings","Leading indicators 60-90 days out","Board-ready narrative backed by data"],
-        int:"Integrate Call AI signals into forecasting. Replace subjective commit with AI-scored deal health." },
-      { id:"productivity", label:"Rep\nProductivity", orbit:2, angle:50,
-        mt:["Copilot for real-time call assistance","Centralised content with AI-powered search","Automated coaching triggers from call performance"],
-        exp:["Admin time: 30% \u2192 under 15%","Content findability: right asset in <30 seconds","Personalised development without manager bottleneck"],
-        int:"Deploy Copilot across sales floor. Target: 20% more selling time per rep per week. Reference: Cisco saved 6,000+ manager hours." },
+    const PRIO = [
+      {id:"pipeline",label:"Pipeline\nGeneration",orbit:1,angle:-90,
+        today:"Honestly: nothing directly. Mindtickle is not a pipeline generation tool. No outbound prospecting, no lead scoring, no intent data, no campaign automation.",
+        todayItems:[],
+        competition:["Orum / Nooks: AI parallel dialers with real-time SDR coaching during live calls","Apollo / ZoomInfo: Contact databases + outbound sequencing + intent signals","Outreach / Salesloft: Multi-channel sales engagement. Pipeline generation is their core","6sense / Demandbase: Intent data + ABM. Identify in-market accounts before they raise their hand"],
+        artOfPossible:["Call AI + Role-Play for SDRs \u2014 practice cold calling scripts and qualification frameworks before dialling","LinkedIn connection-based new logo suggestions \u2014 AI analyses customer base, suggests lookalike prospects via Sales Navigator","Conference & events management \u2014 ElevateOS workflow: pre-event prep \u2192 at-event engagement \u2192 post-event follow-up automation","SDR ramp acceleration \u2014 if new SDRs ramp in 2 weeks instead of 6, that\u2019s 4 extra weeks of pipeline per cohort"],
+        metrics:["# qualified leads / quarter","Avg lead size ($)","# no-shows (booked but not attended)","SDR ramp time to first qualified meeting","Cost per qualified lead"],
+        int:"Be honest: Mindtickle doesn\u2019t play here today. The opportunity is SDR enablement (faster ramp = more pipeline) and ElevateOS workflows for event-driven pipeline."},
+      {id:"winrate",label:"Improve\nWin Rates",orbit:1,angle:-30,
+        today:"Core strength. This is where Mindtickle delivers the most proven value today.",
+        todayItems:["Call AI: records, transcribes, scores every call. Auto-maps to CRM. Buyer sentiment, risk flags, next steps","AI Role-Play: pitch practice, objection handling, competitive scenarios. Pitch competitions (Cisco)","Coaching: manager-led deal reviews on specific call moments, not generic feedback","Content Hub: battle cards, case studies, objection playbooks. AI-powered search <30 seconds","Digital Sales Rooms: personalised buyer microsites with content + proposals","Readiness Index: benchmarks reps against Ideal Rep Profile (IRP). Quantitative readiness score"],
+        competition:["Gong: Revenue Intelligence. AI Data Extractor auto-populates CRM. Deal risk scoring. ~$1,200-$2,000+/user/yr. Gong Orchestrate for GTM execution","Seismic + Highspot (merged Feb 2026): Largest content management footprint. Aura AI Agents. M&A integration risk","Clari: Revenue operations + AI forecasting. Strong on predictability, weak on enablement","Chorus (ZoomInfo): Conversation intelligence with tight CRM sync. Part of ZoomInfo ecosystem"],
+        artOfPossible:["ElevateOS Context Graph \u2014 every interaction feeds a single intelligence layer that auto-prescribes training","Automated CRM data entry (like Gong) \u2014 Call AI auto-populates Salesforce fields from conversations","Auto-generated training from winning calls \u2014 AI creates modules from real top-performer conversations","Gamified training tied to deal outcomes \u2014 leaderboards based on call scores + deal progression, not just completion","AI prospect research brief \u2014 auto-generated before each call: company news, LinkedIn posts, mutual connections","Real-time AI Copilot \u2014 during live calls: competitive responses, content surfacing, sentiment alerts","Automated asset generation \u2014 deal-specific ROI calculators, custom proposals, competitive comparison sheets","Sales incentive structuring \u2014 AI analyses win patterns to recommend optimal incentive and regional target allocation","Cross-call pattern intelligence \u2014 across 10,000+ calls, identify exact talk tracks that correlate with 2x win rate"],
+        metrics:["Win rate (overall, by segment, by rep)","Avg deal size ($)","Sales cycle length (days)","Competitive win rate (vs named competitors)","Demo-to-proposal conversion (%)","Proposal-to-close conversion (%)","Avg discount given (%)"],
+        int:"Deploy Call AI on all customer-facing calls. Activate AI Role-Play for top 3 competitive scenarios. Build Readiness Index with IRP. Ref: Cisco saw 31% deal size increase, 6,000+ manager hours saved."},
+      {id:"churn",label:"Prevent\nChurn",orbit:1,angle:30,
+        today:"Readiness Index (existing product) + Certification Programs + Everboarding + Call AI for pre-sale risk detection.",
+        todayItems:["Readiness Index: existing MT product. Measures team skill gaps against Ideal Rep Profile. Quantitative score per rep","Certification programs: compliance and competency tracking. Critical for pharma, financial services, med device","Everboarding: continuous learning beyond onboarding. Spaced reinforcement, micro-learning, quarterly updates","Call AI: identifies at-risk conversations \u2014 negative buyer sentiment, stalled deals, missed next steps"],
+        competition:["Gainsight: Customer success platform. Health scoring, churn prediction, CS workflows","ChurnZero: Real-time customer health monitoring. Usage-based churn alerts","Gong: Expanding into post-sale conversation analysis and renewal call tracking"],
+        artOfPossible:["Call AI for post-sales \u2014 extend conversation intelligence to CS and renewal calls. Score renewal conversations","Predictive rep attrition \u2014 AI flags reps showing disengagement patterns before they resign","Customer health powered by rep readiness \u2014 correlate readiness scores with customer NPS and retention","Auto-adaptive learning \u2014 platform detects skill decay and auto-serves refreshers without manager intervention"],
+        metrics:["Customer retention rate (%)","Net Revenue Retention (NRR)","Rep attrition rate (%)","Certification completion rate (%)","Time to re-certification","Customer NPS by rep readiness quartile"],
+        int:"Implement Readiness Index org-wide. Extend Call AI to post-sale conversations. Correlate readiness with retention in QBRs."},
+      {id:"expansion",label:"Expand\nRevenue",orbit:2,angle:-70,
+        today:"CS-specific training, cross-sell playbooks, Digital Sales Rooms for renewals, account strategy capabilities.",
+        todayItems:["CS-specific training paths: enable CSMs to sell, not just support","Cross-sell/upsell playbooks in Content Hub","Digital Sales Rooms for renewal and expansion conversations","Account strategy and review: prioritise accounts for expansion"],
+        competition:["Gainsight + Salesforce: Expansion playbook automation. Account health \u2192 expansion triggers","Gong: Analysing renewal/expansion calls. Identifying expansion signals in conversations","Totango: Customer success with expansion workflow automation"],
+        artOfPossible:["AI identifies expansion-ready accounts from usage + sentiment + engagement data","Auto-generated expansion plays tailored per account","CSM Role-Play for upsell and renewal conversations","Unified customer 360: call data + training + content + CRM in one view per account"],
+        metrics:["Net Revenue Retention (NRR)","Expansion ARR per account / quarter","Cross-sell conversion rate (%)","Time from onboarding to first upsell","Renewal rate (%)"],
+        int:"Build expansion readiness scoring. Train CS on upsell via Role-Play. Track NRR by cohort."},
+      {id:"forecast",label:"Revenue\nPredictability",orbit:2,angle:-10,
+        today:"Call AI signals for deal assessment, pipeline analytics, Readiness Index as leading indicator.",
+        todayItems:["Call AI signals: buyer sentiment, deal risk flags, next step commitments","Pipeline analytics: stage conversion visibility","Readiness Index: team-level readiness as leading indicator of future performance"],
+        competition:["Clari: Market leader in revenue operations and forecasting. AI pipeline analytics. CRO dashboard","Gong Forecast: Deal-level AI scoring from conversation data. Forecast accuracy claims","BoostUp: Revenue operations platform. Forecast modelling and analytics"],
+        artOfPossible:["AI forecast combining call signals + content engagement + stakeholder mapping + historical patterns","Confidence intervals per deal: \u201873% probability of closing in Q3 based on 6 signals\u2019","Real-time CRO dashboard with AI-generated narrative explaining pipeline shifts","Anomaly detection: auto-alert when multiple deals shift risk profile simultaneously"],
+        metrics:["Forecast accuracy (% variance from actual)","Pipeline coverage ratio","Stage conversion rates (by stage, rep, segment)","Deal velocity (avg days per stage)","Commit-to-close ratio (%)"],
+        int:"Integrate Call AI signals into forecasting workflow. Replace subjective commit with AI-scored deal health."},
+      {id:"productivity",label:"Rep\nProductivity",orbit:2,angle:50,
+        today:"Copilot, centralised content with AI search, automated coaching triggers, gamification.",
+        todayItems:["Copilot: real-time call assistance and follow-up automation","Centralised content with AI-powered search: right asset in <30 seconds","Automated coaching triggers: based on call performance, not manual manager review","Gamification: leaderboards, badges, missions to drive engagement"],
+        competition:["Gong: Automated CRM data entry, call summaries, follow-up email drafts. Gong Orchestrate for workflow automation","Otter.ai / Fireflies: Lightweight meeting transcription and summaries. Cheap alternative","Clari / Groove: Activity capture, workflow automation, CRM hygiene"],
+        artOfPossible:["AI auto-generates call summaries, follow-up emails, CRM updates \u2014 zero rep admin time","Personalised daily skill brief per rep based on that week\u2019s call performance","Manager Copilot: AI triages which reps to coach based on call scores + deal risk","Full workflow: Call AI \u2192 coaching trigger \u2192 training \u2192 practice \u2192 improved call \u2014 all automatic"],
+        metrics:["Selling time as % of total rep time (target: 40%+)","Content search time (target: <30s)","CRM data completeness (% auto-populated)","Manager coaching hours / rep / month","Training completion rate (without enforcement)"],
+        int:"Deploy Copilot. Target: 20% more selling time/rep/week. Ref: Cisco saved 6,000+ manager hours across 7,000 sellers."},
     ];
 
     const PHASES = {
-      q3: {
-        title: "STABILISE & PROVE VALUE", subtitle: "Ford \u00b7 Wipro",
-        tagline: "From active churn risk to renewed partnership in 90 days",
-        accounts: CLIENTS.filter(c=>c.q==="q3"),
-        phases: [
-          { name: "DISCOVER", icon: "\ud83d\udd0d", weeks: "Weeks 1-2",
-            objective: "Emergency diagnostic \u2014 understand what went wrong, map stakeholder sentiment, assess competitive threat level",
-            asks: ["Executive sponsor access (CRO or VP Sales) for 30-min diagnostic interview","Platform admin access for usage audit","CRM data extract: win rates, pipeline velocity, quota attainment for last 4 quarters","List of 5 power users and 5 disengaged users for interviews"],
-            risks: ["CRO may refuse meeting \u2014 mitigate by leading with \u2018we found issues and want to fix them, not sell\u2019","Competitive eval already in progress \u2014 accelerate timeline if Seismic/Highspot is in conversations","Internal champion vacuum \u2014 if no one owns the platform, identify a proxy fast"],
-            metrics: [
-              { label: "Login Rate", current: "30%", target: "Baseline established" },
-              { label: "Active Programs", current: "Unknown", target: "Audit: active vs dormant" },
-              { label: "Content Engagement", current: "Unknown", target: "Top 10 used vs ignored assets" },
-              { label: "Stakeholder Sentiment", current: "Negative", target: "Map: detractors vs neutrals" },
-            ],
-            tasks: ["Pull usage analytics: DAU/MAU, feature adoption heat map, content engagement by asset","Interview 5 stakeholders: 2 reps, 1 manager, 1 enablement lead, 1 exec sponsor","Map competitive landscape: are they evaluating alternatives? What\u2019s the timeline?","Document original business case vs current state \u2014 what was Mindtickle bought to solve?","Prepare Deployment Health Scorecard: Red/Yellow/Green across 5 dimensions"],
-          },
-          { name: "DESIGN", icon: "\ud83d\udcd0", weeks: "Weeks 3-4",
-            objective: "Co-create a 90-day restart plan anchored to their business priorities, not our feature set",
-            asks: ["2-hour Workflow Mapping Workshop with enablement team + 1 sales leader","Agreement on 3 success metrics tied to CRO\u2019s priorities","Commitment to a steering committee cadence (bi-weekly for 90 days)","Internal communication to sales team about the \u2018restart\u2019"],
-            risks: ["Workshop generates too many priorities \u2014 force-rank to top 3 only","CRO wants ROI proof before investing time \u2014 bring industry benchmarks (Cisco: 31% deal size, Janssen: 50% ramp reduction)","Enablement team may be defensive about current setup \u2014 frame as \u2018evolution not criticism\u2019"],
-            metrics: [
-              { label: "Use Cases Selected", current: "0", target: "3 high-impact use cases" },
-              { label: "IRP Defined", current: "No", target: "v1 Ideal Rep Profile" },
-              { label: "Success Metrics", current: "None", target: "3 KPIs with CRO sign-off" },
-              { label: "Steering Committee", current: "None", target: "Bi-weekly cadence set" },
-            ],
-            tasks: ["Run Workflow Mapping Workshop: current state \u2192 best practice \u2192 gap \u2192 prioritised roadmap","Present industry benchmark deck: \u2018Here\u2019s what companies like yours achieve with Mindtickle\u2019","Co-define 3 success metrics with CRO (e.g., ramp time, content adoption, win rate)","Design simplified platform architecture: clean homepage, 5-7 active programs max","Build 90-day implementation timeline with weekly milestones","Assign dedicated restart CSM with inherited-deployment expertise"],
-          },
-          { name: "ACTIVATE", icon: "\ud83d\ude80", weeks: "Weeks 5-10",
-            objective: "Rapid value delivery \u2014 clean up, relaunch, and generate early proof points that the CRO can see",
-            asks: ["IT support for SSO/CRM integration fixes (if broken)","Manager participation in coaching pilot (minimum 3 frontline managers)","Permission to run AI Role-Play pilot with 20-30 reps","Bi-weekly steering committee attendance from exec sponsor"],
-            risks: ["Platform cleanup takes longer than expected \u2014 timebox to 2 weeks max, don\u2019t aim for perfection","Manager resistance to coaching features \u2014 start with willing managers, create proof points","Quick wins don\u2019t materialise fast enough \u2014 ensure week 6 has at least one visible win"],
-            metrics: [
-              { label: "Login Rate", current: "30%", target: "60%+" },
-              { label: "Content Findability", current: ">2 min", target: "<30 seconds" },
-              { label: "Manager Coaching", current: "0 sessions", target: "3 managers, weekly" },
-              { label: "Role-Play Adoption", current: "0", target: "20+ reps completing 1+ scenario" },
-            ],
-            tasks: ["Week 5-6: Platform cleanup \u2014 archive 70% dormant content, fix taxonomy, redesign homepage","Week 6: Relaunch with internal comms \u2014 \u2018New and improved Mindtickle\u2019 email from CRO","Week 7: Launch onboarding program for new hires using best-practice template","Week 7-8: Activate AI Role-Play pilot \u2014 pitch practice for top product (ref: Cisco pitch competition)","Week 8: Enable 3 managers on coaching module \u2014 weekly call review using Call AI scores","Week 9-10: Deploy Readiness Index with IRP \u2014 show CRO first readiness dashboard","Week 10: First steering committee readout with before/after metrics"],
-          },
-          { name: "SUSTAIN", icon: "\ud83d\udcc8", weeks: "Month 3+",
-            objective: "Transition from crisis mode to growth mode \u2014 prove ROI, expand carefully, and prevent regression",
-            asks: ["Quarterly Business Review with CRO and VP Sales","Access to updated CRM data for outcome correlation","Internal case study approval (even if anonymised)","Discussion on contract renewal terms"],
-            risks: ["Regression after initial enthusiasm \u2014 build habit loops through manager reinforcement","Champion attrition \u2014 identify and develop a backup champion","Expansion too early \u2014 don\u2019t pitch new modules until Month 5+ when trust is solid"],
-            metrics: [
-              { label: "Ramp Time", current: "6-9 months", target: "50% reduction (ref: Janssen)" },
-              { label: "Win Rate", current: "Baseline", target: "+5-10 percentage points" },
-              { label: "Deal Size", current: "Baseline", target: "+15-25% (ref: Cisco 31%)" },
-              { label: "NPS/Sentiment", current: "Negative", target: "Neutral \u2192 Positive" },
-            ],
-            tasks: ["Month 3: QBR with CRO \u2014 present ROI dashboard: usage \u2192 readiness \u2192 business outcomes","Month 4: Introduce customer advisory board opportunity \u2014 shift from \u2018customer\u2019 to \u2018partner\u2019","Month 5: Begin expansion conversation \u2014 identify next 2 modules based on usage patterns","Month 6: Contract renewal discussion with value-based pricing (not discount-driven)","Ongoing: Monthly health score monitoring with automated alerts on adoption dips","Ongoing: Quarterly best-practice refresh based on industry peer benchmarks"],
-          },
-        ],
-      },
-      q2: {
-        title: "WORKSHOP & ACTIVATE", subtitle: "Boston Scientific \u00b7 J&J",
-        tagline: "From underleveraged platform to full revenue engine in 120 days",
-        accounts: CLIENTS.filter(c=>c.q==="q2"),
-        phases: [
-          { name: "DISCOVER", icon: "\ud83d\udd0d", weeks: "Weeks 1-2",
-            objective: "Leverage the strong relationship to run deep, collaborative discovery \u2014 they\u2019ll participate willingly",
-            asks: ["Joint discovery workshop with their enablement team (they\u2019ll say yes)","Access to their sales process documentation and methodology","CRM data: conversion rates by stage, ramp time, quota attainment","Interview 5 reps and 3 managers about current workflow"],
-            risks: ["Relationship is good but passive \u2014 risk of \u2018we\u2019re fine\u2019 complacency","Enablement team may not have bandwidth for deep engagement \u2014 keep asks focused","Multiple stakeholders with different priorities \u2014 align on single decision-maker"],
-            metrics: [
-              { label: "Modules Active", current: "1-2", target: "Full capability map completed" },
-              { label: "Sales Process Mapped", current: "No", target: "End-to-end documented" },
-              { label: "Ramp Time (current)", current: "6-9 months", target: "Baselined" },
-              { label: "Feature Awareness", current: "Low", target: "Team educated on full platform" },
-            ],
-            tasks: ["Map their complete sales process: lead \u2192 qualification \u2192 demo \u2192 proposal \u2192 close \u2192 onboard","Identify which Mindtickle modules they\u2019re using vs not (likely: onboarding only)","Document 5 highest-pain workflow gaps where Mindtickle can add value","Benchmark their metrics against industry peers using Mindtickle analytics","Prepare expansion opportunity deck showing module-by-module value"],
-          },
-          { name: "DESIGN", icon: "\ud83d\udcd0", weeks: "Weeks 3-5",
-            objective: "Deep Workflow Mapping Workshop to co-design the transformation roadmap with their team",
-            asks: ["Full-day Workflow Mapping Workshop (on-site preferred) with enablement + sales leadership","CRO 30-min session to align on strategic priorities for the year","Agreement on pilot scope: which use case, which team, which metrics","Content SME to help build industry-specific training materials"],
-            risks: ["Workshop scope creep \u2014 keep to one day, output = prioritised roadmap of 3 initiatives","J&J/pharma: compliance requirements add complexity \u2014 engage their compliance team early","Boston Scientific: med device regulations mean content approval workflows needed"],
-            metrics: [
-              { label: "IRP Defined", current: "No", target: "Industry-specific IRP v1" },
-              { label: "Expansion Modules", current: "0 identified", target: "3 modules scoped" },
-              { label: "Pilot Team", current: "None", target: "20-30 reps selected" },
-              { label: "Success Criteria", current: "Undefined", target: "Signed off by CRO" },
-            ],
-            tasks: ["Run full-day Workflow Mapping Workshop: current workflows \u2192 best practice \u2192 gaps \u2192 roadmap","Co-design Ideal Rep Profile using their top performer data + Mindtickle benchmarks","Scope 3 expansion modules: e.g., Call AI + AI Role-Play + Readiness Index","Design pilot program: 20-30 reps, 30-day sprint, specific use case (e.g., new product launch)","Build industry-specific content: pharma HCP selling scenarios, med device compliance modules","Create enablement-on-enablement plan: train their team to self-administer"],
-          },
-          { name: "ACTIVATE", icon: "\ud83d\ude80", weeks: "Weeks 6-12",
-            objective: "Run the pilot, generate proof points, and build internal momentum for full platform adoption",
-            asks: ["Pilot team commitment: 20-30 reps dedicating 30 min/week to platform","Manager buy-in: 3-5 managers incorporating Mindtickle into weekly coaching","IT: Call AI integration with their conferencing platform","CRO: internal comms sponsoring the pilot as a strategic initiative"],
-            risks: ["Pilot fatigue if too many asks on reps \u2014 keep weekly time commitment under 30 min","Call AI privacy concerns in pharma/med device \u2014 address compliance upfront","Pilot success doesn\u2019t guarantee org-wide adoption \u2014 plan the scale-up in parallel"],
-            metrics: [
-              { label: "Pilot Completion", current: "0%", target: "85%+ completion rate" },
-              { label: "Role-Play Scores", current: "No baseline", target: "Avg score improvement 20%+" },
-              { label: "Call AI Coverage", current: "0%", target: "50% of pilot team calls recorded" },
-              { label: "Ramp Time (pilot)", current: "6-9 months", target: "50% reduction (ref: Janssen, RadNet)" },
-            ],
-            tasks: ["Week 6: Launch pilot with kickoff session \u2014 CRO sends sponsorship email","Week 6-7: Onboard pilot reps on 2 new modules (e.g., AI Role-Play + Call AI)","Week 7-8: First AI Role-Play scenario \u2014 new product pitch or competitive objection handling","Week 8-9: Activate Call AI for pilot team \u2014 begin recording and scoring calls","Week 9-10: Manager coaching pilot \u2014 weekly review of 3 calls using Call AI insights","Week 10-11: Mid-pilot check-in \u2014 adjust scenarios, address adoption gaps","Week 12: Pilot results presentation to CRO and enablement leadership"],
-          },
-          { name: "SUSTAIN", icon: "\ud83d\udcc8", weeks: "Month 4+",
-            objective: "Scale from pilot to org-wide, convert to enterprise license, and build toward design partner status",
-            asks: ["Org-wide rollout approval from CRO based on pilot results","Enterprise licensing discussion \u2014 move from per-module to platform agreement","Case study participation (even anonymised for pharma)","Champion nomination for Mindtickle customer advisory board"],
-            risks: ["Scaling too fast \u2014 phase the rollout by region/BU, don\u2019t go all-at-once","Enterprise license negotiation stalls \u2014 lead with pilot ROI data","J&J: global rollout complexity across countries \u2014 start with 2-3 regions"],
-            metrics: [
-              { label: "Wallet Share", current: "7-34%", target: "40%+ within 12 months" },
-              { label: "Platform Modules", current: "1-2", target: "5+ active" },
-              { label: "Ramp Time (org)", current: "6-9 months", target: "3-4 months" },
-              { label: "Manager Hours Saved", current: "0", target: "Ref: Cisco saved 6,000+ hours" },
-            ],
-            tasks: ["Month 4: Present pilot results + org-wide rollout plan to CRO","Month 5: Phase 1 rollout \u2014 extend to next 100 reps, 2 additional regions/BUs","Month 6: Enterprise licensing conversation \u2014 present total platform value vs per-module cost","Month 6: Activate Readiness Index org-wide \u2014 benchmark all reps against IRP","Month 8: Full Call AI deployment across all customer-facing teams","Month 9: Case study production \u2014 publish success metrics for industry marketing","Ongoing: Quarterly innovation reviews \u2014 early access to ElevateOS features"],
-          },
-        ],
-      },
-      q4: {
-        title: "BUILD RELATIONSHIP", subtitle: "Cisco \u00b7 WWT",
-        tagline: "From transactional vendor to strategic partner in 90 days",
-        accounts: CLIENTS.filter(c=>c.q==="q4"),
-        phases: [
-          { name: "DISCOVER", icon: "\ud83d\udd0d", weeks: "Weeks 1-2",
-            objective: "Diagnose why the relationship is strained despite good usage \u2014 the answer is rarely about the product",
-            asks: ["Candid 1:1 with their VP Enablement or RevOps lead","Support ticket history review \u2014 response times, escalation patterns","Billing/contract review \u2014 any disputes, unexpected charges, pricing friction?","Competitive intelligence: are they being courted by alternatives?"],
-            risks: ["Surface-level answers (\u2018everything is fine\u2019) \u2014 probe deeper, ask about their last frustration","Discovering the issue is about a single person (bad CSM relationship) \u2014 be ready to change the team","Issue may be structural (procurement-driven, not relationship-driven) \u2014 different fix needed"],
-            metrics: [
-              { label: "NPS/CSAT", current: "Low despite usage", target: "Root cause identified" },
-              { label: "Support Response", current: "Unknown", target: "Benchmarked vs SLA" },
-              { label: "Exec Engagement", current: "None", target: "Gap mapped" },
-              { label: "Friction Points", current: "Unknown", target: "Top 3 documented" },
-            ],
-            tasks: ["Review support ticket history: volume, response times, resolution rates, escalations","Interview 3-5 stakeholders at different levels about their experience with Mindtickle as a partner","Analyse billing history: any disputes, credit requests, or pricing concerns","Map executive engagement history: when was the last exec-to-exec conversation?","Document: what would make them describe Mindtickle as a \u2018strategic partner\u2019 vs a \u2018vendor\u2019?"],
-          },
-          { name: "DESIGN", icon: "\ud83d\udcd0", weeks: "Weeks 3-4",
-            objective: "Design the relationship transformation plan \u2014 executive engagement, QBR redesign, partnership elevation",
-            asks: ["Agreement on a new QBR format focused on business impact, not feature updates","Executive sponsor pairing: Mindtickle C-suite \u2194 their CRO/VP Sales","Invitation acceptance for customer advisory board or industry dinner","Feedback on what \u2018strategic partner\u2019 looks like to them"],
-            risks: ["Executive access denied \u2014 start with VP level, earn the right to CRO through delivered value","QBR redesign feels like \u2018more meetings\u2019 \u2014 make it shorter but higher quality","Advisory board feels like a sales tactic \u2014 frame as genuine co-creation opportunity"],
-            metrics: [
-              { label: "QBR Format", current: "Feature-focused", target: "Business impact focused" },
-              { label: "Exec Sponsor", current: "None", target: "Paired and scheduled" },
-              { label: "Advisory Board", current: "Not invited", target: "Invitation extended" },
-              { label: "Engagement Plan", current: "Reactive", target: "Proactive cadence set" },
-            ],
-            tasks: ["Design new QBR template: 70% business outcomes, 20% roadmap, 10% support review","Pair Mindtickle exec sponsor with their CRO \u2014 schedule first strategic conversation","Prepare advisory board invitation with clear value proposition (roadmap influence, early access)","Create proactive value communication plan: monthly insights email with usage benchmarks","Resolve top friction point identified in Discover phase \u2014 quick visible fix","Plan executive dinner or conference co-attendance for relationship elevation"],
-          },
-          { name: "ACTIVATE", icon: "\ud83d\ude80", weeks: "Weeks 5-10",
-            objective: "Execute the relationship transformation \u2014 shift perception through actions, not promises",
-            asks: ["CRO attendance at first redesigned QBR","Participation in one external event (dinner, conference, webinar)","Feedback loop on proactive value communications","Permission to share their usage data benchmarked vs industry peers"],
-            risks: ["Actions don\u2019t match words \u2014 if you promise exec engagement, deliver it consistently","Over-communicating \u2014 monthly insights should be high-signal, not noise","Cisco\u2019s size means multiple BUs with different relationships \u2014 prioritise the loudest detractor BU"],
-            metrics: [
-              { label: "NPS", current: "Low", target: "+20 points improvement" },
-              { label: "Exec Meetings", current: "0/quarter", target: "1/quarter" },
-              { label: "Response Time", current: "Variable", target: "SLA consistently met" },
-              { label: "Partnership Events", current: "0", target: "1 co-attendance completed" },
-            ],
-            tasks: ["Week 5: Deliver first redesigned QBR \u2014 lead with their business outcomes data","Week 6: Send first proactive value insight \u2014 their usage vs top 10% of Mindtickle customers","Week 7: Resolve any outstanding support or billing friction","Week 8: Executive dinner or conference co-attendance \u2014 build personal relationship","Week 9: Share ElevateOS early access invitation \u2014 signal investment in the partnership","Week 10: Check-in survey: \u2018How has your experience with Mindtickle changed?\u2019"],
-          },
-          { name: "SUSTAIN", icon: "\ud83d\udcc8", weeks: "Month 3+",
-            objective: "Lock in the partnership through structural ties \u2014 advisory board, co-innovation, enterprise agreement",
-            asks: ["Advisory board participation confirmed","Co-presentation at industry event or Mindtickle conference","Enterprise license discussion \u2014 platform commitment signals partnership","Annual strategic review with Mindtickle founders"],
-            risks: ["Relationship improvement doesn\u2019t survive personnel changes \u2014 build multi-threaded relationships","Cisco\u2019s procurement team may not reflect the relationship improvement \u2014 engage procurement early","Complacency after initial improvement \u2014 maintain the cadence"],
-            metrics: [
-              { label: "Relationship", current: "Vendor", target: "Strategic Partner" },
-              { label: "NRR", current: "105%", target: "115%+" },
-              { label: "Multi-threading", current: "1-2 contacts", target: "5+ relationships across levels" },
-              { label: "Contract", current: "Annual renewal", target: "Multi-year enterprise agreement" },
-            ],
-            tasks: ["Month 3: Advisory board onboarding \u2014 first roadmap influence session","Month 4: Co-present at industry event \u2014 position them as thought leaders using Mindtickle","Month 5: Enterprise licensing conversation \u2014 platform-wide agreement with multi-year terms","Month 6: Annual strategic review with Mindtickle CEO/CPO \u2014 signal top-tier partnership","Ongoing: Quarterly exec check-ins, monthly value insights, proactive support escalation","Ongoing: Multi-thread the relationship \u2014 build 5+ contacts across CRO, VP Sales, Enablement, IT, RevOps"],
-          },
-        ],
-      },
-      q1: {
-        title: "EXPAND & CO-CREATE", subtitle: "Splunk \u00b7 Juniper \u00b7 Darktrace \u00b7 CentiMark",
-        tagline: "From satisfied customer to strategic advocate and design partner",
-        accounts: CLIENTS.filter(c=>c.q==="q1"),
-        phases: [
-          { name: "DISCOVER", icon: "\ud83d\udd0d", weeks: "Weeks 1-2",
-            objective: "Identify expansion whitespace \u2014 which modules aren\u2019t they on? What\u2019s next on their CRO\u2019s roadmap?",
-            asks: ["Product usage deep-dive: which modules are active, which are underutilised?","CRO/VP Sales meeting to understand their next 12-month priorities","Tech stack audit: what other tools do they use that Mindtickle could replace or integrate with?","Champion check-in: career trajectory, satisfaction, advocacy willingness"],
-            risks: ["Assuming expansion is automatic \u2014 even happy customers need a business case","Champion burnout \u2014 if you\u2019ve relied on one person for 3 years, they may be tired of carrying the flag","Competitor displacement risk is low but not zero \u2014 don\u2019t get complacent"],
-            metrics: [
-              { label: "Modules Active", current: "3-4", target: "Full platform map" },
-              { label: "Tech Stack Overlap", current: "Unknown", target: "Consolidation opportunities identified" },
-              { label: "Champion Health", current: "Unknown", target: "Assessed and supported" },
-              { label: "Expansion Pipeline", current: "$0", target: "2-3 opportunities scoped" },
-            ],
-            tasks: ["Deep usage analysis: feature-level adoption, power users vs casual users","Map their tech stack: Gong, Highspot, Showpad, Seismic \u2014 what can Mindtickle consolidate?","CRO meeting: \u2018What are your top 3 priorities for the next year? How can we help?\u2019","Champion career check-in: speaking opportunities, industry recognition, advisory board role","Identify 2-3 cross-sell opportunities based on usage gaps and CRO priorities"],
-          },
-          { name: "DESIGN", icon: "\ud83d\udcd0", weeks: "Weeks 3-4",
-            objective: "Co-create the expansion and co-innovation roadmap \u2014 make them a design partner, not just a customer",
-            asks: ["Joint roadmap session: their priorities mapped to Mindtickle\u2019s product roadmap","ElevateOS early adopter program agreement","Enterprise licensing discussion \u2014 move from module-based to platform pricing","Case study scope and approval process initiated"],
-            risks: ["Enterprise license sticker shock \u2014 frame as cost consolidation (replace 2-3 point solutions)","ElevateOS not ready for their use case \u2014 set clear expectations on timeline and beta vs GA","Case study approval in regulated industries (pharma) takes months \u2014 start early"],
-            metrics: [
-              { label: "Joint Roadmap", current: "None", target: "12-month co-innovation plan" },
-              { label: "ElevateOS", current: "Not enrolled", target: "Early adopter agreement" },
-              { label: "Case Study", current: "None", target: "Scope agreed, approval initiated" },
-              { label: "License Structure", current: "Per-module", target: "Enterprise proposal delivered" },
-            ],
-            tasks: ["Joint roadmap session: map their 12-month priorities to Mindtickle capabilities","Present ElevateOS vision and early adopter program \u2014 their feedback shapes the product","Design enterprise licensing proposal: consolidation savings + full platform access","Initiate case study process: identify metrics, get internal approval, schedule interviews","Plan champion speaking opportunity at Mindtickle event or industry conference","Design co-innovation pilot: test a new AI feature in their environment with feedback loop"],
-          },
-          { name: "ACTIVATE", icon: "\ud83d\ude80", weeks: "Weeks 5-12",
-            objective: "Launch new modules, produce the case study, and activate the advocacy program",
-            asks: ["IT support for new module integration (Call AI, DSRs, Content Hub)","Marketing team participation for case study production","Champion availability for 1-2 external speaking opportunities","Enterprise license decision timeline from procurement"],
-            risks: ["New module adoption slower than expected \u2014 provide dedicated onboarding support","Case study production delays \u2014 assign a project manager, not just a CSM","Enterprise license negotiation gets stuck in procurement \u2014 involve their champion as internal advocate"],
-            metrics: [
-              { label: "New Modules Active", current: "0", target: "+2 modules launched" },
-              { label: "Case Study", current: "In progress", target: "Published" },
-              { label: "Advocacy Events", current: "0", target: "1 speaking engagement" },
-              { label: "Wallet Share", current: "40-72%", target: "+15 percentage points" },
-            ],
-            tasks: ["Week 5-6: Launch first expansion module (e.g., Call AI or Digital Sales Rooms)","Week 7-8: Case study interviews and data collection \u2014 produce draft","Week 8: Champion speaks at Mindtickle user community event or webinar","Week 9-10: Launch second expansion module with dedicated enablement support","Week 10-11: ElevateOS early adopter pilot \u2014 deploy one AI feature, collect structured feedback","Week 12: Case study published \u2014 promote through Mindtickle marketing channels"],
-          },
-          { name: "SUSTAIN", icon: "\ud83d\udcc8", weeks: "Month 4+",
-            objective: "Maximise lifetime value \u2014 enterprise agreement, full advocacy program, and co-innovation partnership",
-            asks: ["Enterprise license signed \u2014 multi-year platform commitment","Annual strategic review with Mindtickle founders","Champion enrolled in customer advisory board as a leader","Co-innovation feedback incorporated into product roadmap"],
-            risks: ["Champion leaves the company \u2014 build 3+ relationships at different levels","Enterprise agreement creates complacency on Mindtickle side \u2014 maintain proactive engagement","CentiMark-level success (8-day ramp, 30% wallet share) becomes the floor, not the ceiling"],
-            metrics: [
-              { label: "Wallet Share", current: "55-80%", target: "80%+ captured" },
-              { label: "Enterprise License", current: "Per-module", target: "Multi-year platform agreement" },
-              { label: "Advocacy Score", current: "Passive", target: "Active: 2+ events/year, case study live" },
-              { label: "Reference Calls", current: "Ad hoc", target: "Structured program: 4+/year" },
-            ],
-            tasks: ["Month 4: Enterprise license signed \u2014 celebrate with joint press release or blog post","Month 5: Enroll champion in advisory board \u2014 give them roadmap influence and recognition","Month 6: Annual strategic review with Mindtickle CEO + CPO \u2014 top-tier treatment","Month 8: Co-present at major industry conference \u2014 Mindtickle + customer joint session","Month 10: Innovation day \u2014 bring their team to Mindtickle office for deep product immersion","Ongoing: Quarterly co-innovation reviews \u2014 their feedback directly shapes ElevateOS roadmap","Ongoing: Reference program \u2014 structured availability for prospect calls (with incentives)"],
-          },
-        ],
-      },
+      q3:{title:"STABILISE & PROVE VALUE",sub:"Ford Pro \u00b7 Wipro",tag:"From active churn risk to renewed partnership",
+        accounts:CL.filter(c=>c.q==="q3"),
+        phases:[
+          {name:"DISCOVER",icon:"\ud83d\udd0d",weeks:"Weeks 1-2",
+            left:{title:"What We Know: Ford Pro",items:["Ford Pro: $66.3B revenue, $6.8B EBIT, 10.3% margin \u2014 Ford\u2019s profit engine","879,000 paid software subscriptions (Ford Pro Intelligence), growing 30% YoY","CRO pain: training truck sellers to sell software subscriptions \u2014 fundamentally different motion","Incentive misalignment: reps compensated on vehicle price, not subscription attach rate","Competition from pure SaaS fleet companies: Samsara, Geotab, Verizon Connect","Dealer vs direct complexity: two channels, two training needs, two sales motions"]},
+            right:{title:"Present Deployment Issues (by workflow)",items:["Pipeline: No MT involvement. SDR team uses separate tools. Gap: SDR onboarding takes 6+ weeks","Win Rate: Scattered training videos that don\u2019t address truck\u2192subscription transition. No Role-Play. Call AI not activated (privacy concerns never resolved). No competitive battle cards for Samsara/Geotab","Post-Sale: No CS enablement for subscription renewals. Churn not correlated with rep readiness","Forecasting: Subscription forecast separate from vehicle forecast. No Call AI data feeding in","Productivity: Reps toggle 4+ tools. Subscription content buried in shared drive. No structured coaching"]},
+            tasks:["Pull platform analytics: DAU/MAU across 500 licensed Ford Pro users, feature adoption heat map","Interview 5 stakeholders: 2 dealer reps, 1 Ford Pro regional manager, 1 Dealer Training leader, 1 commercial leader","Analyse Ford\u2019s three-segment structure: map enablement urgency (Ford Pro \u2192 EV \u2192 Ford Blue)","Review existing training stack: other tools (Allego, internal LMS, Salesforce Learning)? Overlap?","Assess competitive displacement: is Ford evaluating Seismic or Showpad? Timeline?","Prepare industry benchmark: automotive/fleet company outcomes with full Mindtickle deployment","Map Ford Pro subscription selling journey: where does enablement create most pipeline leverage?"],
+            metrics:[{l:"Platform Login Rate",c:"~25%",t:"Baselined with user-level data"},{l:"Subscription Attach Rate",c:"Unknown",t:"Baseline from CRM data"},{l:"Rep Confidence (subscription pitch)",c:"Unknown",t:"Survey: 1-5 scale"},{l:"Competitive Win Rate vs Samsara",c:"Unknown",t:"Pull from CRM win/loss"}]},
+          {name:"DESIGN",icon:"\ud83d\udcd0",weeks:"Weeks 3-4",
+            left:{title:"Quick Wins (Minimal effort, max visibility)",items:["Week 1-2: Fix homepage \u2014 archive 70% dormant content, make subscription training front-and-center","Week 2: Activate 3 competitive battle cards (Samsara, Geotab, Verizon Connect) in Content Hub","Week 2: Create 1 AI Role-Play scenario: \u2018Pitching Ford Pro Intelligence subscription to a fleet manager\u2019"]},
+            right:{title:"The Happy Path \u2014 Full Roadmap",items:["Week 2-3: Leadership exposure \u2014 Mindtickle VP meets Ford Pro CRO. Exec dinner or steering committee","Week 3-4: Full-day Workflow Mapping Workshop on-site \u2014 map current subscription selling process, identify gaps, design transformation roadmap","Week 4: Competitive battle cards for all named competitors in Ford Pro\u2019s market","Ongoing: Relationship building \u2014 invite Ford Pro leaders to Mindtickle customer conference, advisory board","Budget: estimate CS investment hours + any professional services costs for workshop","Risk: CRO may refuse meeting \u2014 lead with \u2018we found issues and want to fix them\u2019. Have data ready.","Risk: Competitive eval in progress \u2014 accelerate timeline. Quick wins MUST land before competitor demo"]},
+            tasks:["Design simplified platform architecture: clean homepage, 5-7 active programs focused on subscription selling","Co-define 3 success metrics with CRO (e.g., subscription attach rate, ramp time, competitive win rate)","Build 90-day implementation timeline with weekly milestones","Prepare competitive positioning deck: Mindtickle vs Seismic/Showpad/Gong for Ford\u2019s use case","Design the Workflow Mapping Workshop agenda: current-state mapping, gap analysis, priority scoring","Assign dedicated \u2018restart\u2019 CSM with inherited-deployment expertise"],
+            metrics:[{l:"Quick Wins Delivered",c:"0",t:"3 in first 2 weeks"},{l:"CRO Meeting",c:"Not scheduled",t:"Confirmed by Week 3"},{l:"Workshop Completed",c:"No",t:"Full-day by Week 4"},{l:"Success Metrics Agreed",c:"None",t:"3 KPIs with CRO sign-off"}]},
+          {name:"EXECUTE",icon:"\u26a1",weeks:"Weeks 5-12",
+            left:{title:"Weekly Cadence & Milestones",items:["Weekly: 30-min check-in with enablement lead (Mon AM). Agenda: blockers, adoption metrics, content requests","Bi-weekly: Steering committee with exec sponsor. Agenda: progress vs milestones, risk register, decisions needed","Monthly: CRO dashboard email \u2014 usage metrics, readiness scores, early outcome indicators","Month 1 milestone: Platform cleaned up, 3 Role-Play scenarios live, Call AI privacy resolved and activated","Month 2 milestone: 50+ reps completing Role-Play, 3 managers coaching weekly, first Call AI insights shared","Month 3 milestone: First QBR with before/after metrics. Subscription attach rate change visible"]},
+            right:{title:"What Can Go Wrong & Mitigations",items:["Platform cleanup takes >2 weeks \u2192 Timebox ruthlessly. \u2018Good enough\u2019 > perfect. Archive aggressively","Call AI privacy objection resurfaces \u2192 Pre-build compliance documentation. Reference other automotive customers. Offer opt-in pilot with willing team first","Manager resistance to coaching \u2192 Don\u2019t mandate. Start with 2 willing managers. Create proof points. Share: \u2018Cisco saved 6,000 hours\u2019","Quick wins don\u2019t land fast enough \u2192 Ensure Week 6 has at least 1 visible success the CRO sees","Competitive eval accelerates \u2192 If Seismic/Gong gets a demo, request equal access. Use quick wins as proof of momentum","Rep adoption stalls at 40% \u2192 Identify blockers per persona (dealer vs direct). Create separate enablement tracks"]},
+            tasks:["Week 5-6: Platform cleanup \u2014 archive dormant content, rebuild homepage for subscription selling focus","Week 6: Resolve Call AI privacy concerns \u2014 compliance documentation, opt-in pilot structure","Week 6: Internal relaunch comms \u2014 CRO-sponsored email: \u2018Your new Mindtickle experience\u2019","Week 7: Launch AI Role-Play: Ford Pro Intelligence pitch, competitive objection handling (Samsara), renewal conversation","Week 8: Activate Call AI for pilot team (20-30 reps). Begin recording and scoring subscription conversations","Week 8-9: Enable 3 managers on coaching \u2014 weekly review of 3 lowest-scoring calls","Week 10: Deploy Readiness Index with Ford Pro-specific IRP","Week 10: Mid-point steering committee: progress review, adjust priorities","Week 12: First QBR preparation \u2014 compile before/after metrics for CRO presentation"],
+            metrics:[{l:"Login Rate",c:"25%",t:"60%+"},{l:"Role-Play Completion",c:"0 reps",t:"50+ reps, 1+ scenario each"},{l:"Call AI Coverage",c:"0%",t:"50% of pilot team calls"},{l:"Manager Coaching",c:"0 sessions",t:"3 managers, weekly cadence"}]},
+          {name:"SUSTAIN",icon:"\ud83d\udcc8",weeks:"Month 4+",
+            left:{title:"The Ongoing Operating Model",items:["Quarterly QBR with CRO: usage \u2192 readiness \u2192 business outcomes in one narrative","Monthly health score review with automated alerts on adoption dips","Quarterly best-practice refresh: new Role-Play scenarios, updated battle cards, content audit","Champion development: identify and invest in Ford Pro\u2019s internal Mindtickle advocate","Innovation access: early ElevateOS features for subscription selling workflows"]},
+            right:{title:"Becoming a Leadership Aide",items:["Provide CRO with data they can\u2019t get elsewhere: readiness \u2194 subscription attach rate correlation","Quarterly industry benchmarking: \u2018Here\u2019s how Ford Pro compares to 200+ Mindtickle customers\u2019","Co-author thought leadership: white paper on \u2018Enabling the Truck-to-SaaS Selling Transition\u2019","Annual strategic review with Mindtickle founders \u2014 signal top-tier partnership","Advisory board membership: Ford Pro helps shape Mindtickle\u2019s automotive roadmap"]},
+            tasks:["Month 4: QBR with CRO \u2014 present ROI dashboard with before/after metrics","Month 5: Begin expansion conversation \u2014 extend to Ford Blue dealer training or Ford Model e EV selling","Month 6: Contract renewal discussion anchored to proven value, not discount","Month 6: Activate Readiness Index org-wide \u2014 benchmark all Ford Pro reps against IRP","Month 8: Full Call AI deployment across all customer-facing Ford Pro teams","Month 9: Case study \u2014 publish Ford Pro transformation metrics for industry marketing","Ongoing: Multi-thread relationships \u2014 build 5+ contacts across CRO, VP Sales, Enablement, IT, RevOps"],
+            metrics:[{l:"Subscription Attach Rate",c:"Baseline",t:"+15-25% improvement"},{l:"Rep Ramp Time",c:"6+ weeks",t:"50% reduction (ref: Janssen)"},{l:"Wallet Share",c:"27%",t:"40%+ within 12 months"},{l:"Relationship Status",c:"Strained",t:"Strategic Partner"}]},
+        ]},
+      q2:{title:"ACTIVATE",sub:"Boston Scientific \u00b7 J&J",tag:"From underleveraged platform to full revenue engine",
+        accounts:CL.filter(c=>c.q==="q2"),
+        phases:[
+          {name:"DISCOVER",icon:"\ud83d\udd0d",weeks:"Weeks 1-2",
+            left:{title:"What We Know: Boston Scientific",items:["BSX: $16.7B net sales (2024), growing 17.6% YoY. Market cap $134B","17,500 sales reps across 130 countries. Complex med device selling with surgeon training","4+ acquisitions bringing new products: FARAPULSE ($1B first year), Anrei, SoniVie, Bolt Medical","Watchman: first procedure volume decline \u2014 growth headwind in flagship franchise","CEO vision: \u2018next level\u2019 performance with digital and AI capabilities","Compliance-heavy: every rep interaction has regulatory implications. Content approval workflows mandatory"]},
+            right:{title:"Present Deployment: Using Onboarding Only",items:["Currently using: Onboarding module for new hire training. 1-2 modules active out of 6+","Not using: Call AI, Role-Play, Content Hub, Readiness Index, DSRs, Coaching","Strong relationship with VP Enablement \u2014 they want to expand but lack internal budget justification","Gap: no new-product-launch enablement for acquisitions (FARAPULSE, etc.)","Gap: no compliance-tracked certification system beyond basic LMS","Gap: surgeon training enablement completely separate from sales enablement"]},
+            tasks:["Map BSX\u2019s complete sales process: lead \u2192 qualification \u2192 surgeon demo \u2192 committee approval \u2192 procurement","Identify which modules they\u2019re using vs not. Quantify the expansion opportunity","Document 5 highest-pain workflow gaps where additional modules add value","Benchmark their metrics against med device peers using Mindtickle analytics","Interview 5 reps and 3 managers about current workflow and pain points","Engage Medical/Legal/Compliance early \u2014 understand content approval timelines"],
+            metrics:[{l:"Modules Active",c:"1-2",t:"Full capability map completed"},{l:"New Product Launch Speed",c:"Unknown",t:"Baselined for FARAPULSE"},{l:"Compliance Certification Rate",c:"Unknown",t:"Baselined"},{l:"Wallet Share",c:"7%",t:"Expansion opportunities quantified"}]},
+          {name:"DESIGN",icon:"\ud83d\udcd0",weeks:"Weeks 3-5",
+            left:{title:"Quick Wins",items:["Week 1: Build FARAPULSE product launch training module from existing materials","Week 2: Create 2 AI Role-Play scenarios: new product pitch + competitive objection (Medtronic)","Week 2: Set up compliance-tracked certification for one product line as proof of concept"]},
+            right:{title:"The Happy Path",items:["Week 3: CRO meeting \u2014 present pilot ROI projection based on industry benchmarks","Week 3-4: Workflow Mapping Workshop \u2014 map med device selling process to platform capabilities","Week 4-5: Co-design IRP using BSX top performer data + Mindtickle benchmarks","Scope 3 expansion modules: Call AI + AI Role-Play + Readiness Index","Design pilot: 20-30 reps, 30-day sprint, FARAPULSE launch as use case","Risk: Compliance approval delays (4-8 weeks in pharma/med device) \u2014 start early, don\u2019t let it block Activate"]},
+            tasks:["Run Workflow Mapping Workshop: current workflows \u2192 best practice \u2192 gaps \u2192 prioritised roadmap","Co-design IRP using top performer data + Mindtickle industry benchmarks","Scope pilot program: 20-30 reps, 30 days, FARAPULSE as anchor use case","Build compliance content review workflow into Mindtickle (med/legal approval gates)","Prepare expansion business case: consolidation savings + full platform value","Plan champion speaking opportunity at Mindtickle event"],
+            metrics:[{l:"Workshop Completed",c:"No",t:"Full-day by Week 4"},{l:"IRP Defined",c:"No",t:"Industry-specific IRP v1"},{l:"Pilot Team Selected",c:"No",t:"20-30 reps identified"},{l:"Expansion Modules Scoped",c:"0",t:"3 modules with business case"}]},
+          {name:"EXECUTE",icon:"\u26a1",weeks:"Weeks 6-14",
+            left:{title:"Cadence & Milestones",items:["Weekly: enablement team sync. Bi-weekly: pilot team check-in","Month 1: FARAPULSE training live, pilot team onboarded on Role-Play + Call AI","Month 2: First Role-Play scores in, Call AI covering 50% pilot calls, compliance cert pilot running","Month 3: Pilot results presentation to CRO. Org-wide rollout decision"]},
+            right:{title:"What Can Go Wrong",items:["Compliance approval delays new content \u2192 Have materials pre-reviewed. Build compliance gates into workflow","Pilot reps too busy with quota to engage \u2192 Keep weekly time <30 min. Tie to live deals, not abstract training","Call AI privacy concerns in med device (surgeon conversations) \u2192 Offer recording consent framework. Start with internal-only calls","Pilot success doesn\u2019t auto-scale \u2192 Plan org-wide rollout in parallel. Don\u2019t wait for pilot end to start planning"]},
+            tasks:["Week 6: Launch pilot with CRO-sponsored kickoff","Week 6-7: Onboard pilot reps on Role-Play + Call AI","Week 7-8: First Role-Play scenario: FARAPULSE pitch to hospital committee","Week 8-9: Activate Call AI for pilot team","Week 9-10: Manager coaching pilot \u2014 weekly call review","Week 10-11: Mid-pilot check-in \u2014 adjust and iterate","Week 12-14: Compile pilot results for CRO presentation"],
+            metrics:[{l:"Pilot Completion Rate",c:"0%",t:"85%+"},{l:"Role-Play Score Improvement",c:"No baseline",t:"+20%"},{l:"Call AI Coverage (pilot)",c:"0%",t:"50%+ of calls"},{l:"Ramp Time (pilot new hires)",c:"6-9 months",t:"50% reduction"}]},
+          {name:"SUSTAIN",icon:"\ud83d\udcc8",weeks:"Month 5+",
+            left:{title:"Scale & Expand",items:["Org-wide rollout: phase by region/BU (not all-at-once for 17,500 reps)","Enterprise licensing: platform-wide agreement replacing per-module","Multi-product expansion: extend beyond FARAPULSE to full product portfolio","Global compliance certification system on Mindtickle"]},
+            right:{title:"Leadership Aide",items:["CRO dashboard: readiness \u2192 certification \u2192 sales outcomes in one view","Industry benchmarking: BSX vs peer med device companies on enablement metrics","Case study: publish BSX enablement transformation (anonymised if needed)","Advisory board: BSX champion shapes Mindtickle\u2019s med device roadmap"]},
+            tasks:["Month 5: Present pilot results + org-wide rollout plan","Month 6: Phase 1 rollout \u2014 next 100 reps, 2 additional regions","Month 7: Enterprise licensing conversation","Month 8: Full Call AI deployment","Month 9: Case study production","Ongoing: Quarterly innovation reviews, ElevateOS early access"],
+            metrics:[{l:"Wallet Share",c:"7%",t:"25%+ within 12 months"},{l:"Platform Modules Active",c:"1-2",t:"5+"},{l:"Manager Hours Saved",c:"0",t:"Ref: Cisco 6,000+ hours"},{l:"NRR",c:"Baseline",t:"115%+"}]},
+        ]},
+      q4:{title:"BUILD RELATIONSHIP",sub:"Cisco \u00b7 WWT",tag:"From transactional vendor to strategic partner",
+        accounts:CL.filter(c=>c.q==="q4"),
+        phases:[
+          {name:"DISCOVER",icon:"\ud83d\udd0d",weeks:"Weeks 1-2",
+            left:{title:"What We Know: Cisco",items:["Record $15.8B revenue Q3 2026, up 12% YoY. $1.9B AI infrastructure orders from hyperscalers","Cutting 4,000 jobs to reallocate to AI, security, cloud \u2014 \u2018focus, urgency, discipline\u2019","7,000+ sellers need to transition from networking \u2192 AI infrastructure selling","Already proven value: 31% deal size increase, 6,000+ manager hours saved with Role-Play","But relationship is transactional \u2014 usage is good, partnership feeling is not"]},
+            right:{title:"Diagnosing the Relationship Gap",items:["Is it billing/pricing friction? Review contract history for disputes","Is it support responsiveness? Pull ticket history \u2014 response times, escalation patterns","Is it exec access? When was last CRO-to-CRO conversation?","Is it \u2018feeling like a number\u2019? Large enterprise accounts often feel underserved despite good product","Multi-BU complexity: different BUs may have different relationship quality"]},
+            tasks:["Interview 5 stakeholders at different levels about partnership quality","Analyse support ticket history: volume, response times, resolution, escalations","Review billing history: disputes, credits, pricing friction","Map executive engagement: last exec-to-exec conversation date","Document: what would make them call Mindtickle a \u2018strategic partner\u2019 vs \u2018vendor\u2019?"],
+            metrics:[{l:"NPS/CSAT",c:"Low despite usage",t:"Root cause identified"},{l:"Support Response vs SLA",c:"Unknown",t:"Benchmarked"},{l:"Exec Engagement",c:"None/infrequent",t:"Gap documented"},{l:"Friction Points",c:"Unknown",t:"Top 3 identified"}]},
+          {name:"DESIGN",icon:"\ud83d\udcd0",weeks:"Weeks 3-4",
+            left:{title:"Quick Wins",items:["Resolve #1 friction point immediately (billing dispute, support SLA, whatever it is)","Send first proactive value insight: Cisco\u2019s usage vs top 10% Mindtickle customers","Invite to upcoming Mindtickle customer event or exec dinner"]},
+            right:{title:"The Happy Path",items:["QBR redesign: 70% business outcomes, 20% roadmap, 10% support review","Executive sponsor pairing: Mindtickle CRO \u2194 Cisco VP Sales","Advisory board invitation with clear value prop (roadmap influence, early access)","AI infrastructure selling enablement: new Role-Play scenarios for the AI transition","Risk: Exec access gated by procurement \u2014 build upward through enablement team trust"]},
+            tasks:["Design new QBR template focused on business impact, not product features","Pair Mindtickle exec sponsor with Cisco leadership \u2014 schedule first conversation","Prepare advisory board invitation with roadmap influence positioning","Create proactive value communication plan: monthly insights with peer benchmarks","Plan exec dinner or conference co-attendance","Build AI infrastructure selling Role-Play scenarios for Cisco\u2019s market transition"],
+            metrics:[{l:"#1 Friction Point",c:"Unresolved",t:"Fixed by Week 3"},{l:"QBR Format",c:"Feature-focused",t:"Business impact focused"},{l:"Exec Sponsor",c:"None",t:"Paired and scheduled"},{l:"Advisory Board",c:"Not invited",t:"Invitation extended"}]},
+          {name:"EXECUTE",icon:"\u26a1",weeks:"Weeks 5-10",
+            left:{title:"Cadence & Milestones",items:["Week 5: First redesigned QBR \u2014 lead with business outcomes","Week 6: First proactive value insight email","Week 7: Outstanding support/billing friction resolved","Week 8: Executive dinner or conference co-attendance","Week 9: ElevateOS early access invitation","Week 10: Partnership perception check-in survey"]},
+            right:{title:"What Can Go Wrong",items:["Actions don\u2019t match words \u2014 if you promise exec engagement, deliver it every quarter without fail","Over-communicating \u2014 monthly insights must be high-signal, not noise","Cisco\u2019s size means different BUs have different relationships \u2014 prioritise the loudest detractor BU","Procurement doesn\u2019t reflect relationship improvement \u2014 engage procurement early on commercial terms"]},
+            tasks:["Week 5: Deliver redesigned QBR with Cisco\u2019s business outcomes data","Week 6: Monthly value insight: usage vs top 10% of Mindtickle customers","Week 7: Resolve outstanding friction points","Week 8: Executive relationship event","Week 9: ElevateOS early access for AI selling scenarios","Week 10: Survey: \u2018How has your experience with Mindtickle changed?\u2019"],
+            metrics:[{l:"NPS",c:"Low",t:"+20 points"},{l:"Exec Meetings",c:"0/quarter",t:"1/quarter"},{l:"Support SLA",c:"Variable",t:"Consistently met"},{l:"Partnership Events",c:"0",t:"1 completed"}]},
+          {name:"SUSTAIN",icon:"\ud83d\udcc8",weeks:"Month 3+",
+            left:{title:"Lock In the Partnership",items:["Advisory board participation confirmed and active","Multi-year enterprise agreement discussion","Co-presentation at industry events","Annual strategic review with Mindtickle founders"]},
+            right:{title:"Preventing Regression",items:["Multi-thread: build 5+ relationships across levels so account doesn\u2019t depend on one person","Maintain quarterly exec cadence \u2014 don\u2019t let it slip after initial improvement","Proactive renewal planning \u2014 start 6 months before, not 30 days","Continuous value: monthly insights, quarterly innovation, annual strategic review"]},
+            tasks:["Month 3: Advisory board onboarding","Month 4: Co-present at industry event","Month 5: Enterprise licensing \u2014 multi-year platform agreement","Month 6: Annual strategic review with Mindtickle CEO/CPO","Ongoing: Multi-thread relationships across 5+ contacts","Ongoing: Quarterly exec check-ins, monthly value insights"],
+            metrics:[{l:"Relationship Status",c:"Vendor",t:"Strategic Partner"},{l:"NRR",c:"105%",t:"115%+"},{l:"Multi-threading",c:"1-2 contacts",t:"5+ across levels"},{l:"Contract",c:"Annual renewal",t:"Multi-year enterprise"}]},
+        ]},
+      q1:{title:"CO-CREATE",sub:"Splunk \u00b7 Juniper \u00b7 Darktrace \u00b7 CentiMark",tag:"From satisfied customer to strategic advocate and design partner",
+        accounts:CL.filter(c=>c.q==="q1"),
+        phases:[
+          {name:"DISCOVER",icon:"\ud83d\udd0d",weeks:"Weeks 1-2",
+            left:{title:"Expansion Whitespace",items:["CentiMark: 8-day ramp, 72% wallet share \u2014 the gold standard. What modules aren\u2019t they on?","Splunk: strong coaching culture, 60% wallet share. Cross-sell Call AI or DSRs?","Darktrace: published case study. Ready for enterprise licensing?","Juniper: using content + training. Expansion into AI Role-Play and coaching?"]},
+            right:{title:"What to Assess",items:["Tech stack audit: Gong, Highspot, Showpad \u2014 tools Mindtickle could consolidate/replace?","Champion health: are they still engaged? Career trajectory? Burnout risk?","CRO priorities for next 12 months: where can Mindtickle add new value?","Product/engineering liaison: who can evaluate ElevateOS as design partner?"]},
+            tasks:["Deep usage analysis: feature-level adoption, power users vs casual users","Map tech stack: identify consolidation opportunities","CRO meeting: \u2018What are your top 3 priorities? How can we help?\u2019","Champion career check-in: speaking opportunities, recognition, advisory role","Identify 2-3 cross-sell opportunities based on usage gaps"],
+            metrics:[{l:"Modules Active",c:"3-4",t:"Full platform map"},{l:"Tech Stack Overlap",c:"Unknown",t:"Consolidation opps identified"},{l:"Champion Health",c:"Unknown",t:"Assessed and supported"},{l:"Expansion Pipeline",c:"$0",t:"2-3 opps scoped"}]},
+          {name:"DESIGN",icon:"\ud83d\udcd0",weeks:"Weeks 3-4",
+            left:{title:"Quick Wins",items:["Nominate champion for speaking at next Mindtickle conference","Share exclusive ElevateOS roadmap preview \u2014 make them feel like insiders","Build custom industry benchmark: their performance vs anonymised Mindtickle peers"]},
+            right:{title:"The Happy Path",items:["Joint innovation roadmap: 12-month plan mapping their priorities to Mindtickle capabilities","ElevateOS early adopter agreement with structured feedback sessions","Enterprise licensing proposal: consolidation savings + full platform access","Case study scope agreed, internal approval process initiated","Risk: champion attrition \u2014 develop 2 backup relationships at same level now"]},
+            tasks:["Joint roadmap session: their priorities mapped to Mindtickle product roadmap","Present ElevateOS early adopter program","Design enterprise licensing proposal with consolidation savings analysis","Initiate case study: identify metrics, get approval, schedule interviews","Plan champion speaking opportunity"],
+            metrics:[{l:"Joint Roadmap",c:"None",t:"12-month plan signed"},{l:"ElevateOS",c:"Not enrolled",t:"Early adopter agreement"},{l:"Case Study",c:"None",t:"Scope agreed"},{l:"Enterprise License",c:"Per-module",t:"Proposal delivered"}]},
+          {name:"EXECUTE",icon:"\u26a1",weeks:"Weeks 5-12",
+            left:{title:"Cadence & Milestones",items:["Month 1: First new module launched (Call AI or DSRs)","Month 1: Case study interviews and data collection","Month 2: Champion speaks at community event. Second module launched","Month 3: ElevateOS pilot deployed. Case study published"]},
+            right:{title:"What Can Go Wrong",items:["New module adoption slower than expected \u2192 Provide dedicated onboarding support, not just self-serve","Case study production delays \u2192 Assign project manager, not just CSM. Timeline with milestones","Enterprise license stuck in procurement \u2192 Use champion as internal advocate. Build the ROI deck for procurement","ElevateOS not ready for their use case \u2192 Set clear expectations: beta vs GA. Manage scope"]},
+            tasks:["Week 5-6: Launch first expansion module with dedicated enablement","Week 7-8: Case study interviews and draft production","Week 8: Champion speaks at Mindtickle community event","Week 9-10: Launch second expansion module","Week 10-11: ElevateOS pilot \u2014 deploy one AI feature, collect structured feedback","Week 12: Case study published through marketing channels"],
+            metrics:[{l:"New Modules Active",c:"0",t:"+2 launched"},{l:"Case Study",c:"In progress",t:"Published"},{l:"Advocacy Events",c:"0",t:"1 speaking engagement"},{l:"Wallet Share",c:"40-72%",t:"+15 percentage points"}]},
+          {name:"SUSTAIN",icon:"\ud83d\udcc8",weeks:"Month 4+",
+            left:{title:"Maximum Lifetime Value",items:["Enterprise license signed \u2014 multi-year platform commitment","Annual strategic review with Mindtickle founders","Champion: advisory board leader, not just member","Co-innovation: feedback directly shapes ElevateOS roadmap"]},
+            right:{title:"Preventing Complacency",items:["Don\u2019t take them for granted \u2014 champion attrition kills great accounts","Maintain proactive engagement even after enterprise deal closes","CentiMark-level (72% wallet) should be the floor, not the ceiling","Continue quarterly innovation reviews and early feature access"]},
+            tasks:["Month 4: Enterprise license signed","Month 5: Advisory board leadership role","Month 6: Annual strategic review with CEO/CPO","Month 8: Co-present at major industry conference","Month 10: Innovation day at Mindtickle office","Ongoing: Quarterly co-innovation reviews","Ongoing: Reference program \u2014 4+ prospect calls/year"],
+            metrics:[{l:"Wallet Share",c:"55-72%",t:"80%+"},{l:"Enterprise License",c:"Per-module",t:"Multi-year signed"},{l:"Advocacy",c:"Passive",t:"2+ events/year, case study live"},{l:"Reference Calls",c:"Ad hoc",t:"4+/year structured"}]},
+        ]},
     };
 
+    // ===== COMPONENTS =====
     function S1Chart({clients,hov,setHov,sel,setSel,aq,setAq}) {
-      const W=520,H=400,pad={top:10,right:16,bottom:44,left:50};
-      const cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
-      const xP=v=>pad.left+(v/100)*cW, yP=v=>pad.top+cH-(v/100)*cH;
+      const W=520,H=400,pad={top:10,right:16,bottom:44,left:50},cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
+      const xP=v=>pad.left+(v/100)*cW,yP=v=>pad.top+cH-(v/100)*cH;
       const qF={q2:"#f5f5f5",q1:"#fafafa",q3:"#ededed",q4:"#f5f5f5"};
       const qB=[{k:"q2",x:pad.left,y:pad.top},{k:"q1",x:pad.left+cW/2,y:pad.top},{k:"q3",x:pad.left,y:pad.top+cH/2},{k:"q4",x:pad.left+cW/2,y:pad.top+cH/2}];
-      return React.createElement("svg", {viewBox:`0 0 ${W} ${H}`, style:{width:"100%",display:"block"}},
-        qB.map(({k,x,y})=>React.createElement("rect", {key:k, x:x, y:y, width:cW/2, height:cH/2, fill:aq===k?"#e8e8e8":qF[k], onClick:()=>{setAq(aq===k?null:k);setSel(null)}, style:{cursor:"pointer",transition:"fill 0.15s"}})),
-        [{x:.25,y:18,t:"WORKSHOP & ACTIVATE",f:"#888"},{x:.75,y:18,t:"EXPAND & CO-CREATE",f:"#444"},{x:.25,y:cH-6,t:"STABILISE & PROVE VALUE",f:"#666"},{x:.75,y:cH-6,t:"BUILD RELATIONSHIP",f:"#999"}].map(({x,y,t,f})=>React.createElement("text", {key:t, x:pad.left+cW*x, y:pad.top+y, textAnchor:"middle", fontSize:"8.5", fill:f, fontWeight:"600", fontFamily:"'IBM Plex Sans',sans-serif", letterSpacing:"0.04em", style:{pointerEvents:"none"}}, t)),
-        React.createElement("line", {x1:pad.left+cW/2, y1:pad.top, x2:pad.left+cW/2, y2:pad.top+cH, stroke:"#ccc", strokeWidth:"0.75", strokeDasharray:"4,3", style:{pointerEvents:"none"}}),
-        React.createElement("line", {x1:pad.left, y1:pad.top+cH/2, x2:pad.left+cW, y2:pad.top+cH/2, stroke:"#ccc", strokeWidth:"0.75", strokeDasharray:"4,3", style:{pointerEvents:"none"}}),
-        React.createElement("rect", {x:pad.left, y:pad.top, width:cW, height:cH, fill:"none", stroke:"#444", strokeWidth:"1", style:{pointerEvents:"none"}}),
-        React.createElement("text", {x:pad.left+cW/2, y:H-6, textAnchor:"middle", fontSize:"10.5", fill:"#333", fontWeight:"600", fontFamily:"'IBM Plex Sans',sans-serif", style:{pointerEvents:"none"}}, "Deployment Health \u2192"),
-        React.createElement("text", {x:10, y:pad.top+cH/2, textAnchor:"middle", fontSize:"10.5", fill:"#333", fontWeight:"600", fontFamily:"'IBM Plex Sans',sans-serif", transform:`rotate(-90,10,${pad.top+cH/2})`, style:{pointerEvents:"none"}}, "Relationship Strength \u2192"),
-        [0,50,100].map(v=>React.createElement("text", {key:`x${v}`, x:xP(v), y:pad.top+cH+15, textAnchor:"middle", fontSize:"8.5", fill:"#bbb", fontFamily:"'IBM Plex Sans',sans-serif", style:{pointerEvents:"none"}}, v)),
-        [0,50,100].map(v=>React.createElement("text", {key:`y${v}`, x:pad.left-7, y:yP(v)+3, textAnchor:"end", fontSize:"8.5", fill:"#bbb", fontFamily:"'IBM Plex Sans',sans-serif", style:{pointerEvents:"none"}}, v)),
-        clients.map((c,i)=>{const wp=Math.round((c.currentARR/c.potentialARR)*100),cx=xP(c.dh),cy=yP(c.rs),r=11+(c.potentialARR/20000)*16,gv=Math.round(195-(wp/100)*155),iS=sel===i;
-        return React.createElement("g", {key:c.name, onMouseEnter:()=>setHov(i), onMouseLeave:()=>setHov(null), onClick:e=>{e.stopPropagation();setSel(iS?null:i);setAq(null)}, style:{cursor:"pointer"}},
-          React.createElement("circle", {cx:cx, cy:cy, r:r, fill:`rgb(${gv},${gv},${gv})`, stroke:iS?"#000":"#999", strokeWidth:iS?2:0.5, opacity:hov===i||iS?1:0.85, style:{transition:"all 0.15s"}}),
-          React.createElement("text", {x:cx, y:cy-r-4, textAnchor:"middle", fontSize:"9.5", fontWeight:"600", fill:"#222", fontFamily:"'IBM Plex Sans',sans-serif", style:{pointerEvents:"none"}}, c.name),
-          React.createElement("text", {x:cx, y:cy+3.5, textAnchor:"middle", fontSize:"9", fontWeight:"700", fill:wp>45?"#fff":"#333", fontFamily:"'IBM Plex Sans',sans-serif", style:{pointerEvents:"none"}}, wp+"%")
+      return h("svg",{viewBox:`0 0 ${W} ${H}`,style:{width:"100%",display:"block"}},
+        qB.map(({k,x,y})=>h("rect",{key:k,x,y,width:cW/2,height:cH/2,fill:aq===k?"#e8e8e8":qF[k],onClick:()=>{setAq(aq===k?null:k);setSel(null)},style:{cursor:"pointer",transition:"fill 0.15s"}})),
+        [{x:.25,y:18,t:"ACTIVATE",f:"#888"},{x:.75,y:18,t:"CO-CREATE",f:"#444"},{x:.25,y:cH-6,t:"STABILISE & PROVE VALUE",f:"#666"},{x:.75,y:cH-6,t:"BUILD RELATIONSHIP",f:"#999"}].map(({x,y,t,f})=>h("text",{key:t,x:pad.left+cW*x,y:pad.top+y,textAnchor:"middle",fontSize:"8.5",fill:f,fontWeight:"600",fontFamily:"'IBM Plex Sans',sans-serif",letterSpacing:"0.04em",style:{pointerEvents:"none"}},t)),
+        h("line",{x1:pad.left+cW/2,y1:pad.top,x2:pad.left+cW/2,y2:pad.top+cH,stroke:"#ccc",strokeWidth:"0.75",strokeDasharray:"4,3",style:{pointerEvents:"none"}}),
+        h("line",{x1:pad.left,y1:pad.top+cH/2,x2:pad.left+cW,y2:pad.top+cH/2,stroke:"#ccc",strokeWidth:"0.75",strokeDasharray:"4,3",style:{pointerEvents:"none"}}),
+        h("rect",{x:pad.left,y:pad.top,width:cW,height:cH,fill:"none",stroke:"#444",strokeWidth:"1",style:{pointerEvents:"none"}}),
+        h("text",{x:pad.left+cW/2,y:H-6,textAnchor:"middle",fontSize:"10.5",fill:"#333",fontWeight:"600",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},"Deployment Health \u2192"),
+        h("text",{x:10,y:pad.top+cH/2,textAnchor:"middle",fontSize:"10.5",fill:"#333",fontWeight:"600",fontFamily:"'IBM Plex Sans',sans-serif",transform:`rotate(-90,10,${pad.top+cH/2})`,style:{pointerEvents:"none"}},"Relationship Strength \u2192"),
+        [0,50,100].map(v=>h("text",{key:`x${v}`,x:xP(v),y:pad.top+cH+15,textAnchor:"middle",fontSize:"8.5",fill:"#bbb",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},v)),
+        [0,50,100].map(v=>h("text",{key:`y${v}`,x:pad.left-7,y:yP(v)+3,textAnchor:"end",fontSize:"8.5",fill:"#bbb",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},v)),
+        clients.map((c,i)=>{const wp=Math.round((c.cur/c.pot)*100),cx=xP(c.dh),cy=yP(c.rs),r=11+(c.pot/20000)*16,gv=Math.round(195-(wp/100)*155),iS=sel===i;
+        return h("g",{key:c.name,onMouseEnter:()=>setHov(i),onMouseLeave:()=>setHov(null),onClick:e=>{e.stopPropagation();setSel(iS?null:i);setAq(null)},style:{cursor:"pointer"}},
+          h("circle",{cx,cy,r,fill:`rgb(${gv},${gv},${gv})`,stroke:iS?"#000":"#999",strokeWidth:iS?2:0.5,opacity:hov===i||iS?1:0.85,style:{transition:"all 0.15s"}}),
+          h("text",{x:cx,y:cy-r-4,textAnchor:"middle",fontSize:"9.5",fontWeight:"600",fill:"#222",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},c.name),
+          h("text",{x:cx,y:cy+3.5,textAnchor:"middle",fontSize:"9",fontWeight:"700",fill:wp>45?"#fff":"#333",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},wp+"%")
         )})
       );
     }
 
     function OrbitDiag({ps,ap,setAp}) {
       const W=440,H=400,cx=W/2,cy=H/2,r1=110,r2=165;
-      return React.createElement("svg", {viewBox:`0 0 ${W} ${H}`, style:{width:"100%",display:"block"}},
-        React.createElement("circle", {cx:cx, cy:cy, r:r1, fill:"none", stroke:"#ddd", strokeWidth:"0.75", strokeDasharray:"4,3"}),
-        React.createElement("circle", {cx:cx, cy:cy, r:r2, fill:"none", stroke:"#eee", strokeWidth:"0.75", strokeDasharray:"4,3"}),
-        React.createElement("circle", {cx:cx, cy:cy, r:36, fill:"#222"}),
-        React.createElement("text", {x:cx, y:cy-4, textAnchor:"middle", fontSize:"10", fontWeight:"700", fill:"#fff", fontFamily:"'IBM Plex Sans',sans-serif"}, "CRO"),
-        React.createElement("text", {x:cx, y:cy+9, textAnchor:"middle", fontSize:"7.5", fill:"#aaa", fontFamily:"'IBM Plex Sans',sans-serif"}, "Revenue Officer"),
+      return h("svg",{viewBox:`0 0 ${W} ${H}`,style:{width:"100%",display:"block"}},
+        h("circle",{cx,cy,r:r1,fill:"none",stroke:"#ddd",strokeWidth:"0.75",strokeDasharray:"4,3"}),
+        h("circle",{cx,cy,r:r2,fill:"none",stroke:"#eee",strokeWidth:"0.75",strokeDasharray:"4,3"}),
+        h("circle",{cx,cy,r:36,fill:"#222"}),
+        h("text",{x:cx,y:cy-4,textAnchor:"middle",fontSize:"10",fontWeight:"700",fill:"#fff",fontFamily:"'IBM Plex Sans',sans-serif"},"CRO"),
+        h("text",{x:cx,y:cy+9,textAnchor:"middle",fontSize:"7.5",fill:"#aaa",fontFamily:"'IBM Plex Sans',sans-serif"},"Revenue Officer"),
         ps.map(p=>{const r=p.orbit===1?r1:r2,rad=(p.angle*Math.PI)/180,px=cx+r*Math.cos(rad),py=cy+r*Math.sin(rad),isA=ap===p.id,nR=32,ls=p.label.split("\n");
-        return React.createElement("g", {key:p.id, onClick:()=>setAp(isA?null:p.id), style:{cursor:"pointer"}},
-          React.createElement("line", {x1:cx, y1:cy, x2:px, y2:py, stroke:"#ddd", strokeWidth:"0.5", style:{pointerEvents:"none"}}),
-          React.createElement("circle", {cx:px, cy:py, r:nR, fill:isA?"#333":"#f5f5f5", stroke:isA?"#000":"#bbb", strokeWidth:isA?2:0.75, style:{transition:"all 0.15s"}}),
-          ls.map((l,i)=>React.createElement("text", {key:i, x:px, y:py+(i-(ls.length-1)/2)*11, textAnchor:"middle", fontSize:"8", fontWeight:"600", fill:isA?"#fff":"#444", fontFamily:"'IBM Plex Sans',sans-serif", style:{pointerEvents:"none"}}, l))
-        )}),
-        React.createElement("text", {x:cx+r1+4, y:cy-r1+14, fontSize:"7", fill:"#ccc", fontFamily:"'IBM Plex Sans',sans-serif"}, "Core"),
-        React.createElement("text", {x:cx+r2+4, y:cy-r2+14, fontSize:"7", fill:"#ddd", fontFamily:"'IBM Plex Sans',sans-serif"}, "Enabling")
+        return h("g",{key:p.id,onClick:()=>setAp(isA?null:p.id),style:{cursor:"pointer"}},
+          h("line",{x1:cx,y1:cy,x2:px,y2:py,stroke:"#ddd",strokeWidth:"0.5",style:{pointerEvents:"none"}}),
+          h("circle",{cx:px,cy:py,r:nR,fill:isA?"#333":"#f5f5f5",stroke:isA?"#000":"#bbb",strokeWidth:isA?2:0.75,style:{transition:"all 0.15s"}}),
+          ls.map((l,i)=>h("text",{key:i,x:px,y:py+(i-(ls.length-1)/2)*11,textAnchor:"middle",fontSize:"8",fontWeight:"600",fill:isA?"#fff":"#444",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},l))
+        )})
       );
     }
 
     function PhaseSlide({data}) {
-      const [activePhase, setActivePhase] = useState(0);
-      const phase = data.phases[activePhase];
-      const gap = data.accounts.reduce((s,c)=>s+(c.potentialARR-c.currentARR),0);
-      return React.createElement("div", null,
-        React.createElement("h1", {style:{fontSize:20,fontWeight:700,color:"#111",margin:"0 0 2px",letterSpacing:"-0.02em"}}, data.title),
-        React.createElement("p", {style:{fontSize:11,color:"#999",margin:"0 0 4px"}}, data.subtitle+" \u2014 "+data.tagline),
-        React.createElement("p", {style:{fontSize:10,color:"#aaa",margin:"0 0 14px"}}, "Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.currentARR)+" \u2192 "+fmt(c.potentialARR)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
-        React.createElement("div", {className:"phase-tabs"},
-          data.phases.map((p,i)=>React.createElement("div", {key:i, onClick:()=>setActivePhase(i), style:{
-            flex:1,padding:"10px 12px",cursor:"pointer",borderBottom:activePhase===i?"3px solid #111":"3px solid transparent",
-            borderRight:i<3?"1px solid #eee":"none",background:activePhase===i?"#f7f7f7":"#fff",transition:"all 0.15s"
-          }},
-            React.createElement("div", {style:{fontSize:16,marginBottom:2}}, p.icon),
-            React.createElement("div", {style:{fontSize:11,fontWeight:700,color:activePhase===i?"#111":"#888"}}, p.name),
-            React.createElement("div", {style:{fontSize:9,color:"#bbb"}}, p.weeks)
+      const [ap,setAp] = useState(0);
+      const p = data.phases[ap];
+      const gap = data.accounts.reduce((s,c)=>s+(c.pot-c.cur),0);
+      return h("div",null,
+        h("h1",{style:{fontSize:18,fontWeight:700,color:"#111",margin:"0 0 2px"}},data.title),
+        h("p",{style:{fontSize:11,color:"#999",margin:"0 0 3px"}},data.sub+" \u2014 "+data.tag),
+        h("p",{style:{fontSize:10,color:"#aaa",margin:"0 0 12px"}},"Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.cur)+"\u2192"+fmt(c.pot)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
+        h("div",{className:"phase-tabs"},
+          data.phases.map((ph,i)=>h("div",{key:i,onClick:()=>setAp(i),style:{flex:1,padding:"8px 10px",cursor:"pointer",borderBottom:ap===i?"3px solid #111":"3px solid transparent",borderRight:i<3?"1px solid #eee":"none",background:ap===i?"#f7f7f7":"#fff",transition:"all 0.15s"}},
+            h("div",{style:{fontSize:14,marginBottom:1}},ph.icon),
+            h("div",{style:{fontSize:11,fontWeight:700,color:ap===i?"#111":"#888"}},ph.name),
+            h("div",{style:{fontSize:9,color:"#bbb"}},ph.weeks)
           ))
         ),
-        React.createElement("div", {className:"phase-content"},
-          React.createElement("div", {style:{flex:1,minWidth:0}},
-            React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}}, "Objective"),
-            React.createElement("div", {style:{fontSize:12,color:"#333",lineHeight:1.6,marginBottom:14}}, phase.objective),
-            React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}}, "Key Asks from Customer"),
-            phase.asks.map((a,i)=>React.createElement("div", {key:i, style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-              React.createElement("div", {style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#888",marginTop:6}}),
-              React.createElement("div", {style:{fontSize:10,color:"#444",lineHeight:1.5}}, a)
-            )),
-            React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginTop:12,marginBottom:6}}, "Key Risks"),
-            phase.risks.map((r,i)=>React.createElement("div", {key:i, style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-              React.createElement("div", {style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#ccc",marginTop:6}}),
-              React.createElement("div", {style:{fontSize:10,color:"#666",lineHeight:1.5}}, r)
+        h("div",{className:"phase-content"},
+          h("div",{style:{flex:1,minWidth:0}},
+            h("div",{style:{fontSize:10,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}},p.left.title),
+            p.left.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
+              h("div",{style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#888",marginTop:6}}),
+              h("div",{style:{fontSize:10,color:"#444",lineHeight:1.5}},it)
             ))
           ),
-          React.createElement("div", {className:"metrics-col"},
-            React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:8}}, "Target Metrics"),
-            phase.metrics.map((m,i)=>React.createElement("div", {key:i, style:{padding:"8px 10px",background:i%2===0?"#f9f9f9":"#fff",borderBottom:"1px solid #f0f0f0"}},
-              React.createElement("div", {style:{fontSize:10,fontWeight:600,color:"#333",marginBottom:4}}, m.label),
-              React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
-                React.createElement("div", null, React.createElement("span", {style:{fontSize:9,color:"#aaa"}}, "Current: "), React.createElement("span", {style:{fontSize:10,color:"#888"}}, m.current)),
-                React.createElement("div", {style:{fontSize:9,color:"#ccc"}}, "\u2192"),
-                React.createElement("div", null, React.createElement("span", {style:{fontSize:9,color:"#aaa"}}, "Target: "), React.createElement("span", {style:{fontSize:10,fontWeight:600,color:"#111"}}, m.target))
-              )
+          h("div",{style:{flex:1,minWidth:0}},
+            h("div",{style:{fontSize:10,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}},p.right.title),
+            p.right.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
+              h("div",{style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#ccc",marginTop:6}}),
+              h("div",{style:{fontSize:10,color:"#555",lineHeight:1.5}},it)
             ))
           )
         ),
-        React.createElement("div", {style:{borderTop:"2px solid #111",paddingTop:12}},
-          React.createElement("div", {style:{fontSize:12,fontWeight:700,color:"#111",marginBottom:10}}, "Execution Tasks \u2014 "+phase.name+" ("+phase.weeks+")"),
-          React.createElement("div", {className:"grid-2col"},
-            phase.tasks.map((t,i)=>React.createElement("div", {key:i, style:{display:"flex",gap:8,alignItems:"flex-start"}},
-              React.createElement("div", {style:{flex:"0 0 18px",height:18,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:1}}, i+1),
-              React.createElement("div", {style:{fontSize:10,color:"#444",lineHeight:1.5}}, t)
+        p.metrics && h("div",{className:"metrics-grid"},
+          p.metrics.map((m,i)=>h("div",{key:i,style:{padding:"8px 10px",background:"#f9f9f9",borderRadius:3}},
+            h("div",{style:{fontSize:9,fontWeight:600,color:"#666",marginBottom:4}},m.l),
+            h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
+              h("span",{style:{fontSize:9,color:"#aaa"}},m.c),
+              h("span",{style:{fontSize:8,color:"#ccc"}},"\u2192"),
+              h("span",{style:{fontSize:9,fontWeight:600,color:"#111"}},m.t)
+            )
+          ))
+        ),
+        h("div",{style:{borderTop:"2px solid #111",paddingTop:10}},
+          h("div",{style:{fontSize:11,fontWeight:700,color:"#111",marginBottom:8}},"Execution Tasks \u2014 "+p.name+" ("+p.weeks+")"),
+          h("div",{className:"grid-2col"},
+            p.tasks.map((t,i)=>h("div",{key:i,style:{display:"flex",gap:6,alignItems:"flex-start"}},
+              h("div",{style:{flex:"0 0 16px",height:16,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:1}},i+1),
+              h("div",{style:{fontSize:10,color:"#444",lineHeight:1.4}},t)
             ))
           )
         )
       );
     }
 
-    function Presentation() {
-      const [slide,setSlide]=useState(1);
-      const [s1H,setS1H]=useState(null),[s1S,setS1S]=useState(null),[s1Q,setS1Q]=useState(null);
-      const [ap,setAp]=useState(null);
-      const tC=CLIENTS.reduce((s,c)=>s+c.currentARR,0),tP=CLIENTS.reduce((s,c)=>s+c.potentialARR,0);
-      const s1Sel=s1S!==null?CLIENTS[s1S]:null,s1EQ=s1Sel?s1Sel.q:s1Q,s1I=s1EQ?S1_INT[s1EQ]:null;
-      const aP=ap?CRO_P.find(p=>p.id===ap):null;
-      const slideNames=["Portfolio","CRO Priorities","Q3: Stabilise","Q2: Workshop","Q4: Relationship","Q1: Expand"];
+    // ===== MAIN =====
+    function Pres() {
+      const [sl,setSl] = useState(1);
+      const [s1H,setS1H] = useState(null),[s1S,setS1S] = useState(null),[s1Q,setS1Q] = useState(null);
+      const [ap,setAp] = useState(null);
+      const tC = CL.reduce((s,c)=>s+c.cur,0), tP = CL.reduce((s,c)=>s+c.pot,0);
+      const s1Sel = s1S!==null ? CL[s1S] : null, s1EQ = s1Sel ? s1Sel.q : s1Q;
+      const s1Int = s1EQ ? S1I[s1EQ] : null;
+      const aP = ap ? PRIO.find(p=>p.id===ap) : null;
+      const sn = ["Portfolio","CRO Priorities","Stabilise (Q3)","Activate (Q2)","Relationship (Q4)","Co-Create (Q1)"];
 
-      return React.createElement("div", {className:"pres-root"},
-        React.createElement("div", {className:"nav-bar"},
-          React.createElement("button", {onClick:()=>setSlide(Math.max(1,slide-1)), disabled:slide===1, style:{padding:"5px 14px",fontSize:10,fontWeight:600,borderRadius:3,cursor:slide===1?"default":"pointer",border:"1px solid #ddd",background:slide===1?"#f5f5f5":"#fff",color:slide===1?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}}, "\u2190 Prev"),
-          React.createElement("div", {className:"nav-slides"},
-            slideNames.map((n,i)=>React.createElement("button", {key:i, onClick:()=>setSlide(i+1), style:{padding:"4px 8px",borderRadius:2,fontSize:8,fontWeight:600,cursor:"pointer",border:slide===i+1?"1.5px solid #111":"1px solid #ddd",background:slide===i+1?"#111":"#fff",color:slide===i+1?"#fff":"#aaa",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}}, n))
+      return h("div",{className:"pres-root"},
+        // Nav
+        h("div",{className:"nav-bar"},
+          h("button",{onClick:()=>setSl(Math.max(1,sl-1)),disabled:sl===1,style:{padding:"4px 12px",fontSize:10,fontWeight:600,borderRadius:3,cursor:sl===1?"default":"pointer",border:"1px solid #ddd",background:sl===1?"#f5f5f5":"#fff",color:sl===1?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},"\u2190 Prev"),
+          h("div",{className:"nav-slides"},
+            sn.map((n,i)=>h("button",{key:i,onClick:()=>setSl(i+1),style:{padding:"3px 7px",borderRadius:2,fontSize:7.5,fontWeight:600,cursor:"pointer",border:sl===i+1?"1.5px solid #111":"1px solid #ddd",background:sl===i+1?"#111":"#fff",color:sl===i+1?"#fff":"#aaa",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},n))
           ),
-          React.createElement("button", {onClick:()=>setSlide(Math.min(6,slide+1)), disabled:slide===6, style:{padding:"5px 14px",fontSize:10,fontWeight:600,borderRadius:3,cursor:slide===6?"default":"pointer",border:"1px solid #ddd",background:slide===6?"#f5f5f5":"#fff",color:slide===6?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}}, "Next \u2192")
+          h("button",{onClick:()=>setSl(Math.min(6,sl+1)),disabled:sl===6,style:{padding:"4px 12px",fontSize:10,fontWeight:600,borderRadius:3,cursor:sl===6?"default":"pointer",border:"1px solid #ddd",background:sl===6?"#f5f5f5":"#fff",color:sl===6?"#ccc":"#444",fontFamily:"'IBM Plex Sans',sans-serif",whiteSpace:"nowrap"}},"Next \u2192")
         ),
 
-        slide===1 && React.createElement("div", null,
-          React.createElement("h1", {style:{fontSize:20,fontWeight:700,color:"#111",margin:"0 0 2px"}}, "Achieving Full Revenue Potential from Existing Accounts"),
-          React.createElement("p", {style:{fontSize:11,color:"#999",margin:"0 0 14px"}}, "Top 10 accounts \u2014 "+fmt(tC)+" of "+fmt(tP)+" addressable \u00b7 "+Math.round((tC/tP)*100)+"% captured \u00b7 "+fmt(tP-tC)+" gap"),
-          React.createElement("div", {className:"stats-bar"},
-            [{l:"Current ARR",v:fmt(tC)},{l:"Addressable",v:fmt(tP)},{l:"Captured",v:Math.round((tC/tP)*100)+"%"},{l:"Gap",v:fmt(tP-tC)}].map(({l,v},i)=>React.createElement("div", {key:l, style:{flex:1,padding:"10px 0",textAlign:"center",borderRight:i<3?"1px solid #eee":"none"}},
-              React.createElement("div", {style:{fontSize:8,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.1em",fontWeight:600}}, l),
-              React.createElement("div", {style:{fontSize:18,fontWeight:700,color:"#111",marginTop:2}}, v)
+        // SLIDE 1
+        sl===1 && h("div",null,
+          h("h1",{style:{fontSize:18,fontWeight:700,color:"#111",margin:"0 0 2px"}},"Achieving Full Revenue Potential from Existing Accounts"),
+          h("p",{style:{fontSize:11,color:"#999",margin:"0 0 12px"}},"Top 10 \u2014 "+fmt(tC)+" of "+fmt(tP)+" addressable \u00b7 "+Math.round((tC/tP)*100)+"% captured \u00b7 "+fmt(tP-tC)+" gap"),
+          h("div",{className:"stats-bar"},
+            [{l:"Current",v:fmt(tC)},{l:"Addressable",v:fmt(tP)},{l:"Captured",v:Math.round((tC/tP)*100)+"%"},{l:"Gap",v:fmt(tP-tC)}].map(({l,v},i)=>h("div",{key:l,style:{flex:1,padding:"8px 0",textAlign:"center",borderRight:i<3?"1px solid #eee":"none"}},
+              h("div",{style:{fontSize:8,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.1em",fontWeight:600}},l),
+              h("div",{style:{fontSize:16,fontWeight:700,color:"#111",marginTop:2}},v)
             ))
           ),
-          React.createElement("div", {className:"flex-row", style:{marginBottom:20}},
-            React.createElement("div", {className:"chart-col"},
-              React.createElement(S1Chart, {clients:CLIENTS, hov:s1H, setHov:setS1H, sel:s1S, setSel:setS1S, aq:s1Q, setAq:setS1Q}),
-              React.createElement("div", {style:{display:"flex",gap:16,justifyContent:"center",marginTop:4,flexWrap:"wrap"}},
-                [{bg:"#ddd",t:"Light = Low capture"},{bg:"#444",t:"Dark = High capture"}].map(({bg,t})=>React.createElement("div", {key:t, style:{display:"flex",alignItems:"center",gap:5,fontSize:9,color:"#aaa"}}, React.createElement("div", {style:{width:12,height:12,borderRadius:"50%",background:bg}}), t)),
-                React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, "Size = Potential ARR")
+          h("div",{className:"flex-row",style:{marginBottom:16}},
+            h("div",{className:"chart-col"},
+              h(S1Chart,{clients:CL,hov:s1H,setHov:setS1H,sel:s1S,setSel:setS1S,aq:s1Q,setAq:setS1Q}),
+              h("div",{style:{display:"flex",gap:12,justifyContent:"center",marginTop:4,flexWrap:"wrap"}},
+                [{bg:"#ddd",t:"Light = Low capture"},{bg:"#444",t:"Dark = High capture"}].map(({bg,t})=>h("div",{key:t,style:{display:"flex",alignItems:"center",gap:4,fontSize:9,color:"#aaa"}},h("div",{style:{width:10,height:10,borderRadius:"50%",background:bg}}),t)),
+                h("div",{style:{fontSize:9,color:"#aaa"}},"Size = Potential")
               )
             ),
-            React.createElement("div", {className:"sidebar-col"},
-              s1Sel ? React.createElement("div", null,
-                React.createElement("div", {style:{fontSize:14,fontWeight:700,color:"#111"}}, s1Sel.name),
-                React.createElement("div", {style:{fontSize:9,color:"#aaa",marginBottom:12}}, s1Sel.industry),
-                [{l:"Addressable ARR",v:fmt(s1Sel.potentialARR)},{l:"Current ARR",v:fmt(s1Sel.currentARR)},{l:"Wallet Captured",v:Math.round((s1Sel.currentARR/s1Sel.potentialARR)*100)+"%"},{l:"Revenue Gap",v:fmt(s1Sel.potentialARR-s1Sel.currentARR)},{l:"Deployment Health",v:s1Sel.dh+"/100"},{l:"Relationship",v:s1Sel.rs+"/100"}].map(({l,v})=>React.createElement("div", {key:l, style:{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"1px solid #f0f0f0"}},
-                  React.createElement("span", {style:{fontSize:10,color:"#999"}}, l),
-                  React.createElement("span", {style:{fontSize:11,fontWeight:600,color:"#111"}}, v)
+            h("div",{className:"sidebar-col"},
+              s1Sel ? h("div",null,
+                h("div",{style:{fontSize:13,fontWeight:700,color:"#111"}},s1Sel.name),
+                h("div",{style:{fontSize:9,color:"#aaa",marginBottom:10}},s1Sel.ind),
+                [{l:"Addressable",v:fmt(s1Sel.pot)},{l:"Current",v:fmt(s1Sel.cur)},{l:"Captured",v:Math.round((s1Sel.cur/s1Sel.pot)*100)+"%"},{l:"Gap",v:fmt(s1Sel.pot-s1Sel.cur)},{l:"Deployment Health",v:s1Sel.dh+"/100"},{l:"Relationship",v:s1Sel.rs+"/100"}].map(({l,v})=>h("div",{key:l,style:{display:"flex",justifyContent:"space-between",padding:"4px 0",borderBottom:"1px solid #f0f0f0"}},
+                  h("span",{style:{fontSize:10,color:"#999"}},l),
+                  h("span",{style:{fontSize:10,fontWeight:600,color:"#111"}},v)
                 ))
-              ) : React.createElement("div", null,
-                React.createElement("div", {style:{fontSize:12,fontWeight:600,color:"#777",marginBottom:10}}, s1Q?"Accounts in this quadrant":"Click a bubble or quadrant"),
-                (s1Q?CLIENTS.filter(c=>c.q===s1Q):CLIENTS).map(c=>React.createElement("div", {key:c.name, onClick:()=>{setS1S(CLIENTS.indexOf(c));setS1Q(null)}, style:{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"1px solid #f3f3f3",cursor:"pointer"}},
-                  React.createElement("div", null,
-                    React.createElement("span", {style:{fontSize:10,fontWeight:600,color:"#333"}}, c.name),
-                    React.createElement("span", {style:{fontSize:9,color:"#bbb",marginLeft:6}}, c.industry)
-                  ),
-                  React.createElement("div", {style:{display:"flex",gap:8,fontSize:9}},
-                    React.createElement("span", {style:{color:"#999"}}, fmt(c.currentARR)),
-                    React.createElement("span", {style:{color:"#ccc"}}, "\u2192"),
-                    React.createElement("span", {style:{fontWeight:600,color:"#666"}}, fmt(c.potentialARR))
+              ) : h("div",null,
+                h("div",{style:{fontSize:11,fontWeight:600,color:"#777",marginBottom:8}},s1Q?"Accounts in quadrant":"Click a bubble or quadrant"),
+                (s1Q?CL.filter(c=>c.q===s1Q):CL).map(c=>h("div",{key:c.name,onClick:()=>{setS1S(CL.indexOf(c));setS1Q(null)},style:{display:"flex",justifyContent:"space-between",padding:"4px 0",borderBottom:"1px solid #f3f3f3",cursor:"pointer"}},
+                  h("span",{style:{fontSize:10,fontWeight:600,color:"#333"}},c.name),
+                  h("div",{style:{fontSize:9}},
+                    h("span",{style:{color:"#999"}},fmt(c.cur)),
+                    h("span",{style:{color:"#ccc",margin:"0 4px"}},"\u2192"),
+                    h("span",{style:{fontWeight:600,color:"#666"}},fmt(c.pot))
                   )
                 ))
               )
             )
           ),
-          React.createElement("div", {style:{borderTop:"2px solid #111",paddingTop:16}},
-            s1I ? React.createElement("div", null,
-              React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12,flexWrap:"wrap",gap:8}},
-                React.createElement("div", null,
-                  React.createElement("div", {style:{fontSize:14,fontWeight:700,color:"#111"}}, s1I.title),
-                  React.createElement("div", {style:{fontSize:10,color:"#999"}}, s1I.subtitle)
+          h("div",{style:{borderTop:"2px solid #111",paddingTop:12}},
+            s1Int ? h("div",null,
+              h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,flexWrap:"wrap",gap:8}},
+                h("div",null,
+                  h("div",{style:{fontSize:13,fontWeight:700,color:"#111"}},QN[s1EQ]),
+                  h("div",{style:{fontSize:10,color:"#999"}},QS[s1EQ])
                 ),
-                React.createElement("div", {className:"intervention-btns"},
-                  QO.map(q=>React.createElement("button", {key:q, onClick:()=>{setS1Q(q);setS1S(null)}, style:{padding:"3px 10px",borderRadius:2,fontSize:8,fontWeight:600,border:"1px solid "+(s1EQ===q?"#111":"#ddd"),background:s1EQ===q?"#111":"#fff",color:s1EQ===q?"#fff":"#999",cursor:"pointer",fontFamily:"'IBM Plex Sans',sans-serif"}}, S1_INT[q].title.split("&")[0].trim()))
+                h("div",{className:"intervention-btns"},
+                  QO.map(q=>h("button",{key:q,onClick:()=>{setS1Q(q);setS1S(null)},style:{padding:"3px 8px",borderRadius:2,fontSize:8,fontWeight:600,border:"1px solid "+(s1EQ===q?"#111":"#ddd"),background:s1EQ===q?"#111":"#fff",color:s1EQ===q?"#fff":"#999",cursor:"pointer",fontFamily:"'IBM Plex Sans',sans-serif"}},QN[q].split("&")[0].split("(")[0].trim()))
                 )
               ),
-              React.createElement("div", {className:"grid-2col"},
-                s1I.items.map((it,i)=>React.createElement("div", {key:i, style:{display:"flex",gap:8,alignItems:"flex-start"}},
-                  React.createElement("div", {style:{flex:"0 0 16px",height:16,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:2}}, i+1),
-                  React.createElement("div", {style:{fontSize:11,color:"#444",lineHeight:1.5}}, it)
+              h("div",{className:"grid-2col"},
+                s1Int.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,alignItems:"flex-start"}},
+                  h("div",{style:{flex:"0 0 16px",height:16,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:1}},i+1),
+                  h("div",{style:{fontSize:10,color:"#444",lineHeight:1.5}},it)
                 ))
               ),
-              React.createElement("div", {style:{marginTop:12,padding:"8px 12px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:11,color:"#555",fontWeight:500}}, s1I.focus)
-            ) : React.createElement("div", null,
-              React.createElement("div", {style:{fontSize:13,fontWeight:700,color:"#111",marginBottom:12}}, "Intervention Playbook by Quadrant"),
-              React.createElement("div", {className:"grid-4col"},
-                QO.map(q=>{const inv=S1_INT[q],qc=CLIENTS.filter(c=>c.q===q);
-                return React.createElement("div", {key:q, onClick:()=>setS1Q(q), style:{padding:"12px 14px",background:"#f9f9f9",borderRadius:4,cursor:"pointer",border:"1px solid #eee"}},
-                  React.createElement("div", {style:{fontSize:11,fontWeight:700,color:"#333",marginBottom:4}}, inv.title),
-                  React.createElement("div", {style:{fontSize:9,color:"#aaa",marginBottom:8}}, inv.subtitle),
-                  React.createElement("div", {style:{fontSize:9,color:"#888"}}, qc.map(c=>c.name).join(", ")),
-                  React.createElement("div", {style:{marginTop:8,fontSize:10,fontWeight:600,color:"#555"}}, fmt(qc.reduce((s,c)=>s+(c.potentialARR-c.currentARR),0))+" gap \u2192")
+              h("div",{style:{marginTop:10,padding:"8px 12px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:10,color:"#555",fontWeight:500}},s1Int.focus)
+            ) : h("div",null,
+              h("div",{style:{fontSize:12,fontWeight:700,color:"#111",marginBottom:10}},"Intervention Playbook by Quadrant"),
+              h("div",{className:"grid-4col"},
+                QO.map(q=>{const qc=CL.filter(c=>c.q===q);
+                return h("div",{key:q,onClick:()=>{setS1Q(q);setS1S(null)},style:{padding:"10px 12px",background:"#f9f9f9",borderRadius:3,cursor:"pointer",border:"1px solid #eee"}},
+                  h("div",{style:{fontSize:10,fontWeight:700,color:"#333",marginBottom:3}},QN[q]),
+                  h("div",{style:{fontSize:8,color:"#aaa",marginBottom:6}},QS[q]),
+                  h("div",{style:{fontSize:8,color:"#888"}},qc.map(c=>c.name).join(", ")),
+                  h("div",{style:{marginTop:6,fontSize:9,fontWeight:600,color:"#555"}},fmt(qc.reduce((s,c)=>s+(c.pot-c.cur),0))+" gap \u2192")
                 )})
               )
             )
           )
         ),
 
-        slide===2 && React.createElement("div", null,
-          React.createElement("h1", {style:{fontSize:20,fontWeight:700,color:"#111",margin:"0 0 2px"}}, "The CRO\u2019s World \u2014 What Keeps Them Up at Night"),
-          React.createElement("p", {style:{fontSize:11,color:"#999",margin:"0 0 16px"}}, "Mapping CRO priorities to Mindtickle capabilities \u2014 current offering vs expectation gap"),
-          React.createElement("div", {className:"flex-row", style:{marginBottom:20}},
-            React.createElement("div", {className:"orbit-col"},
-              React.createElement(OrbitDiag, {ps:CRO_P, ap:ap, setAp:setAp}),
-              React.createElement("div", {style:{display:"flex",gap:12,justifyContent:"center",marginTop:4}},
-                React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, "Inner = Core"),
-                React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, "Outer = Enabling"),
-                React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, "Click to explore")
-              )
-            ),
-            React.createElement("div", {className:"sidebar-col"},
-              aP ? React.createElement("div", null,
-                React.createElement("div", {style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:12}}, aP.label.replace("\n"," ")),
-                React.createElement("div", {style:{marginBottom:14}},
-                  React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}}, "What Mindtickle Enables Today"),
-                  aP.mt.map((m,i)=>React.createElement("div", {key:i, style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-                    React.createElement("div", {style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#888",marginTop:6}}),
-                    React.createElement("div", {style:{fontSize:11,color:"#444",lineHeight:1.5}}, m)
-                  ))
-                ),
-                React.createElement("div", null,
-                  React.createElement("div", {style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:6}}, "What the CRO Expects"),
-                  aP.exp.map((e,i)=>React.createElement("div", {key:i, style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
-                    React.createElement("div", {style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#ccc",marginTop:6}}),
-                    React.createElement("div", {style:{fontSize:11,color:"#666",lineHeight:1.5}}, e)
-                  ))
-                )
-              ) : React.createElement("div", {style:{color:"#bbb",fontSize:11,lineHeight:1.6}},
-                React.createElement("div", {style:{fontWeight:600,color:"#777",marginBottom:10,fontSize:13}}, "Click a priority node"),
-                CRO_P.map(p=>React.createElement("div", {key:p.id, onClick:()=>setAp(p.id), style:{padding:"5px 0",borderBottom:"1px solid #f3f3f3",cursor:"pointer"}},
-                  React.createElement("span", {style:{fontSize:10,fontWeight:600,color:"#333"}}, p.label.replace("\n"," ")),
-                  React.createElement("span", {style:{fontSize:9,color:"#bbb",marginLeft:8}}, p.orbit===1?"Core":"Enabling")
+        // SLIDE 2
+        sl===2 && h("div",null,
+          h("h1",{style:{fontSize:18,fontWeight:700,color:"#111",margin:"0 0 2px"}},"CRO Priorities \u2014 What Mindtickle Enables vs The Art of the Possible"),
+          h("p",{style:{fontSize:11,color:"#999",margin:"0 0 14px"}},"Honest assessment: where we deliver today, what competition does, and what\u2019s possible with ElevateOS"),
+          h("div",{className:"flex-row",style:{marginBottom:16}},
+            h("div",{className:"orbit-col"},h(OrbitDiag,{ps:PRIO,ap,setAp})),
+            h("div",{className:"sidebar-col"},
+              aP ? h("div",null,
+                h("div",{style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:4}},aP.label.replace("\n"," ")),
+                h("div",{style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"What Mindtickle Does Today"),
+                h("div",{style:{fontSize:10,color:aP.todayItems.length===0?"#999":"#444",marginBottom:aP.todayItems.length>0?2:6,fontStyle:aP.todayItems.length===0?"italic":"normal"}},aP.today),
+                aP.todayItems.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start",paddingLeft:4}},
+                  h("div",{style:{flex:"0 0 3px",height:3,borderRadius:2,background:"#888",marginTop:5}}),
+                  h("div",{style:{fontSize:9,color:"#444",lineHeight:1.4}},it)
+                )),
+                h("div",{style:{fontSize:9,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginTop:8,marginBottom:4}},"What Competition Does"),
+                aP.competition.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start",paddingLeft:4}},
+                  h("div",{style:{flex:"0 0 3px",height:3,borderRadius:2,background:"#ccc",marginTop:5}}),
+                  h("div",{style:{fontSize:9,color:"#666",lineHeight:1.4}},it)
+                ))
+              ) : h("div",{style:{color:"#bbb",fontSize:11,lineHeight:1.6}},
+                h("div",{style:{fontWeight:600,color:"#777",fontSize:13,marginBottom:8}},"Click a priority node"),
+                PRIO.map(p=>h("div",{key:p.id,onClick:()=>setAp(p.id),style:{padding:"4px 0",borderBottom:"1px solid #f3f3f3",cursor:"pointer"}},
+                  h("span",{style:{fontSize:10,fontWeight:600,color:"#333"}},p.label.replace("\n"," ")),
+                  h("span",{style:{fontSize:9,color:"#bbb",marginLeft:6}},p.orbit===1?"Core":"Enabling")
                 ))
               )
             )
           ),
-          React.createElement("div", {style:{borderTop:"2px solid #111",paddingTop:16}},
-            aP ? React.createElement("div", null,
-              React.createElement("div", {style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,flexWrap:"wrap",gap:8}},
-                React.createElement("div", null,
-                  React.createElement("div", {style:{fontSize:13,fontWeight:700,color:"#111"}}, "Recommended Intervention"),
-                  React.createElement("div", {style:{fontSize:10,color:"#999"}}, aP.label.replace("\n"," "))
+          h("div",{style:{borderTop:"2px solid #111",paddingTop:12}},
+            aP ? h("div",null,
+              h("div",{className:"s2-bottom-row"},
+                h("div",{style:{flex:1,minWidth:0}},
+                  h("div",{style:{fontSize:11,fontWeight:700,color:"#111",marginBottom:6}},"Art of the Possible"),
+                  aP.artOfPossible.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
+                    h("div",{style:{flex:"0 0 16px",height:16,borderRadius:2,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,fontWeight:700,color:"#888",marginTop:1}},i+1),
+                    h("div",{style:{fontSize:10,color:"#444",lineHeight:1.4}},it)
+                  ))
                 ),
-                React.createElement("div", {className:"intervention-btns"},
-                  CRO_P.map(p=>React.createElement("button", {key:p.id, onClick:()=>setAp(p.id), style:{padding:"3px 8px",borderRadius:2,fontSize:7.5,fontWeight:600,border:"1px solid "+(ap===p.id?"#111":"#ddd"),background:ap===p.id?"#111":"#fff",color:ap===p.id?"#fff":"#aaa",cursor:"pointer",fontFamily:"'IBM Plex Sans',sans-serif"}}, p.label.split("\n")[0]))
+                h("div",{className:"metrics-col"},
+                  h("div",{style:{fontSize:11,fontWeight:700,color:"#111",marginBottom:6}},"Key CRO Metrics"),
+                  aP.metrics.map((m,i)=>h("div",{key:i,style:{padding:"5px 8px",background:i%2===0?"#f9f9f9":"#fff",borderBottom:"1px solid #f0f0f0",fontSize:10,color:"#444"}},m)),
+                  h("div",{style:{marginTop:10,padding:"8px 10px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:10,color:"#555",lineHeight:1.5}},aP.int)
                 )
-              ),
-              React.createElement("div", {style:{padding:"12px 16px",background:"#f7f7f7",borderLeft:"3px solid #333",fontSize:12,color:"#333",lineHeight:1.6}}, aP.int)
-            ) : React.createElement("div", null,
-              React.createElement("div", {style:{fontSize:13,fontWeight:700,color:"#111",marginBottom:12}}, "CRO Priority \u2192 Mindtickle Capability Map"),
-              React.createElement("div", {className:"grid-3col"},
-                CRO_P.map(p=>React.createElement("div", {key:p.id, onClick:()=>setAp(p.id), style:{padding:"12px 14px",background:"#f9f9f9",borderRadius:4,cursor:"pointer",border:"1px solid #eee"}},
-                  React.createElement("div", {style:{fontSize:11,fontWeight:700,color:"#333",marginBottom:4}}, p.label.replace("\n"," ")),
-                  React.createElement("div", {style:{fontSize:9,color:"#aaa"}}, p.orbit===1?"Core":"Enabling"),
-                  React.createElement("div", {style:{fontSize:10,color:"#666",marginTop:6,lineHeight:1.4}}, p.mt[0])
+              )
+            ) : h("div",null,
+              h("div",{style:{fontSize:12,fontWeight:700,color:"#111",marginBottom:10}},"CRO Priority \u2192 Capability Map"),
+              h("div",{className:"grid-3col"},
+                PRIO.map(p=>h("div",{key:p.id,onClick:()=>setAp(p.id),style:{padding:"10px 12px",background:"#f9f9f9",borderRadius:3,cursor:"pointer",border:"1px solid #eee"}},
+                  h("div",{style:{fontSize:10,fontWeight:700,color:"#333",marginBottom:3}},p.label.replace("\n"," ")),
+                  h("div",{style:{fontSize:9,color:"#aaa",marginBottom:4}},p.orbit===1?"Core":"Enabling"),
+                  h("div",{style:{fontSize:9,color:"#666",lineHeight:1.3}},p.today.substring(0,80)+"...")
                 ))
               )
             )
           )
         ),
 
-        slide===3 && React.createElement(PhaseSlide, {data:PHASES.q3}),
-        slide===4 && React.createElement(PhaseSlide, {data:PHASES.q2}),
-        slide===5 && React.createElement(PhaseSlide, {data:PHASES.q4}),
-        slide===6 && React.createElement(PhaseSlide, {data:PHASES.q1})
+        // SLIDES 3-6
+        sl===3 && h(PhaseSlide,{data:PHASES.q3}),
+        sl===4 && h(PhaseSlide,{data:PHASES.q2}),
+        sl===5 && h(PhaseSlide,{data:PHASES.q4}),
+        sl===6 && h(PhaseSlide,{data:PHASES.q1})
       );
     }
 
     const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(React.createElement(Presentation));
+    root.render(h(Pres));
   </script>
 </body>
 </html>
