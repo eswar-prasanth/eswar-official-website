@@ -23,8 +23,8 @@
     .grid-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .grid-4col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
     .stats-bar { display: flex; border-top: 2px solid #111; border-bottom: 1px solid #eee; margin-bottom: 8px; }
-    .phase-tabs { display: flex; gap: 0; margin-bottom: 8px; border-top: 2px solid #111; }
-    .phase-content { display: flex; gap: 12px; margin-bottom: 8px; }
+    .phase-tabs { display: flex; gap: 0; margin-bottom: 6px; border-top: 2px solid #111; }
+    .phase-content { display: flex; gap: 12px; margin-bottom: 6px; }
     .intervention-btns { display: flex; gap: 3px; flex-wrap: wrap; }
     .metrics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
     .s2-bottom-row { display: flex; gap: 16px; }
@@ -143,99 +143,197 @@
     const PHASES = {
       q3:{title:"STABILISE & PROVE VALUE",sub:"Ford Pro \u00b7 Wipro",tag:"From active churn risk to renewed partnership",
         accounts:CL.filter(c=>c.q==="q3"),
-        phases:[
-          {name:"DISCOVER",icon:"\ud83d\udd0d",weeks:"Weeks 1-2",
-            left:{title:"What We Know: Ford Pro",items:["Ford Pro: $66.3B revenue, $6.8B EBIT, 10.3% margin \u2014 Ford\u2019s profit engine","879,000 paid software subscriptions (Ford Pro Intelligence), growing 30% YoY","CRO pain: training truck sellers to sell software subscriptions \u2014 fundamentally different motion","Incentive misalignment: reps compensated on vehicle price, not subscription attach rate","Competition from pure SaaS fleet companies: Samsara, Geotab, Verizon Connect","Dealer vs direct complexity: two channels, two training needs, two sales motions"]},
-            right:{title:"Present Deployment Issues (by workflow)",items:["Pipeline: No MT involvement. SDR team uses separate tools. Gap: SDR onboarding takes 6+ weeks","Win Rate: Scattered training videos that don\u2019t address truck\u2192subscription transition. No Role-Play. Call AI not activated (privacy concerns never resolved). No competitive battle cards for Samsara/Geotab","Post-Sale: No CS enablement for subscription renewals. Churn not correlated with rep readiness","Forecasting: Subscription forecast separate from vehicle forecast. No Call AI data feeding in","Productivity: Reps toggle 4+ tools. Subscription content buried in shared drive. No structured coaching"]},
-            tasks:["Pull platform analytics: DAU/MAU across 500 licensed Ford Pro users, feature adoption heat map","Interview 5 stakeholders: 2 dealer reps, 1 Ford Pro regional manager, 1 Dealer Training leader, 1 commercial leader","Analyse Ford\u2019s three-segment structure: map enablement urgency (Ford Pro \u2192 EV \u2192 Ford Blue)","Review existing training stack: other tools (Allego, internal LMS, Salesforce Learning)? Overlap?","Assess competitive displacement: is Ford evaluating Seismic or Showpad? Timeline?","Prepare industry benchmark: automotive/fleet company outcomes with full Mindtickle deployment","Map Ford Pro subscription selling journey: where does enablement create most pipeline leverage?"],
-            metrics:[{l:"Platform Login Rate",c:"~25%",t:"Baselined with user-level data"},{l:"Subscription Attach Rate",c:"Unknown",t:"Baseline from CRM data"},{l:"Rep Confidence (subscription pitch)",c:"Unknown",t:"Survey: 1-5 scale"},{l:"Competitive Win Rate vs Samsara",c:"Unknown",t:"Pull from CRM win/loss"}]},
-          {name:"DESIGN",icon:"\ud83d\udcd0",weeks:"Weeks 3-4",
-            left:{title:"Quick Wins (Minimal effort, max visibility)",items:["Week 1-2: Fix homepage \u2014 archive 70% dormant content, make subscription training front-and-center","Week 2: Activate 3 competitive battle cards (Samsara, Geotab, Verizon Connect) in Content Hub","Week 2: Create 1 AI Role-Play scenario: \u2018Pitching Ford Pro Intelligence subscription to a fleet manager\u2019"]},
-            right:{title:"Recommended Roadmap",items:["Week 2-3: Leadership exposure \u2014 Mindtickle VP meets Ford Pro CRO. Exec dinner or steering committee","Week 3-4: Full-day Workflow Mapping Workshop on-site \u2014 map current subscription selling process, identify gaps, design transformation roadmap","Week 4: Competitive battle cards for all named competitors in Ford Pro\u2019s market","Ongoing: Relationship building \u2014 invite Ford Pro leaders to Mindtickle customer conference, advisory board","Budget: estimate CS investment hours + any professional services costs for workshop","Risk: CRO declines meeting. Lead with data-backed findings and remediation plan.","Risk: Competitive eval in progress. Accelerate timeline; quick wins must land before competitor demo"]},
-            tasks:["Design simplified platform architecture: clean homepage, 5-7 active programs focused on subscription selling","Co-define 3 success metrics with CRO (e.g., subscription attach rate, ramp time, competitive win rate)","Build 90-day implementation timeline with weekly milestones","Prepare competitive positioning deck: Mindtickle vs Seismic/Showpad/Gong for Ford\u2019s use case","Design the Workflow Mapping Workshop agenda: current-state mapping, gap analysis, priority scoring","Assign dedicated \u2018restart\u2019 CSM with inherited-deployment expertise"],
-            metrics:[{l:"Quick Wins Delivered",c:"0",t:"3 in first 2 weeks"},{l:"CRO Meeting",c:"Not scheduled",t:"Confirmed by Week 3"},{l:"Workshop Completed",c:"No",t:"Full-day by Week 4"},{l:"Success Metrics Agreed",c:"None",t:"3 KPIs with CRO sign-off"}]},
-          {name:"EXECUTE",icon:"\u26a1",weeks:"Weeks 5-12",
-            left:{title:"Weekly Cadence & Milestones",items:["Weekly: 30-min check-in with enablement lead (Mon AM). Agenda: blockers, adoption metrics, content requests","Bi-weekly: Steering committee with exec sponsor. Agenda: progress vs milestones, risk register, decisions needed","Monthly: CRO dashboard email \u2014 usage metrics, readiness scores, early outcome indicators","Month 1 milestone: Platform cleaned up, 3 Role-Play scenarios live, Call AI privacy resolved and activated","Month 2 milestone: 50+ reps completing Role-Play, 3 managers coaching weekly, first Call AI insights shared","Month 3 milestone: First QBR with before/after metrics. Subscription attach rate change visible"]},
-            right:{title:"What Can Go Wrong & Mitigations",items:["Platform cleanup takes >2 weeks \u2192 Set hard deadline. Prioritise progress over perfection. Archive aggressively","Call AI privacy objection resurfaces \u2192 Pre-build compliance documentation. Reference other automotive customers. Offer opt-in pilot with willing team first","Manager resistance to coaching \u2192 Avoid mandating. Start with 2 willing managers. Create proof points. Reference: Cisco saved 6,000 hours","Quick wins delayed \u2192 Ensure at least 1 CRO-visible success by Week 6","Competitive eval accelerates \u2192 If Seismic/Gong gets a demo, request equal access. Use quick wins as proof of momentum","Rep adoption stalls at 40% \u2192 Identify blockers by persona (dealer vs direct). Create separate enablement tracks"]},
-            tasks:["Week 5-6: Platform cleanup \u2014 archive dormant content, rebuild homepage for subscription selling focus","Week 6: Resolve Call AI privacy concerns \u2014 compliance documentation, opt-in pilot structure","Week 6: Internal relaunch comms \u2014 CRO-sponsored email: \u2018Your new Mindtickle experience\u2019","Week 7: Launch AI Role-Play: Ford Pro Intelligence pitch, competitive objection handling (Samsara), renewal conversation","Week 8: Activate Call AI for pilot team (20-30 reps). Begin recording and scoring subscription conversations","Week 8-9: Enable 3 managers on coaching \u2014 weekly review of 3 lowest-scoring calls","Week 10: Deploy Readiness Index with Ford Pro-specific IRP","Week 10: Mid-point steering committee: progress review, adjust priorities","Week 12: First QBR preparation \u2014 compile before/after metrics for CRO presentation"],
-            metrics:[{l:"Login Rate",c:"25%",t:"60%+"},{l:"Role-Play Completion",c:"0 reps",t:"50+ reps, 1+ scenario each"},{l:"Call AI Coverage",c:"0%",t:"50% of pilot team calls"},{l:"Manager Coaching",c:"0 sessions",t:"3 managers, weekly cadence"}]},
-          {name:"SUSTAIN",icon:"\ud83d\udcc8",weeks:"Month 4+",
-            left:{title:"The Ongoing Operating Model",items:["Quarterly QBR with CRO: usage \u2192 readiness \u2192 business outcomes in one narrative","Monthly health score review with automated alerts on adoption dips","Quarterly best-practice refresh: new Role-Play scenarios, updated battle cards, content audit","Champion development: identify and invest in Ford Pro\u2019s internal Mindtickle advocate","Innovation access: early ElevateOS features for subscription selling workflows"]},
-            right:{title:"Becoming a Leadership Aide",items:["Provide CRO with data they can\u2019t get elsewhere: readiness \u2194 subscription attach rate correlation","Quarterly industry benchmarking: \u2018Here\u2019s how Ford Pro compares to 200+ Mindtickle customers\u2019","Co-author thought leadership: white paper on \u2018Enabling the Truck-to-SaaS Selling Transition\u2019","Annual strategic review with Mindtickle founders \u2014 signal top-tier partnership","Advisory board membership: Ford Pro helps shape Mindtickle\u2019s automotive roadmap"]},
-            tasks:["Month 4: QBR with CRO \u2014 present ROI dashboard with before/after metrics","Month 5: Begin expansion conversation \u2014 extend to Ford Blue dealer training or Ford Model e EV selling","Month 6: Contract renewal discussion anchored to proven value, not discount","Month 6: Activate Readiness Index org-wide \u2014 benchmark all Ford Pro reps against IRP","Month 8: Full Call AI deployment across all customer-facing Ford Pro teams","Month 9: Case study \u2014 publish Ford Pro transformation metrics for industry marketing","Ongoing: Multi-thread relationships \u2014 build 5+ contacts across CRO, VP Sales, Enablement, IT, RevOps"],
-            metrics:[{l:"Subscription Attach Rate",c:"Baseline",t:"+15-25% improvement"},{l:"Rep Ramp Time",c:"6+ weeks",t:"50% reduction (ref: Janssen)"},{l:"Wallet Share",c:"27%",t:"40%+ within 12 months"},{l:"Relationship Status",c:"Strained",t:"Strategic Partner"}]},
+        steps:[
+          {name:"Find Quick Wins",icon:"\u26a1",timeline:"Weeks 1-2",
+            playbook:{
+              tasks:["Audit platform: identify dormant content, archive 70%+, surface high-impact modules","Activate 2-3 competitive battle cards for named competitors in Content Hub","Create 1 AI Role-Play scenario targeting the highest-pain selling motion","Send CRO-sponsored relaunch communication to all licensed users","Identify 1 metric showing immediate before/after improvement"],
+              metrics:[{l:"Quick Wins Delivered",t:"3+ in first 2 weeks"},{l:"Platform Cleanup",t:"70% dormant content archived"},{l:"Battle Cards Live",t:"3 competitors covered"}],
+              risks:[{r:"Content review takes too long",m:"Pre-approve with enablement lead; bypass full legal for internal training"},{r:"CRO declines sponsoring relaunch",m:"Lead with data: usage drop + competitive risk. Offer draft comms for review"}]
+            },
+            examples:[
+              {account:"Ford Pro",items:["Activate Samsara, Geotab, Verizon Connect battle cards","Role-Play: Pitching Ford Pro Intelligence subscription to fleet manager","CEO message on subscription-first strategy as relaunch anchor"]},
+              {account:"Wipro",items:["Surface IT services competitive positioning vs Infosys, TCS","Role-Play: Cross-sell pitch for new Mindtickle modules","Relaunch email from VP Enablement"]}
+            ]},
+          {name:"Communicate Value",icon:"\ud83d\udcca",timeline:"Weeks 3-5",
+            playbook:{
+              tasks:["Establish baseline usage and outcome metrics (login rate, feature adoption, rep performance)","Build automated dashboard: usage trends, readiness scores, business impact indicators","Share monthly insight report with CRO: benchmarks vs industry peers","Publish 2-3 best practice examples from other Mindtickle customers in similar industries","Co-define 3 success KPIs with executive sponsor"],
+              metrics:[{l:"Dashboard Live",t:"Automated by Week 4"},{l:"Monthly Reports",t:"First sent by Week 5"},{l:"KPIs Agreed",t:"3 metrics with CRO sign-off"}],
+              risks:[{r:"Data quality insufficient for meaningful metrics",m:"Use platform analytics + CRM correlation; start with directional data"},{r:"CRO disengaged from reports",m:"Keep to 1-page format with single headline insight; deliver via exec sponsor"}]
+            },
+            examples:[
+              {account:"Ford Pro",items:["Baseline: 25% login rate, zero subscription-specific training completion","Benchmark Ford Pro vs 200+ Mindtickle automotive/fleet customers","KPIs: subscription attach rate, competitive win rate vs Samsara, rep ramp time"]},
+              {account:"Wipro",items:["Baseline: module usage concentrated in onboarding only","Benchmark against IT services peers on continuous learning metrics","KPIs: cross-sell conversion, manager coaching frequency, platform DAU"]}
+            ]},
+          {name:"Provide Thought Leadership",icon:"\ud83d\udca1",timeline:"Weeks 5-10",
+            playbook:{
+              tasks:["Map client\u2019s existing selling workflows end-to-end; identify 3-5 gaps where AI can improve outcomes","Conduct on-site Workflow Mapping Workshop: current state \u2192 gap analysis \u2192 AI-enhanced future state","Present AI transformation roadmap to CRO/VP: how Mindtickle + ElevateOS addresses each gap","Pilot 1-2 AI-enhanced workflows (Call AI, automated coaching triggers)","Schedule leadership review at pilot midpoint: progress, early results, next phase"],
+              metrics:[{l:"Workshop Completed",t:"Full-day on-site by Week 6"},{l:"AI Workflows Piloted",t:"1-2 live by Week 8"},{l:"Leadership Review",t:"Scheduled and delivered"}],
+              risks:[{r:"Client lacks bandwidth for workshop",m:"Offer half-day format with pre-work; run discovery async if needed"},{r:"AI pilot shows limited early signal",m:"Focus on leading indicators (engagement, completion) not lagging outcomes"}]
+            },
+            examples:[
+              {account:"Ford Pro",items:["Workshop: map truck seller \u2192 subscription selling transition workflow","Pilot Call AI on 20-30 reps; measure subscription conversation quality","Leadership review with Ford Pro CRO on AI-driven enablement roadmap"]},
+              {account:"Wipro",items:["Workshop: map cross-sell motion from IT outsourcing \u2192 digital services","Pilot Role-Play for new offering conversations","Leadership review with VP Sales on AI readiness scoring"]}
+            ]},
+          {name:"Build Relationship",icon:"\ud83e\udd1d",timeline:"Month 3+",
+            playbook:{
+              tasks:["Host executive dinner or invite to Mindtickle customer conference","Initiate quarterly QBR cadence: usage \u2192 readiness \u2192 business outcomes narrative","Propose advisory board membership with roadmap influence positioning","Co-author thought leadership: white paper or webinar on industry-specific transformation","Multi-thread: build 5+ contacts across CRO, VP Sales, Enablement, IT, RevOps"],
+              metrics:[{l:"Exec Events",t:"1+ per quarter"},{l:"QBR Cadence",t:"Quarterly, outcome-focused"},{l:"Advisory Board",t:"Invitation extended"},{l:"Contacts",t:"5+ across levels"}],
+              risks:[{r:"Executive access gated by procurement",m:"Build upward through enablement team; demonstrate value that creates internal pull"},{r:"Relationship improvement stalls",m:"Survey partnership perception; address specific gaps identified"}]
+            },
+            examples:[
+              {account:"Ford Pro",items:["White paper: Enabling the Truck-to-SaaS Selling Transition","Advisory board: Ford Pro shapes Mindtickle automotive roadmap","Annual strategic review with Mindtickle founders"]},
+              {account:"Wipro",items:["Joint webinar: AI-Powered Enablement for IT Services","Conference co-presentation at industry event","Quarterly exec dinner with Mindtickle leadership"]}
+            ]},
         ]},
       q2:{title:"ACTIVATE",sub:"Boston Scientific \u00b7 J&J",tag:"From underleveraged platform to full revenue engine",
         accounts:CL.filter(c=>c.q==="q2"),
-        phases:[
-          {name:"DISCOVER",icon:"\ud83d\udd0d",weeks:"Weeks 1-2",
-            left:{title:"What We Know: Boston Scientific",items:["BSX: $16.7B net sales (2024), growing 17.6% YoY. Market cap $134B","17,500 sales reps across 130 countries. Complex med device selling with surgeon training","4+ acquisitions bringing new products: FARAPULSE ($1B first year), Anrei, SoniVie, Bolt Medical","Watchman: first procedure volume decline \u2014 growth headwind in flagship franchise","CEO vision: \u2018next level\u2019 performance with digital and AI capabilities","Compliance-heavy: every rep interaction has regulatory implications. Content approval workflows mandatory"]},
-            right:{title:"Present Deployment: Using Onboarding Only",items:["Currently using: Onboarding module for new hire training. 1-2 modules active out of 6+","Not using: Call AI, Role-Play, Content Hub, Readiness Index, DSRs, Coaching","Strong relationship with VP Enablement \u2014 they want to expand but lack internal budget justification","Gap: no new-product-launch enablement for acquisitions (FARAPULSE, etc.)","Gap: no compliance-tracked certification system beyond basic LMS","Gap: surgeon training enablement completely separate from sales enablement"]},
-            tasks:["Map BSX\u2019s complete sales process: lead \u2192 qualification \u2192 surgeon demo \u2192 committee approval \u2192 procurement","Identify which modules they\u2019re using vs not. Quantify the expansion opportunity","Document 5 highest-pain workflow gaps where additional modules add value","Benchmark their metrics against med device peers using Mindtickle analytics","Interview 5 reps and 3 managers about current workflow and pain points","Engage Medical/Legal/Compliance early \u2014 understand content approval timelines"],
-            metrics:[{l:"Modules Active",c:"1-2",t:"Full capability map completed"},{l:"New Product Launch Speed",c:"Unknown",t:"Baselined for FARAPULSE"},{l:"Compliance Certification Rate",c:"Unknown",t:"Baselined"},{l:"Wallet Share",c:"7%",t:"Expansion opportunities quantified"}]},
-          {name:"DESIGN",icon:"\ud83d\udcd0",weeks:"Weeks 3-5",
-            left:{title:"Quick Wins",items:["Week 1: Build FARAPULSE product launch training module from existing materials","Week 2: Create 2 AI Role-Play scenarios: new product pitch + competitive objection (Medtronic)","Week 2: Set up compliance-tracked certification for one product line as proof of concept"]},
-            right:{title:"Recommended Roadmap",items:["Week 3: CRO meeting \u2014 present pilot ROI projection based on industry benchmarks","Week 3-4: Workflow Mapping Workshop \u2014 map med device selling process to platform capabilities","Week 4-5: Co-design IRP using BSX top performer data + Mindtickle benchmarks","Scope 3 expansion modules: Call AI + AI Role-Play + Readiness Index","Design pilot: 20-30 reps, 30-day sprint, FARAPULSE launch as use case","Risk: Compliance approval delays (4-8 weeks in pharma/med device). Start early; cannot block Activate phase"]},
-            tasks:["Run Workflow Mapping Workshop: current workflows \u2192 best practice \u2192 gaps \u2192 prioritised roadmap","Co-design IRP using top performer data + Mindtickle industry benchmarks","Scope pilot program: 20-30 reps, 30 days, FARAPULSE as anchor use case","Build compliance content review workflow into Mindtickle (med/legal approval gates)","Prepare expansion business case: consolidation savings + full platform value","Plan champion speaking opportunity at Mindtickle event"],
-            metrics:[{l:"Workshop Completed",c:"No",t:"Full-day by Week 4"},{l:"IRP Defined",c:"No",t:"Industry-specific IRP v1"},{l:"Pilot Team Selected",c:"No",t:"20-30 reps identified"},{l:"Expansion Modules Scoped",c:"0",t:"3 modules with business case"}]},
-          {name:"EXECUTE",icon:"\u26a1",weeks:"Weeks 6-14",
-            left:{title:"Cadence & Milestones",items:["Weekly: enablement team sync. Bi-weekly: pilot team check-in","Month 1: FARAPULSE training live, pilot team onboarded on Role-Play + Call AI","Month 2: First Role-Play scores in, Call AI covering 50% pilot calls, compliance cert pilot running","Month 3: Pilot results presentation to CRO. Org-wide rollout decision"]},
-            right:{title:"What Can Go Wrong",items:["Compliance approval delays new content \u2192 Have materials pre-reviewed. Build compliance gates into workflow","Pilot reps too busy with quota to engage \u2192 Keep weekly time under 30 min. Tie to live deals, not abstract training","Call AI privacy concerns in med device (surgeon conversations) \u2192 Offer recording consent framework. Start with internal-only calls","Pilot success does not auto-scale \u2192 Plan org-wide rollout in parallel with pilot execution"]},
-            tasks:["Week 6: Launch pilot with CRO-sponsored kickoff","Week 6-7: Onboard pilot reps on Role-Play + Call AI","Week 7-8: First Role-Play scenario: FARAPULSE pitch to hospital committee","Week 8-9: Activate Call AI for pilot team","Week 9-10: Manager coaching pilot \u2014 weekly call review","Week 10-11: Mid-pilot check-in \u2014 adjust and iterate","Week 12-14: Compile pilot results for CRO presentation"],
-            metrics:[{l:"Pilot Completion Rate",c:"0%",t:"85%+"},{l:"Role-Play Score Improvement",c:"No baseline",t:"+20%"},{l:"Call AI Coverage (pilot)",c:"0%",t:"50%+ of calls"},{l:"Ramp Time (pilot new hires)",c:"6-9 months",t:"50% reduction"}]},
-          {name:"SUSTAIN",icon:"\ud83d\udcc8",weeks:"Month 5+",
-            left:{title:"Scale & Expand",items:["Org-wide rollout: phase by region/BU (not all-at-once for 17,500 reps)","Enterprise licensing: platform-wide agreement replacing per-module","Multi-product expansion: extend beyond FARAPULSE to full product portfolio","Global compliance certification system on Mindtickle"]},
-            right:{title:"Leadership Aide",items:["CRO dashboard: readiness \u2192 certification \u2192 sales outcomes in one view","Industry benchmarking: BSX vs peer med device companies on enablement metrics","Case study: publish BSX enablement transformation (anonymised if needed)","Advisory board: BSX champion shapes Mindtickle\u2019s med device roadmap"]},
-            tasks:["Month 5: Present pilot results + org-wide rollout plan","Month 6: Phase 1 rollout \u2014 next 100 reps, 2 additional regions","Month 7: Enterprise licensing conversation","Month 8: Full Call AI deployment","Month 9: Case study production","Ongoing: Quarterly innovation reviews, ElevateOS early access"],
-            metrics:[{l:"Wallet Share",c:"7%",t:"25%+ within 12 months"},{l:"Platform Modules Active",c:"1-2",t:"5+"},{l:"Manager Hours Saved",c:"0",t:"Ref: Cisco 6,000+ hours"},{l:"NRR",c:"Baseline",t:"115%+"}]},
+        steps:[
+          {name:"Improve Adoption",icon:"\ud83d\ude80",timeline:"Weeks 1-3",
+            playbook:{
+              tasks:["Audit current module usage: identify which capabilities are active vs dormant","Benchmark adoption rates against industry peers on Mindtickle","Identify top 3 underutilised features with highest potential impact","Create adoption acceleration plan: training, comms, manager enablement","Launch internal awareness campaign with exec sponsor endorsement"],
+              metrics:[{l:"Modules Active",t:"Increase from 1-2 to 4+"},{l:"Feature Adoption",t:"Top 3 features at 50%+ usage"},{l:"Awareness Campaign",t:"Launched with exec sponsor"}],
+              risks:[{r:"Users unaware of available capabilities",m:"Run demo sessions; create 2-min feature spotlight videos"},{r:"No exec sponsor for adoption push",m:"Build business case showing cost of unused licenses vs potential value"}]
+            },
+            examples:[
+              {account:"Boston Scientific",items:["Currently 1-2 modules active out of 6+. Not using: Call AI, Role-Play, Content Hub, Readiness Index","VP Enablement wants to expand but lacks budget justification","Target: activate Role-Play + Content Hub for FARAPULSE launch"]},
+              {account:"J&J",items:["Adoption concentrated in compliance training only","Opportunity: extend to field sales coaching and competitive readiness","Target: activate Call AI for top 50 reps in oncology division"]}
+            ]},
+          {name:"Triage Pain Points",icon:"\ud83d\udd0d",timeline:"Weeks 3-5",
+            playbook:{
+              tasks:["Pull publicly available data: earnings calls, press releases, industry reports for client context","Analyse platform usage patterns: where do users drop off, which workflows are incomplete","Interview 5 stakeholders (reps + managers) on current pain points and workflow gaps","Document top 5 workflow gaps where Mindtickle capabilities map to unmet needs","Prioritise gaps by revenue impact and implementation effort"],
+              metrics:[{l:"Stakeholder Interviews",t:"5 completed"},{l:"Pain Points Documented",t:"Top 5 prioritised"},{l:"Revenue Impact Mapped",t:"$ value per gap"}],
+              risks:[{r:"Stakeholders too busy for interviews",m:"Offer 15-min structured format; compensate with platform analytics"},{r:"Pain points are outside Mindtickle scope",m:"Distinguish addressable vs non-addressable; focus on 3 highest-impact addressable gaps"}]
+            },
+            examples:[
+              {account:"Boston Scientific",items:["Earnings: 4+ acquisitions (FARAPULSE $1B), 17,500 reps, 130 countries","Gap: no new-product-launch enablement for acquisitions","Gap: compliance certification separate from sales enablement","Gap: surgeon training disconnected from rep readiness"]},
+              {account:"J&J",items:["Industry: complex pharma selling with regulatory constraints","Gap: field coaching not connected to call performance data","Gap: competitive intelligence scattered across multiple systems","Gap: new product launch ramp takes 6+ months"]}
+            ]},
+          {name:"Workshop + AI Leadership",icon:"\u2699\ufe0f",timeline:"Weeks 5-8",
+            playbook:{
+              tasks:["Conduct Workflow Mapping Workshop: map current selling process end-to-end","Identify automation opportunities: where AI can reduce manual effort or improve quality","Design AI-enhanced workflow roadmap: Call AI, automated coaching, predictive readiness","Present transformation plan to CRO: current gaps \u2192 AI-enabled future state \u2192 projected ROI","Co-design Ideal Rep Profile using top performer data + Mindtickle benchmarks"],
+              metrics:[{l:"Workshop Delivered",t:"Full-day on-site"},{l:"AI Roadmap Presented",t:"CRO sign-off received"},{l:"IRP Designed",t:"Industry-specific v1"}],
+              risks:[{r:"Compliance approval delays workshop outputs (4-8 weeks in pharma)",m:"Start compliance review in parallel; do not gate workshop on approval"},{r:"CRO wants proof before committing",m:"Propose 30-day pilot with 20-30 reps as proof point before org-wide commitment"}]
+            },
+            examples:[
+              {account:"Boston Scientific",items:["Workshop: map med device sales process (lead \u2192 surgeon demo \u2192 committee \u2192 procurement)","AI opportunity: automated compliance certification + new product launch enablement","Present to CRO: consolidation of 3 tools into Mindtickle platform"]},
+              {account:"J&J",items:["Workshop: map pharma field sales + MSL workflow","AI opportunity: Call AI for HCP interactions + automated coaching triggers","Present to CRO: readiness correlation with territory performance"]}
+            ]},
+          {name:"Pilot the Updates",icon:"\ud83d\udea9",timeline:"Weeks 8-14",
+            playbook:{
+              tasks:["Select pilot cohort: 20-30 reps, 1-2 BUs, 30-day sprint","Launch pilot with CRO-sponsored kickoff communication","Onboard pilot team on new modules (Role-Play + Call AI + relevant capabilities)","Run weekly check-ins: adoption metrics, qualitative feedback, blockers","Compile pilot results: before/after metrics for CRO expansion decision"],
+              metrics:[{l:"Pilot Completion",t:"85%+ of cohort"},{l:"Score Improvement",t:"+20% on Role-Play"},{l:"Call AI Coverage",t:"50%+ of pilot calls"},{l:"CRO Decision",t:"Org-wide expansion approved"}],
+              risks:[{r:"Pilot reps too busy with quota",m:"Keep weekly time under 30 min; tie exercises to live deals"},{r:"Pilot success does not auto-scale",m:"Plan org-wide rollout in parallel; do not wait for pilot end to begin planning"}]
+            },
+            examples:[
+              {account:"Boston Scientific",items:["Pilot: 25 FARAPULSE reps, 30-day sprint on product launch readiness","Modules: Role-Play (new product pitch) + Call AI + compliance certification","Success criteria: ramp time reduction, certification completion rate"]},
+              {account:"J&J",items:["Pilot: 30 oncology reps, competitive readiness sprint","Modules: Call AI + competitive battle cards + coaching","Success criteria: competitive win rate improvement, call quality scores"]}
+            ]},
+          {name:"Build Relationship",icon:"\ud83e\udd1d",timeline:"Month 4+",
+            playbook:{
+              tasks:["Present pilot ROI to CRO with org-wide expansion proposal","Initiate enterprise licensing conversation: platform-wide agreement replacing per-module","Propose advisory board membership for internal champion","Plan case study: document transformation metrics for industry marketing","Schedule quarterly strategic reviews with executive sponsor"],
+              metrics:[{l:"Enterprise License",t:"Proposal delivered"},{l:"Wallet Share",t:"25%+ within 12 months"},{l:"Advisory Board",t:"Champion nominated"},{l:"Case Study",t:"Production initiated"}],
+              risks:[{r:"Budget approval delayed",m:"Build ROI deck for procurement; use pilot data as proof"},{r:"Champion leaves role",m:"Multi-thread: ensure 3+ contacts at decision-maker level"}]
+            },
+            examples:[
+              {account:"Boston Scientific",items:["Expansion: phase rollout to 17,500 reps by region/BU","Enterprise license replacing per-module pricing","Advisory board: BSX champion shapes med device roadmap"]},
+              {account:"J&J",items:["Expansion: extend from oncology to all therapeutic areas","Global compliance certification on Mindtickle platform","Case study: J&J enablement transformation (anonymised if needed)"]}
+            ]},
         ]},
       q4:{title:"BUILD RELATIONSHIP",sub:"Cisco \u00b7 WWT",tag:"From transactional vendor to strategic partner",
         accounts:CL.filter(c=>c.q==="q4"),
-        phases:[
-          {name:"DISCOVER",icon:"\ud83d\udd0d",weeks:"Weeks 1-2",
-            left:{title:"What We Know: Cisco",items:["Record $15.8B revenue Q3 2026, up 12% YoY. $1.9B AI infrastructure orders from hyperscalers","Restructuring 4,000 roles toward AI, security, cloud. Stated priorities: focus, urgency, discipline","7,000+ sellers need to transition from networking \u2192 AI infrastructure selling","Already proven value: 31% deal size increase, 6,000+ manager hours saved with Role-Play","Relationship remains transactional despite strong usage metrics"]},
-            right:{title:"Diagnosing the Relationship Gap",items:["Is it billing/pricing friction? Review contract history for disputes","Is it support responsiveness? Pull ticket history \u2014 response times, escalation patterns","Is it exec access? When was last CRO-to-CRO conversation?","Perceived as underserved? Large enterprise accounts expect white-glove partnership despite good product","Multi-BU complexity: different BUs may have different relationship quality"]},
-            tasks:["Interview 5 stakeholders at different levels about partnership quality","Analyse support ticket history: volume, response times, resolution, escalations","Review billing history: disputes, credits, pricing friction","Map executive engagement: last exec-to-exec conversation date","Document: what would elevate Mindtickle from vendor to strategic partner in their view?"],
-            metrics:[{l:"NPS/CSAT",c:"Low despite usage",t:"Root cause identified"},{l:"Support Response vs SLA",c:"Unknown",t:"Benchmarked"},{l:"Exec Engagement",c:"None/infrequent",t:"Gap documented"},{l:"Friction Points",c:"Unknown",t:"Top 3 identified"}]},
-          {name:"DESIGN",icon:"\ud83d\udcd0",weeks:"Weeks 3-4",
-            left:{title:"Quick Wins",items:["Resolve primary friction point immediately (billing dispute, support SLA, or equivalent)","Send first proactive value insight: Cisco\u2019s usage vs top 10% Mindtickle customers","Invite to upcoming Mindtickle customer event or exec dinner"]},
-            right:{title:"Recommended Roadmap",items:["QBR redesign: 70% business outcomes, 20% roadmap, 10% support review","Executive sponsor pairing: Mindtickle CRO \u2194 Cisco VP Sales","Advisory board invitation with clear value prop (roadmap influence, early access)","AI infrastructure selling enablement: new Role-Play scenarios for the AI transition","Risk: Exec access gated by procurement. Build upward through enablement team trust"]},
-            tasks:["Design new QBR template focused on business impact, not product features","Pair Mindtickle exec sponsor with Cisco leadership \u2014 schedule first conversation","Prepare advisory board invitation with roadmap influence positioning","Create proactive value communication plan: monthly insights with peer benchmarks","Plan exec dinner or conference co-attendance","Build AI infrastructure selling Role-Play scenarios for Cisco\u2019s market transition"],
-            metrics:[{l:"#1 Friction Point",c:"Unresolved",t:"Fixed by Week 3"},{l:"QBR Format",c:"Feature-focused",t:"Business impact focused"},{l:"Exec Sponsor",c:"None",t:"Paired and scheduled"},{l:"Advisory Board",c:"Not invited",t:"Invitation extended"}]},
-          {name:"EXECUTE",icon:"\u26a1",weeks:"Weeks 5-10",
-            left:{title:"Cadence & Milestones",items:["Week 5: First redesigned QBR \u2014 lead with business outcomes","Week 6: First proactive value insight email","Week 7: Outstanding support/billing friction resolved","Week 8: Executive dinner or conference co-attendance","Week 9: ElevateOS early access invitation","Week 10: Partnership perception check-in survey"]},
-            right:{title:"What Can Go Wrong",items:["Execution gap: if exec engagement is committed, deliver every quarter without fail","Over-communicating: monthly insights must be high-signal, not noise","Cisco\u2019s scale means different BUs have different experiences. Prioritise the loudest detractor BU","Procurement may not reflect relationship gains. Engage procurement early on commercial terms"]},
-            tasks:["Week 5: Deliver redesigned QBR with Cisco\u2019s business outcomes data","Week 6: Monthly value insight: usage vs top 10% of Mindtickle customers","Week 7: Resolve outstanding friction points","Week 8: Executive relationship event","Week 9: ElevateOS early access for AI selling scenarios","Week 10: Survey: \u2018How has your experience with Mindtickle changed?\u2019"],
-            metrics:[{l:"NPS",c:"Low",t:"+20 points"},{l:"Exec Meetings",c:"0/quarter",t:"1/quarter"},{l:"Support SLA",c:"Variable",t:"Consistently met"},{l:"Partnership Events",c:"0",t:"1 completed"}]},
-          {name:"SUSTAIN",icon:"\ud83d\udcc8",weeks:"Month 3+",
-            left:{title:"Lock In the Partnership",items:["Advisory board participation confirmed and active","Multi-year enterprise agreement discussion","Co-presentation at industry events","Annual strategic review with Mindtickle founders"]},
-            right:{title:"Preventing Regression",items:["Multi-thread: build 5+ relationships across levels to eliminate single-point-of-failure risk","Maintain quarterly exec cadence. Cannot slip after initial improvement","Proactive renewal planning: initiate 6 months before expiry","Continuous value: monthly insights, quarterly innovation, annual strategic review"]},
-            tasks:["Month 3: Advisory board onboarding","Month 4: Co-present at industry event","Month 5: Enterprise licensing \u2014 multi-year platform agreement","Month 6: Annual strategic review with Mindtickle CEO/CPO","Ongoing: Multi-thread relationships across 5+ contacts","Ongoing: Quarterly exec check-ins, monthly value insights"],
-            metrics:[{l:"Relationship Status",c:"Vendor",t:"Strategic Partner"},{l:"NRR",c:"105%",t:"115%+"},{l:"Multi-threading",c:"1-2 contacts",t:"5+ across levels"},{l:"Contract",c:"Annual renewal",t:"Multi-year enterprise"}]},
+        steps:[
+          {name:"Resolve Friction",icon:"\ud83d\udd27",timeline:"Weeks 1-3",
+            playbook:{
+              tasks:["Audit all open friction points: billing disputes, support SLA misses, unresolved escalations","Interview 5 stakeholders at different levels about partnership quality and pain points","Identify #1 friction point and resolve within 2 weeks","Review support ticket history: response times, resolution rates, escalation patterns","Communicate resolution proactively: acknowledge issue, share fix, confirm satisfaction"],
+              metrics:[{l:"#1 Friction Point",t:"Resolved by Week 2"},{l:"Support SLA",t:"100% compliance achieved"},{l:"Stakeholder Interviews",t:"5 completed"},{l:"Open Escalations",t:"Zero backlog"}],
+              risks:[{r:"Friction is systemic (pricing/contract structure)",m:"Escalate internally; propose commercial flexibility tied to expansion commitment"},{r:"Multiple BUs have different issues",m:"Prioritise the loudest detractor BU first; create per-BU action plans"}]
+            },
+            examples:[
+              {account:"Cisco",items:["31% deal size increase and 6,000+ hours saved but relationship feels transactional","Audit: billing history, support tickets, exec engagement frequency","Resolve: likely support responsiveness or exec access gap"]},
+              {account:"WWT",items:["Strong platform adoption but low relationship investment from Mindtickle","Audit: last QBR quality, proactive communication frequency","Resolve: likely lack of strategic engagement beyond product support"]}
+            ]},
+          {name:"Redesign QBR & Comms",icon:"\ud83d\udd04",timeline:"Weeks 3-6",
+            playbook:{
+              tasks:["Redesign QBR format: 70% business outcomes, 20% roadmap/innovation, 10% support review","Create proactive value communication plan: monthly insights with peer benchmarks","Build CRO-ready dashboard: platform usage \u2192 readiness scores \u2192 revenue correlation","Send first proactive value insight: client usage vs top 10% of Mindtickle customers","Establish bi-weekly internal sync to monitor relationship health signals"],
+              metrics:[{l:"QBR Redesigned",t:"New format delivered"},{l:"Monthly Insights",t:"First sent by Week 5"},{l:"Dashboard",t:"CRO-ready, outcome-focused"},{l:"Internal Sync",t:"Bi-weekly cadence set"}],
+              risks:[{r:"Client perceives new QBR as just repackaging",m:"Include net-new data they cannot get elsewhere (industry benchmarks, AI insights)"},{r:"Monthly comms ignored",m:"Keep to 1 headline + 1 action; deliver through exec sponsor channel"}]
+            },
+            examples:[
+              {account:"Cisco",items:["QBR: lead with AI infrastructure selling readiness across 7,000 sellers","Monthly insight: Cisco vs top 10% enterprise tech customers on readiness metrics","Dashboard: Role-Play adoption \u2192 deal size increase correlation"]},
+              {account:"WWT",items:["QBR: lead with enablement ROI across partner-facing teams","Monthly insight: WWT vs peer system integrators","Dashboard: training completion \u2192 certification \u2192 customer satisfaction correlation"]}
+            ]},
+          {name:"Thought Leadership & Advisory",icon:"\u2b50",timeline:"Weeks 6-10",
+            playbook:{
+              tasks:["Pair Mindtickle exec sponsor with client CRO/VP Sales for quarterly strategic dialogue","Invite to customer advisory board with roadmap influence positioning","Offer ElevateOS early access for their highest-priority selling transformation","Co-develop thought leadership: industry white paper, conference co-presentation, or joint webinar","Host executive dinner or conference co-attendance to strengthen personal relationships"],
+              metrics:[{l:"Exec Sponsor Paired",t:"First meeting completed"},{l:"Advisory Board",t:"Invitation accepted"},{l:"ElevateOS Access",t:"Early access granted"},{l:"Thought Leadership",t:"1 piece co-developed"}],
+              risks:[{r:"Exec access gated by procurement",m:"Build through enablement team; create internal pull via proven business outcomes"},{r:"Advisory board feels like token gesture",m:"Demonstrate real roadmap influence; share how prior feedback shaped product decisions"}]
+            },
+            examples:[
+              {account:"Cisco",items:["Exec pairing: Mindtickle CRO with Cisco VP Sales","ElevateOS: AI infrastructure selling scenarios for networking \u2192 AI transition","Co-presentation: AI-powered enablement at enterprise tech conference"]},
+              {account:"WWT",items:["Exec pairing: Mindtickle VP CS with WWT enablement leadership","Advisory board: WWT shapes partner enablement roadmap","White paper: Partner Ecosystem Enablement at Scale"]}
+            ]},
+          {name:"Multi-Year Commitment",icon:"\ud83d\udd12",timeline:"Month 3+",
+            playbook:{
+              tasks:["Initiate multi-year enterprise agreement discussion anchored to proven partnership value","Propose consolidated pricing: platform-wide access replacing per-module","Plan annual strategic review with Mindtickle CEO/CPO","Establish multi-threading: ensure 5+ contacts across levels","Set up proactive renewal planning: begin 6 months before contract expiry"],
+              metrics:[{l:"Contract",t:"Multi-year enterprise signed"},{l:"Multi-threading",t:"5+ contacts across levels"},{l:"NRR",t:"115%+"},{l:"Relationship Status",t:"Strategic Partner"}],
+              risks:[{r:"Procurement blocks multi-year commitment",m:"Build financial case: consolidation savings + guaranteed roadmap access"},{r:"Key contact changes role",m:"Multi-threaded relationships prevent single-point-of-failure risk"}]
+            },
+            examples:[
+              {account:"Cisco",items:["Enterprise license for 7,000+ sellers across all BUs","Annual strategic review with Mindtickle founders","Co-presentation at 2+ industry events per year"]},
+              {account:"WWT",items:["Platform-wide agreement covering partner enablement + internal teams","Advisory board leadership role","Joint case study on partner ecosystem transformation"]}
+            ]},
         ]},
       q1:{title:"CO-CREATE",sub:"Splunk \u00b7 Juniper \u00b7 Darktrace \u00b7 CentiMark",tag:"From satisfied customer to strategic advocate and design partner",
         accounts:CL.filter(c=>c.q==="q1"),
-        phases:[
-          {name:"DISCOVER",icon:"\ud83d\udd0d",weeks:"Weeks 1-2",
-            left:{title:"Expansion Whitespace",items:["CentiMark: 8-day ramp, 72% wallet share \u2014 the gold standard. What modules aren\u2019t they on?","Splunk: strong coaching culture, 60% wallet share. Cross-sell Call AI or DSRs?","Darktrace: published case study. Ready for enterprise licensing?","Juniper: using content + training. Expansion into AI Role-Play and coaching?"]},
-            right:{title:"What to Assess",items:["Tech stack audit: Gong, Highspot, Showpad \u2014 tools Mindtickle could consolidate/replace?","Champion health: are they still engaged? Career trajectory? Burnout risk?","CRO priorities for next 12 months: where can Mindtickle add new value?","Product/engineering liaison: who can evaluate ElevateOS as design partner?"]},
-            tasks:["Deep usage analysis: feature-level adoption, power users vs casual users","Map tech stack: identify consolidation opportunities","CRO meeting: align on top 3 priorities and identify where Mindtickle adds value","Champion career check-in: speaking opportunities, recognition, advisory role","Identify 2-3 cross-sell opportunities based on usage gaps"],
-            metrics:[{l:"Modules Active",c:"3-4",t:"Full platform map"},{l:"Tech Stack Overlap",c:"Unknown",t:"Consolidation opps identified"},{l:"Champion Health",c:"Unknown",t:"Assessed and supported"},{l:"Expansion Pipeline",c:"$0",t:"2-3 opps scoped"}]},
-          {name:"DESIGN",icon:"\ud83d\udcd0",weeks:"Weeks 3-4",
-            left:{title:"Quick Wins",items:["Nominate champion for speaking at next Mindtickle conference","Share exclusive ElevateOS roadmap preview to reinforce insider partnership status","Build custom industry benchmark: their performance vs anonymised Mindtickle peers"]},
-            right:{title:"Recommended Roadmap",items:["Joint innovation roadmap: 12-month plan mapping their priorities to Mindtickle capabilities","ElevateOS early adopter agreement with structured feedback sessions","Enterprise licensing proposal: consolidation savings + full platform access","Case study scope agreed, internal approval process initiated","Risk: champion attrition. Develop 2 backup relationships at same level now"]},
-            tasks:["Joint roadmap session: their priorities mapped to Mindtickle product roadmap","Present ElevateOS early adopter program","Design enterprise licensing proposal with consolidation savings analysis","Initiate case study: identify metrics, get approval, schedule interviews","Plan champion speaking opportunity"],
-            metrics:[{l:"Joint Roadmap",c:"None",t:"12-month plan signed"},{l:"ElevateOS",c:"Not enrolled",t:"Early adopter agreement"},{l:"Case Study",c:"None",t:"Scope agreed"},{l:"Enterprise License",c:"Per-module",t:"Proposal delivered"}]},
-          {name:"EXECUTE",icon:"\u26a1",weeks:"Weeks 5-12",
-            left:{title:"Cadence & Milestones",items:["Month 1: First new module launched (Call AI or DSRs)","Month 1: Case study interviews and data collection","Month 2: Champion speaks at community event. Second module launched","Month 3: ElevateOS pilot deployed. Case study published"]},
-            right:{title:"What Can Go Wrong",items:["New module adoption slower than expected \u2192 Provide dedicated onboarding support beyond self-serve","Case study production delays \u2192 Assign dedicated project manager with milestone-driven timeline","Enterprise license stuck in procurement \u2192 Use champion as internal advocate. Build the ROI deck for procurement","ElevateOS not ready for their use case \u2192 Set clear expectations on beta vs GA. Manage scope tightly"]},
-            tasks:["Week 5-6: Launch first expansion module with dedicated enablement","Week 7-8: Case study interviews and draft production","Week 8: Champion speaks at Mindtickle community event","Week 9-10: Launch second expansion module","Week 10-11: ElevateOS pilot \u2014 deploy one AI feature, collect structured feedback","Week 12: Case study published through marketing channels"],
-            metrics:[{l:"New Modules Active",c:"0",t:"+2 launched"},{l:"Case Study",c:"In progress",t:"Published"},{l:"Advocacy Events",c:"0",t:"1 speaking engagement"},{l:"Wallet Share",c:"40-72%",t:"+15 percentage points"}]},
-          {name:"SUSTAIN",icon:"\ud83d\udcc8",weeks:"Month 4+",
-            left:{title:"Maximum Lifetime Value",items:["Enterprise license signed \u2014 multi-year platform commitment","Annual strategic review with Mindtickle founders","Champion: advisory board leadership role","Co-innovation: feedback directly shapes ElevateOS roadmap"]},
-            right:{title:"Preventing Complacency",items:["Avoid complacency: champion attrition is the primary risk to these accounts","Maintain proactive engagement after enterprise deal closes","Target: CentiMark-level wallet share (72%) as the baseline, with room to expand further","Continue quarterly innovation reviews and early feature access"]},
-            tasks:["Month 4: Enterprise license signed","Month 5: Advisory board leadership role","Month 6: Annual strategic review with CEO/CPO","Month 8: Co-present at major industry conference","Month 10: Innovation day at Mindtickle office","Ongoing: Quarterly co-innovation reviews","Ongoing: Reference program \u2014 4+ prospect calls/year"],
-            metrics:[{l:"Wallet Share",c:"55-72%",t:"80%+"},{l:"Enterprise License",c:"Per-module",t:"Multi-year signed"},{l:"Advocacy",c:"Passive",t:"2+ events/year, case study live"},{l:"Reference Calls",c:"Ad hoc",t:"4+/year structured"}]},
+        steps:[
+          {name:"Identify Expansion Whitespace",icon:"\ud83d\udccd",timeline:"Weeks 1-3",
+            playbook:{
+              tasks:["Deep usage analysis: feature-level adoption, power users vs casual users, unused modules","Tech stack audit: identify tools Mindtickle could consolidate or replace (Gong, Highspot, etc.)","CRO meeting: align on top 3 priorities for next 12 months","Quantify expansion opportunity: revenue potential per additional module/capability","Assess champion health: engagement level, career trajectory, internal influence"],
+              metrics:[{l:"Expansion Opps",t:"2-3 scoped with $ value"},{l:"Tech Stack Map",t:"Consolidation opportunities identified"},{l:"Champion Health",t:"Assessed and supported"},{l:"CRO Alignment",t:"Top 3 priorities mapped"}],
+              risks:[{r:"Champion attrition",m:"Develop 2 backup relationships at same level immediately"},{r:"Tech stack consolidation blocked by existing contracts",m:"Time proposal to coincide with renewal windows; build TCO comparison"}]
+            },
+            examples:[
+              {account:"Splunk",items:["60% wallet share, strong coaching culture. Cross-sell: Call AI, Digital Sales Rooms","Tech stack: evaluate Gong overlap; position Mindtickle as consolidated platform"]},
+              {account:"CentiMark",items:["72% wallet share, 8-day ramp (gold standard). Identify remaining module gaps","Expansion: ElevateOS early access, advanced analytics, custom integrations"]},
+              {account:"Darktrace",items:["Published case study. Ready for enterprise licensing conversation","Expansion: multi-product (Content Hub + DSRs) + geographic expansion"]},
+              {account:"Juniper",items:["Using content + training. Expansion into AI Role-Play and structured coaching","Tech stack: potential Highspot/Showpad consolidation opportunity"]}
+            ]},
+          {name:"Joint Innovation Roadmap",icon:"\ud83e\udded",timeline:"Weeks 3-6",
+            playbook:{
+              tasks:["Facilitate joint roadmap session: client priorities mapped to Mindtickle product roadmap","Present ElevateOS early adopter program with structured feedback framework","Design enterprise licensing proposal: consolidation savings + full platform access","Co-define innovation milestones: which AI features to pilot, feedback cadence, success criteria","Share exclusive roadmap preview to reinforce design partner status"],
+              metrics:[{l:"Joint Roadmap",t:"12-month plan signed"},{l:"ElevateOS",t:"Early adopter agreement"},{l:"Enterprise License",t:"Proposal delivered"},{l:"Innovation Milestones",t:"3+ defined with timeline"}],
+              risks:[{r:"ElevateOS not ready for their use case",m:"Set clear expectations on beta vs GA; define scope and feedback structure"},{r:"Enterprise license stuck in procurement",m:"Use champion as internal advocate; build ROI deck for procurement team"}]
+            },
+            examples:[
+              {account:"Splunk",items:["Joint roadmap: coaching AI + conversation intelligence consolidation","ElevateOS pilot: automated coaching triggers from call patterns","Enterprise license: replace Gong + Mindtickle per-module with unified platform"]},
+              {account:"CentiMark",items:["Joint roadmap: advanced analytics + predictive readiness","ElevateOS pilot: auto-adaptive learning paths based on performance","Enterprise license: already at 72% wallet; target 85%+ with new capabilities"]},
+              {account:"Darktrace",items:["Joint roadmap: cybersecurity-specific selling enablement suite","ElevateOS pilot: competitive intelligence automation","Enterprise license: consolidate existing modules into platform agreement"]},
+              {account:"Juniper",items:["Joint roadmap: networking \u2192 AI infrastructure selling transformation","ElevateOS pilot: AI Role-Play for new product positioning","Enterprise license: expand from content/training to full platform"]}
+            ]},
+          {name:"Advocacy & Case Studies",icon:"\ud83c\udfc6",timeline:"Weeks 6-12",
+            playbook:{
+              tasks:["Initiate case study production: identify metrics, secure approval, schedule interviews","Nominate champion for speaking at Mindtickle conference or industry event","Establish reference program: structured prospect call participation (4+/year)","Co-present at major industry conference on enablement transformation","Publish joint content: white paper, webinar, or blog on AI-powered enablement results"],
+              metrics:[{l:"Case Study",t:"Published"},{l:"Speaking Events",t:"1+ engagement"},{l:"Reference Calls",t:"4+/year structured"},{l:"Joint Content",t:"1 piece published"}],
+              risks:[{r:"Case study approval delayed internally",m:"Assign dedicated PM with milestone timeline; offer anonymised version as fallback"},{r:"Champion too busy for speaking",m:"Offer full preparation support; position as personal brand builder, not just vendor ask"}]
+            },
+            examples:[
+              {account:"Splunk",items:["Case study: coaching culture transformation + Call AI results","Conference speaking: sales enablement at enterprise scale","Reference program: 4+ prospect calls on coaching ROI"]},
+              {account:"CentiMark",items:["Case study: 8-day ramp achievement (industry benchmark)","Conference: speed-to-productivity in field sales","Reference: construction/services industry prospects"]},
+              {account:"Darktrace",items:["Case study already published; expand to video testimonial","Speaking: cybersecurity sales enablement","Reference: mid-market tech/security prospects"]},
+              {account:"Juniper",items:["Case study: content-led enablement to full platform transformation","Conference: networking industry enablement","Reference: enterprise networking/infrastructure prospects"]}
+            ]},
+          {name:"Enterprise Platform Commitment",icon:"\ud83d\udee1\ufe0f",timeline:"Month 4+",
+            playbook:{
+              tasks:["Close enterprise platform license: multi-year commitment with full capability access","Establish advisory board leadership role (not just membership)","Schedule annual strategic review with Mindtickle CEO/CPO","Set up co-innovation cadence: quarterly feedback sessions shaping product roadmap","Plan innovation day: on-site visit to Mindtickle office for roadmap deep-dive"],
+              metrics:[{l:"Enterprise License",t:"Multi-year signed"},{l:"Wallet Share",t:"80%+"},{l:"Advisory Role",t:"Board leadership"},{l:"Innovation Cadence",t:"Quarterly reviews active"}],
+              risks:[{r:"Complacency after deal closes",m:"Maintain proactive engagement; quarterly innovation reviews; early feature access"},{r:"Wallet share plateaus",m:"Continuously identify new use cases; connect to new BUs/regions/teams"}]
+            },
+            examples:[
+              {account:"Splunk",items:["Multi-year platform license replacing per-module + Gong","Advisory board: shapes conversation intelligence roadmap","Innovation day: annual visit, ElevateOS co-development"]},
+              {account:"CentiMark",items:["Baseline 72% \u2192 target 85%+ with advanced analytics","Advisory board leadership: field sales enablement expertise","Reference: 6+ prospect calls/year; keynote at Mindtickle summit"]},
+              {account:"Darktrace",items:["Enterprise license: full platform consolidation","Advisory board: cybersecurity industry perspective","Annual strategic review + joint conference presence"]},
+              {account:"Juniper",items:["Enterprise license: full platform covering all selling motions","Advisory board: networking/AI infrastructure perspective","Co-innovation: ElevateOS features for technical selling"]}
+            ]},
         ]},
     };
 
@@ -283,51 +381,50 @@
 
     function PhaseSlide({data}) {
       const [ap,setAp] = useState(0);
-      const p = data.phases[ap];
-      const gap = data.accounts.reduce((s,c)=>s+(c.pot-c.cur),0);
+      const s = data.steps[ap];
+      const gap = data.accounts.reduce((a,c)=>a+(c.pot-c.cur),0);
+      const numSteps = data.steps.length;
       return h("div",null,
         h("h1",{style:{fontSize:22,fontWeight:700,color:"#111",margin:"0 0 1px"}},data.title),
         h("p",{style:{fontSize:13,color:"#999",margin:"0 0 1px"}},data.sub+" \u2014 "+data.tag),
-        h("p",{style:{fontSize:12,color:"#aaa",margin:"0 0 6px"}},"Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.cur)+"\u2192"+fmt(c.pot)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
+        h("p",{style:{fontSize:11,color:"#aaa",margin:"0 0 6px"}},"Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.cur)+"\u2192"+fmt(c.pot)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
         h("div",{className:"phase-tabs"},
-          data.phases.map((ph,i)=>h("div",{key:i,onClick:()=>setAp(i),style:{flex:1,padding:"6px 8px",cursor:"pointer",borderBottom:ap===i?"3px solid #111":"3px solid transparent",borderRight:i<3?"1px solid #eee":"none",background:ap===i?"#f7f7f7":"#fff",transition:"all 0.15s"}},
-            h("div",{style:{fontSize:16,marginBottom:0}},ph.icon),
-            h("div",{style:{fontSize:14,fontWeight:700,color:ap===i?"#111":"#888"}},ph.name),
-            h("div",{style:{fontSize:12,color:"#bbb"}},ph.weeks)
+          data.steps.map((st,i)=>h("div",{key:i,onClick:()=>setAp(i),style:{flex:1,padding:"5px 6px",cursor:"pointer",borderBottom:ap===i?"3px solid #111":"3px solid transparent",borderRight:i<numSteps-1?"1px solid #eee":"none",background:ap===i?"#f7f7f7":"#fff",transition:"all 0.15s"}},
+            h("div",{style:{fontSize:15,marginBottom:0}},st.icon),
+            h("div",{style:{fontSize:12,fontWeight:700,color:ap===i?"#111":"#888"}},st.name),
+            h("div",{style:{fontSize:10,color:"#bbb"}},st.timeline)
           ))
         ),
-        h("div",{className:"phase-content"},
-          h("div",{style:{flex:1,minWidth:0}},
-            h("div",{style:{fontSize:13,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},p.left.title),
-            p.left.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#888",marginTop:7}}),
-              h("div",{style:{fontSize:13,color:"#444",lineHeight:1.4}},it)
+        h("div",{style:{display:"flex",gap:12,marginBottom:6}},
+          h("div",{style:{flex:"1 1 60%",minWidth:0}},
+            h("div",{style:{fontSize:12,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"Playbook"),
+            s.playbook.tasks.map((t,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start"}},
+              h("div",{style:{flex:"0 0 16px",height:16,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:"#888",marginTop:1}},i+1),
+              h("div",{style:{fontSize:12,color:"#444",lineHeight:1.4}},t)
             ))
           ),
-          h("div",{style:{flex:1,minWidth:0}},
-            h("div",{style:{fontSize:13,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},p.right.title),
-            p.right.items.map((it,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 4px",height:4,borderRadius:2,background:"#ccc",marginTop:7}}),
-              h("div",{style:{fontSize:13,color:"#555",lineHeight:1.4}},it)
+          h("div",{style:{flex:"1 1 40%",minWidth:0}},
+            h("div",{style:{fontSize:12,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"Metrics & Targets"),
+            s.playbook.metrics.map((m,i)=>h("div",{key:i,style:{display:"flex",justifyContent:"space-between",padding:"3px 6px",background:i%2===0?"#f9f9f9":"#fff",borderRadius:2,marginBottom:1}},
+              h("span",{style:{fontSize:11,fontWeight:600,color:"#666"}},m.l),
+              h("span",{style:{fontSize:11,fontWeight:600,color:"#111"}},m.t)
+            )),
+            h("div",{style:{fontSize:12,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginTop:8,marginBottom:4}},"Risks & Mitigations"),
+            s.playbook.risks.map((rk,i)=>h("div",{key:i,style:{marginBottom:4,padding:"4px 6px",background:"#fafafa",borderLeft:"2px solid #ddd",borderRadius:2}},
+              h("div",{style:{fontSize:11,fontWeight:600,color:"#c33"}},rk.r),
+              h("div",{style:{fontSize:11,color:"#666",marginTop:1}},"\u2192 "+rk.m)
             ))
           )
         ),
-        p.metrics && h("div",{className:"metrics-grid"},
-          p.metrics.map((m,i)=>h("div",{key:i,style:{padding:"5px 8px",background:"#f9f9f9",borderRadius:3}},
-            h("div",{style:{fontSize:12,fontWeight:600,color:"#666",marginBottom:2}},m.l),
-            h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
-              h("span",{style:{fontSize:12,color:"#aaa"}},m.c),
-              h("span",{style:{fontSize:10,color:"#ccc"}},"\u2192"),
-              h("span",{style:{fontSize:12,fontWeight:600,color:"#111"}},m.t)
-            )
-          ))
-        ),
-        h("div",{style:{borderTop:"2px solid #111",paddingTop:6}},
-          h("div",{style:{fontSize:14,fontWeight:700,color:"#111",marginBottom:5}},"Execution Tasks \u2014 "+p.name+" ("+p.weeks+")"),
-          h("div",{className:"grid-2col"},
-            p.tasks.map((t,i)=>h("div",{key:i,style:{display:"flex",gap:5,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 18px",height:18,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:"#888",marginTop:1}},i+1),
-              h("div",{style:{fontSize:13,color:"#444",lineHeight:1.35}},t)
+        s.examples && h("div",{style:{borderTop:"1px solid #eee",paddingTop:6}},
+          h("div",{style:{fontSize:11,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"Account Examples"),
+          h("div",{style:{display:"flex",gap:12,flexWrap:"wrap"}},
+            s.examples.map((ex,i)=>h("div",{key:i,style:{flex:"1 1 "+(100/Math.min(s.examples.length,3)-1)+"%",minWidth:0}},
+              h("div",{style:{fontSize:12,fontWeight:700,color:"#333",marginBottom:2}},ex.account),
+              ex.items.map((it,j)=>h("div",{key:j,style:{display:"flex",gap:4,marginBottom:1,alignItems:"flex-start"}},
+                h("div",{style:{flex:"0 0 3px",height:3,borderRadius:2,background:"#aaa",marginTop:6}}),
+                h("div",{style:{fontSize:11,color:"#555",lineHeight:1.35}},it)
+              ))
             ))
           )
         )
