@@ -381,49 +381,70 @@
 
     function PhaseSlide({data}) {
       const [ap,setAp] = useState(0);
+      const [showEx,setShowEx] = useState(false);
       const s = data.steps[ap];
       const gap = data.accounts.reduce((a,c)=>a+(c.pot-c.cur),0);
-      const numSteps = data.steps.length;
+      const ns = data.steps.length;
       return h("div",null,
-        h("h1",{style:{fontSize:22,fontWeight:700,color:"#111",margin:"0 0 1px"}},data.title),
-        h("p",{style:{fontSize:13,color:"#999",margin:"0 0 1px"}},data.sub+" \u2014 "+data.tag),
-        h("p",{style:{fontSize:11,color:"#aaa",margin:"0 0 6px"}},"Accounts: "+data.accounts.map(c=>c.name+" ("+fmt(c.cur)+"\u2192"+fmt(c.pot)+")").join(" \u00b7 ")+" \u00b7 Gap: "+fmt(gap)),
-        h("div",{className:"phase-tabs"},
-          data.steps.map((st,i)=>h("div",{key:i,onClick:()=>setAp(i),style:{flex:1,padding:"5px 6px",cursor:"pointer",borderBottom:ap===i?"3px solid #111":"3px solid transparent",borderRight:i<numSteps-1?"1px solid #eee":"none",background:ap===i?"#f7f7f7":"#fff",transition:"all 0.15s"}},
-            h("div",{style:{fontSize:15,marginBottom:0}},st.icon),
-            h("div",{style:{fontSize:12,fontWeight:700,color:ap===i?"#111":"#888"}},st.name),
-            h("div",{style:{fontSize:10,color:"#bbb"}},st.timeline)
+        h("h1",{style:{fontSize:24,fontWeight:700,color:"#111",margin:"0 0 2px"}},data.title),
+        h("p",{style:{fontSize:14,color:"#777",margin:"0 0 4px"}},data.sub+" \u2014 "+data.tag),
+        h("div",{style:{display:"flex",gap:12,alignItems:"center",marginBottom:8,flexWrap:"wrap"}},
+          data.accounts.map((c,i)=>h("span",{key:i,style:{fontSize:13,color:"#555",background:"#f4f4f4",padding:"3px 10px",borderRadius:12}},c.name+" "+fmt(c.cur)+"\u2192"+fmt(c.pot))),
+          h("span",{style:{fontSize:13,fontWeight:700,color:"#111",background:"#e8f5e9",padding:"3px 10px",borderRadius:12}},"\u0394 Gap: "+fmt(gap))
+        ),
+
+        h("div",{style:{display:"flex",gap:0,marginBottom:10,borderTop:"2px solid #111"}},
+          data.steps.map((st,i)=>h("div",{key:i,onClick:()=>{setAp(i);setShowEx(false)},style:{flex:1,padding:"10px 8px 8px",cursor:"pointer",borderBottom:ap===i?"3px solid #111":"3px solid transparent",borderRight:i<ns-1?"1px solid #eee":"none",background:ap===i?"#f7f7f7":"#fff",transition:"all 0.15s",textAlign:"center"}},
+            h("div",{style:{fontSize:20,marginBottom:3}},st.icon),
+            h("div",{style:{fontSize:14,fontWeight:700,color:ap===i?"#111":"#888",lineHeight:1.2}},st.name),
+            h("div",{style:{fontSize:12,color:"#bbb",marginTop:2}},st.timeline)
           ))
         ),
-        h("div",{style:{display:"flex",gap:12,marginBottom:6}},
-          h("div",{style:{flex:"1 1 60%",minWidth:0}},
-            h("div",{style:{fontSize:12,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"Playbook"),
-            s.playbook.tasks.map((t,i)=>h("div",{key:i,style:{display:"flex",gap:5,marginBottom:2,alignItems:"flex-start"}},
-              h("div",{style:{flex:"0 0 16px",height:16,borderRadius:3,background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:"#888",marginTop:1}},i+1),
-              h("div",{style:{fontSize:12,color:"#444",lineHeight:1.4}},t)
+
+        h("div",{style:{display:"flex",gap:20,marginBottom:10}},
+          h("div",{style:{flex:"1 1 58%",minWidth:0}},
+            h("div",{style:{display:"flex",alignItems:"center",gap:6,marginBottom:8}},
+              h("div",{style:{width:4,height:18,background:"#111",borderRadius:2}}),
+              h("div",{style:{fontSize:15,fontWeight:700,color:"#111",textTransform:"uppercase",letterSpacing:"0.04em"}},"Playbook")
+            ),
+            s.playbook.tasks.map((t,i)=>h("div",{key:i,style:{display:"flex",gap:8,marginBottom:6,alignItems:"flex-start"}},
+              h("div",{style:{flex:"0 0 22px",height:22,borderRadius:4,background:"#111",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#fff",marginTop:1}},i+1),
+              h("div",{style:{fontSize:14,color:"#333",lineHeight:1.5}},t)
             ))
           ),
-          h("div",{style:{flex:"1 1 40%",minWidth:0}},
-            h("div",{style:{fontSize:12,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"Metrics & Targets"),
-            s.playbook.metrics.map((m,i)=>h("div",{key:i,style:{display:"flex",justifyContent:"space-between",padding:"3px 6px",background:i%2===0?"#f9f9f9":"#fff",borderRadius:2,marginBottom:1}},
-              h("span",{style:{fontSize:11,fontWeight:600,color:"#666"}},m.l),
-              h("span",{style:{fontSize:11,fontWeight:600,color:"#111"}},m.t)
+          h("div",{style:{flex:"1 1 42%",minWidth:0}},
+            h("div",{style:{display:"flex",alignItems:"center",gap:6,marginBottom:8}},
+              h("div",{style:{width:4,height:18,background:"#2a7",borderRadius:2}}),
+              h("div",{style:{fontSize:15,fontWeight:700,color:"#111",textTransform:"uppercase",letterSpacing:"0.04em"}},"Metrics & Targets")
+            ),
+            s.playbook.metrics.map((m,i)=>h("div",{key:i,style:{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 10px",background:i%2===0?"#f6f9f7":"#fff",borderRadius:4,marginBottom:3,borderLeft:"3px solid #2a7"}},
+              h("span",{style:{fontSize:14,fontWeight:500,color:"#555"}},m.l),
+              h("span",{style:{fontSize:14,fontWeight:700,color:"#111"}},m.t)
             )),
-            h("div",{style:{fontSize:12,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginTop:8,marginBottom:4}},"Risks & Mitigations"),
-            s.playbook.risks.map((rk,i)=>h("div",{key:i,style:{marginBottom:4,padding:"4px 6px",background:"#fafafa",borderLeft:"2px solid #ddd",borderRadius:2}},
-              h("div",{style:{fontSize:11,fontWeight:600,color:"#c33"}},rk.r),
-              h("div",{style:{fontSize:11,color:"#666",marginTop:1}},"\u2192 "+rk.m)
+
+            h("div",{style:{display:"flex",alignItems:"center",gap:6,marginTop:14,marginBottom:8}},
+              h("div",{style:{width:4,height:18,background:"#c44",borderRadius:2}}),
+              h("div",{style:{fontSize:15,fontWeight:700,color:"#111",textTransform:"uppercase",letterSpacing:"0.04em"}},"Risks & Mitigations")
+            ),
+            s.playbook.risks.map((rk,i)=>h("div",{key:i,style:{marginBottom:6,padding:"6px 10px",background:"#fef8f8",borderLeft:"3px solid #e55",borderRadius:4}},
+              h("div",{style:{fontSize:13,fontWeight:700,color:"#c33",marginBottom:2}},"\u26a0 "+rk.r),
+              h("div",{style:{fontSize:13,color:"#666"}},"\u2192 "+rk.m)
             ))
           )
         ),
-        s.examples && h("div",{style:{borderTop:"1px solid #eee",paddingTop:6}},
-          h("div",{style:{fontSize:11,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.08em",fontWeight:600,marginBottom:4}},"Account Examples"),
-          h("div",{style:{display:"flex",gap:12,flexWrap:"wrap"}},
-            s.examples.map((ex,i)=>h("div",{key:i,style:{flex:"1 1 "+(100/Math.min(s.examples.length,3)-1)+"%",minWidth:0}},
-              h("div",{style:{fontSize:12,fontWeight:700,color:"#333",marginBottom:2}},ex.account),
-              ex.items.map((it,j)=>h("div",{key:j,style:{display:"flex",gap:4,marginBottom:1,alignItems:"flex-start"}},
-                h("div",{style:{flex:"0 0 3px",height:3,borderRadius:2,background:"#aaa",marginTop:6}}),
-                h("div",{style:{fontSize:11,color:"#555",lineHeight:1.35}},it)
+
+        s.examples && h("div",{style:{borderTop:"2px solid #eee",paddingTop:8}},
+          h("div",{onClick:()=>setShowEx(!showEx),style:{display:"flex",alignItems:"center",gap:8,cursor:"pointer",marginBottom:showEx?8:0}},
+            h("div",{style:{fontSize:15,fontWeight:700,color:"#111"}},"Account Examples"),
+            h("div",{style:{fontSize:13,color:"#999",transition:"transform 0.2s",transform:showEx?"rotate(90deg)":"rotate(0deg)"}},"\u25b6"),
+            h("div",{style:{fontSize:13,color:"#aaa"}},s.examples.map(e=>e.account).join(" \u00b7 "))
+          ),
+          showEx && h("div",{style:{display:"flex",gap:16,flexWrap:"wrap"}},
+            s.examples.map((ex,i)=>h("div",{key:i,style:{flex:"1 1 "+(s.examples.length>2?"30%":"45%"),minWidth:200,padding:"10px 14px",background:"#f9f9f9",borderRadius:6,border:"1px solid #eee"}},
+              h("div",{style:{fontSize:15,fontWeight:700,color:"#222",marginBottom:6}},ex.account),
+              ex.items.map((it,j)=>h("div",{key:j,style:{display:"flex",gap:6,marginBottom:4,alignItems:"flex-start"}},
+                h("div",{style:{flex:"0 0 5px",height:5,borderRadius:3,background:"#888",marginTop:7}}),
+                h("div",{style:{fontSize:13,color:"#444",lineHeight:1.45}},it)
               ))
             ))
           )
