@@ -339,10 +339,34 @@
 
     // ===== COMPONENTS =====
     function S1Chart({clients,hov,setHov,sel,setSel,aq,setAq}) {
-      const W=520,H=340,pad={top:10,right:16,bottom:40,left:50},cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
+      const W=620,H=420,pad={top:14,right:20,bottom:44,left:54},cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
       const xP=v=>pad.left+(v/100)*cW,yP=v=>pad.top+cH-(v/100)*cH;
       const qF={q2:"#f5f5f5",q1:"#fafafa",q3:"#ededed",q4:"#f5f5f5"};
       const qB=[{k:"q2",x:pad.left,y:pad.top},{k:"q1",x:pad.left+cW/2,y:pad.top},{k:"q3",x:pad.left,y:pad.top+cH/2},{k:"q4",x:pad.left+cW/2,y:pad.top+cH/2}];
+
+      const labelOffsets={
+        "Ford":{dx:0,dy:-1,anchor:"middle"},
+        "Wipro":{dx:0,dy:-1,anchor:"middle"},
+        "Boston Scientific":{dx:0,dy:-1,anchor:"middle"},
+        "J&J":{dx:0,dy:-1,anchor:"middle"},
+        "Cisco":{dx:0,dy:-1,anchor:"end"},
+        "WWT":{dx:-4,dy:1,anchor:"end"},
+        "Splunk":{dx:-4,dy:-1,anchor:"end"},
+        "Juniper Networks":{dx:4,dy:1,anchor:"start"},
+        "Darktrace":{dx:4,dy:-1,anchor:"start"},
+        "CentiMark":{dx:0,dy:-1,anchor:"middle"},
+      };
+      const pts=clients.map((c,i)=>{
+        const r=10+(c.pot/20000)*14;
+        return {i,cx:xP(c.dh),cy:yP(c.rs),r,name:c.name};
+      });
+      const lbls=pts.map(p=>{
+        const off=labelOffsets[p.name]||{dx:0,dy:-1,anchor:"middle"};
+        const tx = off.anchor==="start" ? p.cx+p.r+4+off.dx : off.anchor==="end" ? p.cx-p.r-4+off.dx : p.cx+off.dx;
+        const ty = off.dy<0 ? p.cy-p.r-6 : p.cy+p.r+14;
+        return {tx,ty,anchor:off.anchor,name:p.name};
+      });
+
       return h("svg",{viewBox:`0 0 ${W} ${H}`,style:{width:"100%",display:"block"}},
         qB.map(({k,x,y})=>h("rect",{key:k,x,y,width:cW/2,height:cH/2,fill:aq===k?"#e8e8e8":qF[k],onClick:()=>{setAq(aq===k?null:k);setSel(null)},style:{cursor:"pointer",transition:"fill 0.15s"}})),
         [{x:.25,y:18,t:"ACTIVATE",f:"#888"},{x:.75,y:18,t:"CO-CREATE",f:"#444"},{x:.25,y:cH-6,t:"STABILISE & PROVE VALUE",f:"#666"},{x:.75,y:cH-6,t:"BUILD RELATIONSHIP",f:"#999"}].map(({x,y,t,f})=>h("text",{key:t,x:pad.left+cW*x,y:pad.top+y,textAnchor:"middle",fontSize:"11",fill:f,fontWeight:"600",fontFamily:"'IBM Plex Sans',sans-serif",letterSpacing:"0.04em",style:{pointerEvents:"none"}},t)),
@@ -350,13 +374,15 @@
         h("line",{x1:pad.left,y1:pad.top+cH/2,x2:pad.left+cW,y2:pad.top+cH/2,stroke:"#ccc",strokeWidth:"0.75",strokeDasharray:"4,3",style:{pointerEvents:"none"}}),
         h("rect",{x:pad.left,y:pad.top,width:cW,height:cH,fill:"none",stroke:"#444",strokeWidth:"1",style:{pointerEvents:"none"}}),
         h("text",{x:pad.left+cW/2,y:H-6,textAnchor:"middle",fontSize:"12",fill:"#333",fontWeight:"600",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},"Deployment Health \u2192"),
-        h("text",{x:10,y:pad.top+cH/2,textAnchor:"middle",fontSize:"12",fill:"#333",fontWeight:"600",fontFamily:"'IBM Plex Sans',sans-serif",transform:`rotate(-90,10,${pad.top+cH/2})`,style:{pointerEvents:"none"}},"Relationship Strength \u2192"),
+        h("text",{x:12,y:pad.top+cH/2,textAnchor:"middle",fontSize:"12",fill:"#333",fontWeight:"600",fontFamily:"'IBM Plex Sans',sans-serif",transform:`rotate(-90,12,${pad.top+cH/2})`,style:{pointerEvents:"none"}},"Relationship Strength \u2192"),
         [0,50,100].map(v=>h("text",{key:`x${v}`,x:xP(v),y:pad.top+cH+15,textAnchor:"middle",fontSize:"10",fill:"#bbb",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},v)),
         [0,50,100].map(v=>h("text",{key:`y${v}`,x:pad.left-7,y:yP(v)+3,textAnchor:"end",fontSize:"10",fill:"#bbb",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},v)),
-        clients.map((c,i)=>{const wp=Math.round((c.cur/c.pot)*100),cx=xP(c.dh),cy=yP(c.rs),r=11+(c.pot/20000)*16,gv=Math.round(195-(wp/100)*155),iS=sel===i;
+        clients.map((c,i)=>{const wp=Math.round((c.cur/c.pot)*100),cx=pts[i].cx,cy=pts[i].cy,r=pts[i].r,gv=Math.round(195-(wp/100)*155),iS=sel===i;
+        const lbl=lbls[i];
         return h("g",{key:c.name,onMouseEnter:()=>setHov(i),onMouseLeave:()=>setHov(null),onClick:e=>{e.stopPropagation();setSel(iS?null:i);setAq(null)},style:{cursor:"pointer"}},
           h("circle",{cx,cy,r,fill:`rgb(${gv},${gv},${gv})`,stroke:iS?"#000":"#999",strokeWidth:iS?2:0.5,opacity:hov===i||iS?1:0.85,style:{transition:"all 0.15s"}}),
-          h("text",{x:cx,y:cy-r-4,textAnchor:"middle",fontSize:"11",fontWeight:"600",fill:"#222",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},c.name),
+          (Math.abs(lbl.tx-cx)>2||Math.abs(lbl.ty-(cy-r))>18) && h("line",{x1:cx,y1:lbl.ty<cy?cy-r:cy+r,x2:lbl.anchor==="start"?lbl.tx-2:lbl.anchor==="end"?lbl.tx+2:lbl.tx,y2:lbl.ty<cy?lbl.ty+4:lbl.ty-10,stroke:"#bbb",strokeWidth:"0.5",style:{pointerEvents:"none"}}),
+          h("text",{x:lbl.tx,y:lbl.ty,textAnchor:lbl.anchor,fontSize:"11",fontWeight:"600",fill:"#222",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},c.name),
           h("text",{x:cx,y:cy+3.5,textAnchor:"middle",fontSize:"11",fontWeight:"700",fill:wp>45?"#fff":"#333",fontFamily:"'IBM Plex Sans',sans-serif",style:{pointerEvents:"none"}},wp+"%")
         )})
       );
